@@ -1,0 +1,1994 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AbaTools</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        action: '#05A045',
+                        urgency: '#E64A19',
+                        dark: '#0F172A', // Titles
+                        text: '#475569',
+                        background: '#F8FAFC',
+                        highlight: '#FACC15',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- ConverteAI SmartPlayer SDK -->
+    <script src="https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js" async></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Custom transitions */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Locked Overlay - Robust Design */
+        .locked-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(218, 218, 218, 0.493);
+            /* Slate gray, semi-transparent */
+            backdrop-filter: none;
+            /* No blur as requested */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            border-radius: inherit;
+        }
+
+        .locked-icon {
+            color: white;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+            /* Shadow for visibility */
+        }
+    </style>
+
+    <!-- Auth Check & Security -->
+    <style id="auth-protection">
+        html {
+            display: none;
+        }
+    </style>
+    <script>
+            (function () {
+                // Helper for secure redirect
+                const redirectToLogin = () => {
+                    localStorage.removeItem('abatools_auth');
+                    window.location.replace('login.html');
+                };
+
+                try {
+                    const storedAuth = localStorage.getItem('abatools_auth');
+
+                    if (!storedAuth) {
+                        redirectToLogin();
+                        return;
+                    }
+
+                    const authData = JSON.parse(storedAuth);
+                    if (!authData || !authData.email) {
+                        throw new Error('Invalid auth data');
+                    }
+
+                    // Auth Valid: Reveal Page
+                    const style = document.getElementById('auth-protection');
+                    if (style) style.remove();
+                    document.documentElement.style.display = '';
+
+                } catch (e) {
+                    console.error('Auth validation error:', e);
+                    redirectToLogin();
+                }
+            })();
+    </script>
+</head>
+
+<body class="bg-background text-text min-h-screen relative overflow-x-hidden">
+
+    <!-- Top Bar -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-gray-100">
+        <div class="max-w-md mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <img src="../assets/images/logo-abatools.png" alt="AbaTools" class="h-8 w-auto">
+            </div>
+
+            <button onclick="logout()" class="text-gray-400 hover:text-urgency transition-colors">
+                <i data-lucide="log-out" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="pt-24 pb-32 px-6 max-w-md mx-auto min-h-screen">
+
+        <!-- Tab 1: Início (Home) -->
+        <div id="tab-home" class="tab-content active space-y-12">
+            <!-- Section 1: Welcome -->
+            <div class="space-y-6 pt-4">
+                <div class="space-y-4">
+
+                    <h2 class="text-3xl font-black text-dark leading-tight">Welcome to<br>AbaTools</h2>
+                    <p class="text-text leading-relaxed text-lg">
+                        Your access is active and your materials are ready. Inside AbaTools, you’ll find practical
+                        programs designed to support real progress.
+                    </p>
+                </div>
+
+                <button onclick="switchTab('programs')"
+                    class="w-full py-4 rounded-2xl bg-action text-white font-bold text-lg shadow-xl shadow-action/30 hover:bg-green-700 hover:scale-[1.02] transition-all transform active:scale-95 flex items-center justify-center gap-2">
+                    <span>Go to My Programs</span>
+                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Section 2: How to use -->
+            <div class="space-y-4">
+                <h3 class="text-2xl font-bold text-dark px-2">How to use your materials</h3>
+                <div
+                    class="bg-gradient-to-br from-white to-green-50 p-6 rounded-[2rem] shadow-lg shadow-green-900/5 border border-green-100 flex flex-col gap-6 relative overflow-hidden group">
+                    <!-- Decorational background element -->
+                    <div
+                        class="absolute -right-10 -top-10 w-32 h-32 bg-action/5 rounded-full blur-2xl group-hover:bg-action/10 transition-colors">
+                    </div>
+
+                    <p class="text-dark/80 font-medium leading-relaxed relative z-10">
+                        AbaTools materials are flexible, practical, and meant to be adapted to your reality. They serve
+                        as a guide, not a rigid rulebook.
+                    </p>
+                    <ul class="space-y-4 relative z-10">
+                        <li class="flex items-start gap-4">
+                            <div
+                                class="w-8 h-8 rounded-xl bg-action text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-action/20">
+                                <i data-lucide="check" class="w-5 h-5 stroke-[3]"></i>
+                            </div>
+                            <span class="text-dark font-semibold pt-1">Choose what fits your current goal</span>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div
+                                class="w-8 h-8 rounded-xl bg-action text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-action/20">
+                                <i data-lucide="check" class="w-5 h-5 stroke-[3]"></i>
+                            </div>
+                            <span class="text-dark font-semibold pt-1">Apply consistently in real situations</span>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div
+                                class="w-8 h-8 rounded-xl bg-action text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-action/20">
+                                <i data-lucide="check" class="w-5 h-5 stroke-[3]"></i>
+                            </div>
+                            <span class="text-dark font-semibold pt-1">Adapt protocols to each child</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Section 3: Development Pillars -->
+            <div class="space-y-6">
+                <div class="space-y-1">
+                    <h3 class="text-2xl font-bold text-dark">Development Pillars</h3>
+                    <p class="text-text">Master the technical and scientific foundations behind each essential skill in
+                        ABA intervention.</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Verbal -->
+                    <div onclick="openHub('verbal')"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:border-action/20 transition-all cursor-pointer group active:scale-95">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="message-circle" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="font-bold text-dark mb-1">Verbal</h4>
+                        <p class="text-xs text-gray-400">Communication & language</p>
+                    </div>
+
+                    <!-- Logical -->
+                    <div onclick="openHub('logical')"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:border-action/20 transition-all cursor-pointer group active:scale-95">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="puzzle" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="font-bold text-dark mb-1">Logical</h4>
+                        <p class="text-xs text-gray-400">Reasoning & patterns</p>
+                    </div>
+
+                    <!-- Social -->
+                    <div onclick="openHub('social')"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:border-action/20 transition-all cursor-pointer group active:scale-95">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-green-50 text-green-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="smile" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="font-bold text-dark mb-1">Social</h4>
+                        <p class="text-xs text-gray-400">Interaction & emotions</p>
+                    </div>
+
+                    <!-- Motor -->
+                    <div onclick="openHub('motor')"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:border-action/20 transition-all cursor-pointer group active:scale-95">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="hand" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="font-bold text-dark mb-1">Motor</h4>
+                        <p class="text-xs text-gray-400">Movement & imitation</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Support & connection -->
+            <div class="pt-4 pb-2">
+                <div class="bg-gray-50 p-6 rounded-[2rem] border border-gray-100 text-center space-y-6">
+                    <div class="space-y-2">
+                        <h3 class="text-lg font-bold text-dark">Need support?</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed px-4">
+                            If you have questions about the materials or protocols, don’t hesitate to reach out.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <a href="mailto:contact@abatools.pro"
+                            class="py-3 px-4 rounded-xl bg-white border border-gray-200 text-dark font-bold text-sm hover:border-action/30 hover:text-action transition-colors flex flex-col items-center gap-2 shadow-sm">
+                            <i data-lucide="mail" class="w-5 h-5 text-gray-400"></i>
+                            <span>Email</span>
+                        </a>
+                        <a href="https://www.instagram.com/aba.tools/" target="_blank"
+                            class="py-3 px-4 rounded-xl bg-white border border-gray-200 text-dark font-bold text-sm hover:border-pink-500/30 hover:text-pink-600 transition-colors flex flex-col items-center gap-2 shadow-sm">
+                            <i data-lucide="instagram" class="w-5 h-5 text-gray-400"></i>
+                            <span>Instagram</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Programs (My Programs) -->
+        <div id="tab-programs" class="tab-content space-y-8">
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-black text-dark uppercase tracking-wide">My Programs</h2>
+                    <span id="active-products-tag"
+                        class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider hidden">
+                        0 ACTIVES
+                    </span>
+                </div>
+                <div class="h-px w-full bg-gray-200"></div>
+            </div>
+
+            <!-- Naturalistic ABA Section -->
+            <div class="space-y-4">
+                <h3 class="text-sm font-black text-gray-400 uppercase tracking-widest pl-1">Naturalistic ABA</h3>
+
+                <!-- Primary Program Card 1 -->
+                <div data-slug="35_protocols"
+                    class="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100 group hover:shadow-lg transition-all duration-300 relative overflow-hidden">
+                    <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4">
+                        <i data-lucide="book-open-check" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark leading-tight mb-2">35 Naturalistic ABA Protocols</h3>
+                    <p class="text-sm text-gray-500 mb-6">Ready-to-use protocols for natural interaction.</p>
+
+                    <button onclick="openProgram35()"
+                        class="w-full py-3 rounded-xl bg-dark text-white font-bold hover:bg-gray-800 transition-colors flex items-center justify-center gap-2">
+                        <span>Open Program</span>
+                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- Upsell Card 1 -->
+                <div data-slug="naturalistic_mastery"
+                    class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 relative overflow-hidden">
+                    <div class="space-y-1">
+                        <h4 class="font-bold text-dark text-base">Naturalistic Application Mastery</h4>
+                        <p class="text-xs text-gray-500 leading-relaxed">Step-by-step training to apply the 35
+                            protocols confidently in real sessions.</p>
+                    </div>
+                    <button onclick="openNaturalisticMastery()"
+                        class="w-full py-2.5 rounded-xl border border-gray-200 bg-white text-dark font-bold text-sm hover:bg-gray-50 transition-colors shadow-sm">
+                        View Details
+                    </button>
+                </div>
+
+                <div class="border-t border-gray-100 mx-2 pt-2"></div>
+            </div>
+
+            <!-- VB-MAPP Framework Section -->
+            <div class="space-y-4">
+                <h3 class="text-sm font-black text-gray-400 uppercase tracking-widest pl-1">VB-MAPP Framework</h3>
+
+                <!-- Primary Program Card 2 -->
+                <div data-slug="pratical_toolkit"
+                    class="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100 group hover:shadow-lg transition-all duration-300 relative overflow-hidden">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center mb-4">
+                        <i data-lucide="boxes" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark leading-tight mb-2">Practical Autism Transformation Toolkit
+                    </h3>
+                    <p class="text-sm text-gray-500 mb-6">A step-by-step framework to teach communication.</p>
+
+                    <button onclick="openProgramToolkit()"
+                        class="w-full py-3 rounded-xl bg-dark text-white font-bold hover:bg-gray-800 transition-colors flex items-center justify-center gap-2">
+                        <span>Open Program</span>
+                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- Upsell Card 2 -->
+                <div data-slug="vbmapp_implementation"
+                    class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 relative overflow-hidden">
+                    <div class="space-y-1">
+                        <h4 class="font-bold text-dark text-base">VB-MAPP Implementation Companion</h4>
+                        <p class="text-xs text-gray-500 leading-relaxed">Turn VB-MAPP results into clear, effective
+                            intervention plans.</p>
+                    </div>
+                    <button onclick="openVbmappCompanion()"
+                        class="w-full py-2.5 rounded-xl border border-gray-200 bg-white text-dark font-bold text-sm hover:bg-gray-50 transition-colors shadow-sm">
+                        View Details
+                    </button>
+                </div>
+
+                <div class="border-t border-gray-100 mx-2 pt-2"></div>
+            </div>
+
+            <!-- Complementary Programs Section -->
+            <div class="space-y-4">
+                <div class="space-y-1 px-1">
+                    <h3 class="text-lg font-bold text-dark">Complementary Programs</h3>
+                    <p class="text-xs text-gray-400 font-medium">Additional tools designed to support different
+                        intervention goals.</p>
+                </div>
+
+                <div class="grid grid-cols-1 gap-4">
+                    <!-- Card 1 -->
+                    <div data-slug="20_session_plans"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="wind" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">20 Session Plans for Sensory
+                                    Regulation</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Calming activities and sensory
+                                    tolerance strategies.</p>
+                            </div>
+                        </div>
+                        <a href="../assets/en/nap/20 Session Plans for Sensory Regulation.pdf"
+                            download="20 Session Plans for Sensory Regulation.pdf"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            View Program
+                        </a>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div data-slug="30_functional_play"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="gamepad-2" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">30 Functional Play Activities for OT
+                                    in ASD</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Play-based therapeutic activities
+                                    aligned with OT goals.</p>
+                            </div>
+                        </div>
+                        <a href="../assets/en/nap/30 Functional Play Activities for OT in ASD.pdf"
+                            download="30 Functional Play Activities for OT in ASD.pdf"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            View Program
+                        </a>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div data-slug="15_intervention_protocols"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">15 Intervention Protocols for Daily
+                                    Living Skills (ADLs)</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Step-by-step protocols to build
+                                    autonomy and independence.</p>
+                            </div>
+                        </div>
+                        <a href="../assets/en/nap/15 Intervention Protocols for Daily Living Skills (ADLs).pdf"
+                            download="15 Intervention Protocols for Daily Living Skills (ADLs).pdf"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            View Program
+                        </a>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div data-slug="17_guided_aba"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">17 Guided ABA Protocols for Autism
+                                    Sessions</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Structured plans for complete and
+                                    organized ABA sessions.</p>
+                            </div>
+                        </div>
+                        <a href="../assets/en/nap/17 Guided ABA Protocols for Autism Sessions.pdf"
+                            download="17 Guided ABA Protocols for Autism Sessions.pdf"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            View Program
+                        </a>
+                    </div>
+
+                    <!-- Card 5 -->
+                    <div data-slug="school_readiness"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">School Readiness Strategies Kit for
+                                    Autism</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">How to Develop Reading, Writing, School
+                                    Routines, and Math Based on the VB-MAPP</p>
+                            </div>
+                        </div>
+                        <a href="../assets/en/pat/School Readiness Strategies Kit for Autism.pdf"
+                            download="School Readiness Strategies Kit for Autism.pdf"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            View Program
+                        </a>
+                    </div>
+
+                    <!-- Card 6 -->
+                    <div data-slug="aba_playful"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-pink-50 text-pink-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="sparkles" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">ABA Playful Approaches</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">How to Train Sharing, Waiting, and
+                                    Turn-Taking in Children with Autism in a Fun Way</p>
+                            </div>
+                        </div>
+                        <a href="../assets/en/pat/ABA Playful Approaches.pdf" download="ABA Playful Approaches.pdf"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            View Program
+                        </a>
+                    </div>
+
+                    <!-- Card 7 -->
+                    <div data-slug="emotional_recognition"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="heart" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">Emotional Recognition Training</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Methodologies to Identify, Express, and
+                                    Understand Feelings</p>
+                            </div>
+                        </div>
+                        <a href="../assets/en/pat/Emotional Recognition Training.pdf"
+                            download="Emotional Recognition Training.pdf"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            View Program
+                        </a>
+                    </div>
+
+                    <!-- Card 8 -->
+                    <div data-slug="autism_safety"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="shield-check" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">Autism Safety Pack</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">How to Train Vital Skills for Social
+                                    Integration</p>
+                            </div>
+                        </div>
+                        <a href="../assets/en/pat/Autism Safety Pack.pdf" download="Autism Safety Pack.pdf"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            View Program
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: Feed -->
+        <div id="tab-feed" class="tab-content space-y-6">
+            <h2 class="text-2xl font-black text-dark uppercase tracking-wide border-b border-gray-200 pb-4">Feed</h2>
+
+            <!-- Dynamic Feed Container -->
+            <div id="main-feed-container" class="space-y-6">
+                <!-- Rendered by JS -->
+            </div>
+        </div>
+
+        <!-- Tab 4: Profile -->
+        <div id="tab-profile" class="tab-content space-y-6">
+            <h2 class="text-2xl font-black text-dark uppercase tracking-wide border-b border-gray-200 pb-4">Profile</h2>
+
+            <div
+                class="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100 flex flex-col items-center space-y-6">
+                <!-- Icon -->
+                <div
+                    class="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 shadow-inner">
+                    <i data-lucide="user" class="w-12 h-12"></i>
+                </div>
+
+                <!-- Form -->
+                <div class="w-full space-y-4">
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-dark ml-1">Name</label>
+                        <div class="relative">
+                            <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                <i data-lucide="smile" class="w-5 h-5"></i>
+                            </div>
+                            <input type="text" id="profile-name"
+                                class="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-action focus:ring-2 focus:ring-action/10 outline-none transition-all font-medium text-dark"
+                                placeholder="Your Name">
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-dark ml-1">Phone</label>
+                        <div class="relative">
+                            <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                <i data-lucide="phone" class="w-5 h-5"></i>
+                            </div>
+                            <input type="tel" id="profile-phone"
+                                class="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-action focus:ring-2 focus:ring-action/10 outline-none transition-all font-medium text-dark"
+                                placeholder="+1 (555) 000-0000">
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-dark ml-1">Email</label>
+                        <div class="relative">
+                            <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                <i data-lucide="mail" class="w-5 h-5"></i>
+                            </div>
+                            <input type="email" id="profile-email" disabled
+                                class="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-100 border border-gray-100 text-gray-500 font-medium cursor-not-allowed">
+                        </div>
+                    </div>
+
+                    <button onclick="saveProfile()" id="save-profile-btn"
+                        class="w-full py-3 rounded-xl bg-action text-white font-bold shadow-lg shadow-action/20 hover:bg-green-700 transition-all active:scale-95 flex items-center justify-center gap-2 mt-4">
+                        <span>Save Changes</span>
+                        <i data-lucide="save" class="w-4 h-4"></i>
+                    </button>
+                    <p id="profile-message" class="text-center text-sm font-medium mt-2 hidden"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Hub Detail View (Generic Template) -->
+        <div id="hub-view"
+            class="tab-content hidden fixed inset-0 z-[60] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+            <!-- Header -->
+            <div
+                class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+                <button onclick="closeHub()"
+                    class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <h2 id="hub-title" class="text-lg font-bold">Area Title</h2>
+            </div>
+
+            <div class="max-w-md mx-auto px-6 py-6 space-y-10">
+
+                <!-- Section 1: Daily Observation -->
+                <div class="space-y-4">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+                        Daily Observation
+                    </h3>
+                    <div class="bg-white rounded-[2rem] p-6 shadow-sm border border-gray-100 space-y-4">
+                        <p class="font-medium text-dark italic">What to observe in the child:</p>
+                        <ul id="hub-observation-list" class="space-y-4">
+                            <!-- Populated by JS -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Section 2: The Concept -->
+                <div class="space-y-3">
+                    <h3 class="text-2xl font-black text-dark">The Concept</h3>
+                    <p id="hub-concept-text" class="text-text leading-relaxed text-lg">
+                        <!-- Populated by JS -->
+                    </p>
+                </div>
+
+                <!-- Section 3: Technical Foundation -->
+                <div class="relative overflow-hidden rounded-[2rem] bg-dark text-white p-8 space-y-4 shadow-xl">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
+                    <div class="relative z-10 space-y-2">
+                        <div class="flex items-center gap-2 text-action mb-2">
+                            <i data-lucide="flask-conical" class="w-5 h-5"></i>
+                            <span class="text-xs font-bold uppercase tracking-widest">Scientific Basis</span>
+                        </div>
+                        <h4 class="text-xl font-bold">Technical Foundation</h4>
+                        <p id="hub-tech-text" class="text-gray-300 leading-relaxed text-sm">
+                            <!-- Populated by JS -->
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Section 4: Practical Application -->
+                <div class="space-y-4">
+                    <h3 class="text-2xl font-bold text-dark">Practical Application</h3>
+                    <div class="bg-green-50 rounded-[2rem] p-6 border border-green-100 space-y-4">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div
+                                class="w-10 h-10 rounded-full bg-action text-white flex items-center justify-center shadow-lg shadow-action/20">
+                                <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+                            </div>
+                            <span class="font-bold text-action">Try this today</span>
+                        </div>
+                        <p id="hub-practical-text" class="text-dark/80 font-medium leading-relaxed">
+                            <!-- Populated by JS -->
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Footer: Reference -->
+                <div class="pt-6 border-t border-gray-200">
+                    <p class="text-xs text-gray-400 font-mono leading-relaxed">
+                        <span class="font-bold text-gray-500 block mb-1">REFERENCE:</span>
+                        <span id="hub-reference-text"></span>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Program 35 Naturalistic ABA Protocols View -->
+        <div id="program-view-35"
+            class="tab-content hidden fixed inset-0 z-[60] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+            <!-- Header -->
+            <div
+                class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+                <button onclick="closeProgram35()"
+                    class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div class="flex-1 text-center pr-14">
+                    <span class="text-xs font-bold uppercase tracking-widest text-action">35 Naturalistic
+                        Protocols</span>
+                </div>
+            </div>
+
+            <div class="max-w-md mx-auto px-6 py-8 space-y-12">
+                <!-- Title Section -->
+                <div class="space-y-4">
+                    <h1 class="text-3xl font-black text-dark leading-tight">35 Naturalistic ABA Protocols</h1>
+                    <p class="text-lg text-text leading-relaxed font-medium">A complete, step-by-step framework to
+                        teach communication, interaction, and essential skills through natural play and daily routines.
+                    </p>
+                    <p class="text-sm text-gray-500 leading-relaxed border-l-4 border-action/30 pl-4 py-1 italic">
+                        Designed
+                        to help children learn in real contexts without rigid drills or artificial setups.</p>
+                </div>
+
+                <!-- Section – Understanding Naturalistic ABA -->
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-bold text-dark">Understanding Naturalistic ABA</h2>
+                    <p class="text-text leading-relaxed">Naturalistic ABA integrates learning into play, routines, and
+                        real interactions. Instead of sitting at a table with flashcards, learning happens where the
+                        child is most motivated.</p>
+                    <div class="bg-blue-50 rounded-2xl p-5 border border-blue-100 flex items-start gap-4">
+                        <i data-lucide="lightbulb" class="w-6 h-6 text-blue-600 flex-shrink-0 mt-1"></i>
+                        <p class="text-sm text-blue-800 font-medium leading-relaxed">Key Focus: Motivation, functional
+                            use of skills, and real-life generalization.</p>
+                    </div>
+                </div>
+
+                <!-- Section – Evidence-Based Approaches -->
+                <div class="space-y-6">
+                    <h2 class="text-2xl font-bold text-dark">Evidence-Based Approaches</h2>
+                    <div class="grid gap-4">
+                        <!-- PRT Card -->
+                        <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center shadow-inner">
+                                    <i data-lucide="zap" class="w-5 h-5"></i>
+                                </div>
+                                <h3 class="font-bold text-dark leading-tight">Pivotal Response Treatment (PRT)</h3>
+                            </div>
+                            <p class="text-sm text-gray-500 leading-relaxed">Focus on motivation, initiation, and
+                                responsiveness.</p>
+                        </div>
+                        <!-- ESDM Card -->
+                        <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center shadow-inner">
+                                    <i data-lucide="heart-handshake" class="w-5 h-5"></i>
+                                </div>
+                                <h3 class="font-bold text-dark leading-tight">Early Start Denver Model (ESDM)</h3>
+                            </div>
+                            <p class="text-sm text-gray-500 leading-relaxed">Play-based, developmental approach combined
+                                with ABA strategies.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section – How this program works -->
+                <div class="space-y-8">
+                    <h2 class="text-2xl font-bold text-dark">How this program works</h2>
+                    <div
+                        class="relative pl-8 space-y-10 before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-action before:to-gray-200">
+                        <!-- Step 1 -->
+                        <div class="relative group">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-action text-white text-xs font-bold flex items-center justify-center ring-4 ring-background shadow-lg shadow-action/20">1</span>
+                            <h3 class="font-bold text-dark mb-1 text-lg">Choose a focus</h3>
+                            <p class="text-text leading-relaxed">Identify the skill area most relevant to the child's
+                                current needs.</p>
+                        </div>
+                        <!-- Step 2 -->
+                        <div class="relative group">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-action text-white text-xs font-bold flex items-center justify-center ring-4 ring-background shadow-lg shadow-action/20">2</span>
+                            <h3 class="font-bold text-dark mb-1 text-lg">Follow the child’s lead</h3>
+                            <p class="text-text leading-relaxed">Join their play and interests to build engagement.</p>
+                        </div>
+                        <!-- Step 3 -->
+                        <div class="relative group">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-action text-white text-xs font-bold flex items-center justify-center ring-4 ring-background shadow-lg shadow-action/20">3</span>
+                            <h3 class="font-bold text-dark mb-1 text-lg">Apply naturally</h3>
+                            <p class="text-text leading-relaxed">Insert the learning target into the interaction without
+                                breaking the flow.</p>
+                        </div>
+                        <!-- Step 4 -->
+                        <div class="relative group">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-action text-white text-xs font-bold flex items-center justify-center ring-4 ring-background shadow-lg shadow-action/20">4</span>
+                            <h3 class="font-bold text-dark mb-1 text-lg">Observe and adjust</h3>
+                            <p class="text-text leading-relaxed">Monitor response and tweak your approach as needed.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section – Protocol focus areas -->
+                <div class="space-y-6">
+                    <div class="space-y-2">
+                        <h2 class="text-2xl font-bold text-dark">Protocol Focus Areas</h2>
+                        <p class="text-sm text-gray-400">Protocols can be used flexibly with no mandatory order.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Communication
+                            & Language</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Social
+                            Interaction</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Play
+                            Skills</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Emotional
+                            Regulation</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Independence
+                            & Daily Living</span>
+                    </div>
+                </div>
+
+                <!-- Section – Complete Protocol Guide -->
+                <!-- Section – Complete Protocol Guide -->
+                <div
+                    class="bg-white rounded-[2rem] p-8 text-center space-y-6 shadow-sm border border-gray-100 relative overflow-hidden group">
+                    <!-- Background decoration -->
+                    <div
+                        class="absolute top-0 right-0 w-40 h-40 bg-action/5 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-action/10 transition-colors duration-500">
+                    </div>
+
+                    <div class="relative z-10 space-y-4">
+                        <div
+                            class="w-12 h-12 bg-action/10 rounded-2xl flex items-center justify-center mx-auto mb-2 text-action shadow-sm">
+                            <i data-lucide="download" class="w-6 h-6"></i>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-2xl font-bold text-dark">Start Using the Protocols</h3>
+                            <p class="text-text text-sm leading-relaxed px-4">Access the complete guide with all 35
+                                naturalistic ABA protocols, ready to be applied in play, routines, and real-life
+                                interactions.</p>
+                        </div>
+                    </div>
+                    <a href="../assets/en/nap/35 Naturalistic ABA Protocols.pdf"
+                        download="35 Naturalistic ABA Protocols.pdf"
+                        class="w-full py-4 rounded-xl bg-action text-white font-bold hover:bg-green-600 transition-all flex items-center justify-center gap-3 relative z-10 shadow-lg shadow-action/20 hover:scale-[1.02] active:scale-95 text-lg">
+                        <span>Download Now (PDF)</span>
+                    </a>
+                </div>
+
+                <!-- Section – Included Bonuses -->
+                <div class="space-y-6">
+                    <h2 class="text-2xl font-bold text-dark">Included Bonuses</h2>
+
+                    <!-- Bonus 01 -->
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Bonus 01</span>
+                            <h4 class="font-bold text-dark text-base">Guided Play Sequences</h4>
+                            <p class="text-xs text-gray-400">15 Ready-to-Use Activities</p>
+                        </div>
+                        <a href="../assets/en/nap/Guided Play Sequences.pdf" download="Guided Play Sequences.pdf"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+
+                    <!-- Bonus 02 -->
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Bonus 02</span>
+                            <h4 class="font-bold text-dark text-base">Naturalistic Language Scripts</h4>
+                            <p class="text-xs text-gray-400">10 Done-For-You Models</p>
+                        </div>
+                        <a href="../assets/en/nap/Naturalistic Language Scripts.pdf"
+                            download="Naturalistic Language Scripts.pdf"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+
+                    <!-- Bonus 03 -->
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Bonus 03</span>
+                            <h4 class="font-bold text-dark text-base">Naturalistic Self-Regulation Guide</h4>
+                            <p class="text-xs text-gray-400">Essential Strategies</p>
+                        </div>
+                        <a href="../assets/en/nap/Naturalistic Self-Regulation Guide.pdf"
+                            download="Naturalistic Self-Regulation Guide.pdf"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+
+                    <!-- Bonus 04 -->
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Bonus 04</span>
+                            <h4 class="font-bold text-dark text-base">Instant Engagement Guide</h4>
+                            <p class="text-xs text-gray-400">For PRT & ESDM</p>
+                        </div>
+                        <a href="../assets/en/nap/Instant Engagement Guide for PRT & ESDM.pdf"
+                            download="Instant Engagement Guide for PRT & ESDM.pdf"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Program Toolkit View -->
+        <div id="program-view-toolkit"
+            class="tab-content hidden fixed inset-0 z-[60] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+            <!-- Header -->
+            <div
+                class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+                <button onclick="closeProgramToolkit()"
+                    class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div class="flex-1 text-center pr-14">
+                    <span class="text-xs font-bold uppercase tracking-widest text-action">Practical Toolkit</span>
+                </div>
+            </div>
+
+            <div class="max-w-md mx-auto px-6 py-8 space-y-12">
+                <!-- Title Section -->
+                <div class="space-y-4">
+                    <h1 class="text-3xl font-black text-dark leading-tight">Practical Autism Transformation Toolkit</h1>
+                    <p class="text-lg text-text leading-relaxed font-medium">Essential VB-MAPP Skills</p>
+                    <p class="text-text leading-relaxed">A structured, practical system designed to teach core
+                        communication, language, and learning skills in children with autism—without starting from
+                        scratch.</p>
+                    <p class="text-sm text-gray-500 leading-relaxed border-l-4 border-action/30 pl-4 py-1 italic">
+                        Designed to help therapists and educators teach essential skills with clarity, consistency, and
+                        confidence.
+                    </p>
+                </div>
+
+                <!-- Understanding the Toolkit -->
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-bold text-dark">Understanding the Toolkit</h2>
+                    <p class="text-text leading-relaxed">The Practical Autism Transformation Toolkit is built around the
+                        VB-MAPP milestones and provides clear, ready-to-use teaching programs for the most critical
+                        skill areas in autism intervention.</p>
+                    <p class="text-text leading-relaxed">Instead of spending hours planning, you follow structured
+                        protocols that guide you step by step—from stimulus selection to reinforcement and data-driven
+                        progress.</p>
+
+                    <div class="bg-blue-50 rounded-2xl p-5 border border-blue-100 flex items-start gap-4">
+                        <i data-lucide="lightbulb" class="w-6 h-6 text-blue-600 flex-shrink-0 mt-1"></i>
+                        <p class="text-sm text-blue-800 font-medium leading-relaxed">Key Focus: Clarity in teaching,
+                            functional communication, and measurable skill development.</p>
+                    </div>
+                </div>
+
+                <!-- Evidence-Based Foundation -->
+                <div class="space-y-6">
+                    <h2 class="text-2xl font-bold text-dark">Evidence-Based Foundation</h2>
+                    <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center shadow-inner">
+                                <i data-lucide="book-open" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="font-bold text-dark leading-tight">VB-MAPP Framework</h3>
+                        </div>
+                        <p class="text-sm text-gray-500 leading-relaxed">A milestone-based system focused on functional
+                            communication, language development, and learning readiness.</p>
+                        <p class="text-sm text-gray-500 leading-relaxed mt-2">Grounded in decades of applied behavior
+                            analysis research and clinical practice.</p>
+                    </div>
+                </div>
+
+                <!-- How this program works -->
+                <div class="space-y-8">
+                    <h2 class="text-2xl font-bold text-dark">How this program works</h2>
+                    <div
+                        class="relative pl-8 space-y-10 before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-action before:to-gray-200">
+                        <!-- Step 1 -->
+                        <div class="relative group">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-action text-white text-xs font-bold flex items-center justify-center ring-4 ring-background shadow-lg shadow-action/20">1</span>
+                            <h3 class="font-bold text-dark mb-1 text-lg">Select the target skill</h3>
+                            <p class="text-text leading-relaxed">Choose the VB-MAPP milestone most relevant to the
+                                child’s current level.</p>
+                        </div>
+                        <!-- Step 2 -->
+                        <div class="relative group">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-action text-white text-xs font-bold flex items-center justify-center ring-4 ring-background shadow-lg shadow-action/20">2</span>
+                            <h3 class="font-bold text-dark mb-1 text-lg">Follow the protocol</h3>
+                            <p class="text-text leading-relaxed">Apply clear, step-by-step teaching procedures with
+                                defined prompts and reinforcement.</p>
+                        </div>
+                        <!-- Step 3 -->
+                        <div class="relative group">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-action text-white text-xs font-bold flex items-center justify-center ring-4 ring-background shadow-lg shadow-action/20">3</span>
+                            <h3 class="font-bold text-dark mb-1 text-lg">Teach and monitor</h3>
+                            <p class="text-text leading-relaxed">Implement the program during sessions while observing
+                                responses and progress.</p>
+                        </div>
+                        <!-- Step 4 -->
+                        <div class="relative group">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-action text-white text-xs font-bold flex items-center justify-center ring-4 ring-background shadow-lg shadow-action/20">4</span>
+                            <h3 class="font-bold text-dark mb-1 text-lg">Adjust and generalize</h3>
+                            <p class="text-text leading-relaxed">Modify difficulty, ensure skill generalization, and
+                                maintain progress over time.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Program Focus Areas -->
+                <div class="space-y-6">
+                    <div class="space-y-2">
+                        <h2 class="text-2xl font-bold text-dark">Program Focus Areas</h2>
+                        <p class="text-sm text-gray-400">All programs are independent and can be applied according to
+                            the child’s needs.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <!-- Focus Areas Tags -->
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Mands</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Tacts</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Listener
+                            Responding</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Echoics</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Intraverbals</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">LRFFC</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Vocal
+                            Skills</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Imitation</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Social
+                            Skills</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Play
+                            Skills</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Language
+                            Development</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">VPN-MTS</span>
+                    </div>
+                </div>
+
+                <!-- Start Using the Toolkit (CTA) -->
+                <div
+                    class="bg-white rounded-[2rem] p-8 text-center space-y-6 shadow-sm border border-gray-100 relative overflow-hidden group">
+                    <!-- Background decoration -->
+                    <div
+                        class="absolute top-0 right-0 w-40 h-40 bg-action/5 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-action/10 transition-colors duration-500">
+                    </div>
+
+                    <div class="relative z-10 space-y-4">
+                        <div
+                            class="w-12 h-12 bg-action/10 rounded-2xl flex items-center justify-center mx-auto mb-2 text-action shadow-sm">
+                            <i data-lucide="layers" class="w-6 h-6"></i>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-2xl font-bold text-dark">Start Using the Toolkit</h3>
+                            <p class="text-text text-sm leading-relaxed px-4">Access all 12 VB-MAPP milestone programs,
+                                ready to be applied in therapy sessions, schools, or home-based interventions.</p>
+                        </div>
+                    </div>
+                    <button onclick="openToolkitMaterials()"
+                        class="w-full py-4 rounded-xl bg-action text-white font-bold hover:bg-green-600 transition-all flex items-center justify-center gap-3 relative z-10 shadow-lg shadow-action/20 hover:scale-[1.02] active:scale-95 text-lg">
+                        <span>Access the Materials</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <!-- Included Bonuses -->
+                <div class="space-y-6">
+                    <h2 class="text-2xl font-bold text-dark">Included Bonuses</h2>
+
+                    <!-- Bonus 01 -->
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Bonus 01</span>
+                            <h4 class="font-bold text-dark text-base">ABA Facilitation Techniques</h4>
+                            <p class="text-xs text-gray-400">Practical strategies to streamline teaching</p>
+                        </div>
+                        <a href="../assets/en/pat/ABA Facilitation Techniques.pdf"
+                            download="ABA Facilitation Techniques.pdf"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+
+                    <!-- Bonus 02 -->
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Bonus 02</span>
+                            <h4 class="font-bold text-dark text-base">Complete Guide to Teaching Imitation</h4>
+                            <p class="text-xs text-gray-400">Building imitation skills step by step</p>
+                        </div>
+                        <a href="../assets/en/pat/Complete Guide to Teaching Imitation.pdf"
+                            download="Complete Guide to Teaching Imitation.pdf"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toolkit Materials View -->
+        <div id="toolkit-materials-view"
+            class="tab-content hidden fixed inset-0 z-[70] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+            <!-- Header -->
+            <div
+                class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+                <button onclick="closeToolkitMaterials()"
+                    class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div class="flex-1 text-center pr-14">
+                    <span class="text-xs font-bold uppercase tracking-widest text-action">Toolkit Materials</span>
+                </div>
+            </div>
+
+            <div class="max-w-md mx-auto px-6 py-8 space-y-4">
+                <!-- Materials List -->
+                <!-- 1 Mands -->
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">01</span>
+                        <h4 class="font-bold text-dark">Mands</h4>
+                    </div>
+                    <a href="../assets/en/pat/Mands.pdf" download="Mands.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <!-- 2 Tacts -->
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">02</span>
+                        <h4 class="font-bold text-dark">Tacts</h4>
+                    </div>
+                    <a href="../assets/en/pat/Tacts.pdf" download="Tacts.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <!-- 3 Listener Responding -->
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">03</span>
+                        <h4 class="font-bold text-dark">Listener Responding</h4>
+                    </div>
+                    <a href="../assets/en/pat/Listener Responding.pdf" download="Listener Responding.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <!-- 4 Echoics -->
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">04</span>
+                        <h4 class="font-bold text-dark">Echoics</h4>
+                    </div>
+                    <a href="../assets/en/pat/Echoics.pdf" download="Echoics.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <!-- 5 Intraverbals -->
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">05</span>
+                        <h4 class="font-bold text-dark">Intraverbals</h4>
+                    </div>
+                    <a href="../assets/en/pat/Intraverbals.pdf" download="Intraverbals.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <!-- 6 LRFFC -->
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">06</span>
+                        <h4 class="font-bold text-dark">LRFFC</h4>
+                    </div>
+                    <a href="../assets/en/pat/LRFFC.pdf" download="LRFFC.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <!-- 7 Vocal Skills -->
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">07</span>
+                        <h4 class="font-bold text-dark">Vocal Skills</h4>
+                    </div>
+                    <a href="../assets/en/pat/Vocal Skills.pdf" download="Vocal Skills.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <!-- 8 Imitation -->
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">08</span>
+                        <h4 class="font-bold text-dark">Imitation</h4>
+                    </div>
+                    <a href="../assets/en/pat/Imitation.pdf" download="Imitation.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <!-- 9 Social Skills -->
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">09</span>
+                        <h4 class="font-bold text-dark">Social Skills</h4>
+                    </div>
+                    <a href="../assets/en/pat/Social Skills.pdf" download="Social Skills.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <!-- 10 Play Skills -->
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">10</span>
+                        <h4 class="font-bold text-dark">Play Skills</h4>
+                    </div>
+                    <a href="../assets/en/pat/Play Skills.pdf" download="Play Skills.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <!-- 11 Language Development -->
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">11</span>
+                        <h4 class="font-bold text-dark">Language Development</h4>
+                    </div>
+                    <a href="../assets/en/pat/Language Development.pdf" download="Language Development.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <!-- 12 Visual Perception & Matching-to-Sample (VP-MTS) -->
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">12</span>
+                        <h4 class="font-bold text-dark">Visual Perception (VP-MTS)</h4>
+                    </div>
+                    <a href="../assets/en/pat/VP-MTS.pdf" download="VP-MTS.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Naturalistic Application Mastery View -->
+        <div id="program-view-naturalistic-mastery"
+            class="tab-content hidden fixed inset-0 z-[60] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+            <!-- Header -->
+            <div
+                class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+                <button onclick="closeNaturalisticMastery()"
+                    class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div class="flex-1 text-center pr-14">
+                    <span class="text-xs font-bold uppercase tracking-widest text-action">Naturalistic Application
+                        Mastery</span>
+                </div>
+            </div>
+
+            <div class="max-w-md mx-auto px-6 py-8 space-y-12">
+                <!-- Header Section -->
+                <div class="space-y-4">
+                    <h1 class="text-3xl font-black text-dark leading-tight">Naturalistic Application Mastery</h1>
+                    <p class="text-lg text-text leading-relaxed font-medium">Turn the 35 Naturalistic ABA Protocols into
+                        confident, real-session results.</p>
+                </div>
+
+                <!-- Section 1 – Context -->
+                <div class="space-y-4">
+                    <div class="bg-indigo-50 rounded-[2rem] p-6 border border-indigo-100 space-y-4">
+                        <p class="text-indigo-900 font-medium leading-relaxed">
+                            Having strong protocols is an important first step.
+                            But applying them confidently in real sessions is where most professionals struggle.
+                        </p>
+                        <p class="text-indigo-900 font-medium leading-relaxed">
+                            Even with excellent materials, it’s common to feel unsure about when to use play-based
+                            teaching, how to maintain motivation naturally, and how to adapt strategies across different
+                            settings.
+                        </p>
+                        <div class="h-px bg-indigo-200 w-full"></div>
+                        <p class="text-indigo-900 font-bold">
+                            This training was created to bridge that gap.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Section 2 – What this training provides -->
+                <div class="space-y-6">
+                    <div class="space-y-2">
+                        <h2 class="text-2xl font-bold text-dark">What this training provides</h2>
+                        <p class="text-text leading-relaxed">Naturalistic Application Mastery is a practical,
+                            step-by-step video training designed to help you apply the 35 protocols with clarity and
+                            confidence.</p>
+                    </div>
+
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <div
+                                class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                            </div>
+                            <span class="text-dark font-medium leading-relaxed">Apply the 35 protocols in real settings
+                                (clinic, school, or home)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div
+                                class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                            </div>
+                            <span class="text-dark font-medium leading-relaxed">Customize natural reinforcement for each
+                                child</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div
+                                class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                            </div>
+                            <span class="text-dark font-medium leading-relaxed">Balance structure and spontaneity
+                                without losing engagement</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div
+                                class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                            </div>
+                            <span class="text-dark font-medium leading-relaxed">Handle challenging behaviors while
+                                staying naturalistic</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div
+                                class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                            </div>
+                            <span class="text-dark font-medium leading-relaxed">Track progress and generalization
+                                correctly</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Section 3 – What’s included -->
+                <div class="space-y-6">
+                    <h2 class="text-2xl font-bold text-dark">What’s included</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-2">
+                            <i data-lucide="play-circle" class="w-6 h-6 text-action"></i>
+                            <span class="font-bold text-dark text-sm">Step-by-step video training</span>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-2">
+                            <i data-lucide="video" class="w-6 h-6 text-action"></i>
+                            <span class="font-bold text-dark text-sm">Real-session examples</span>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-2">
+                            <i data-lucide="list-checks" class="w-6 h-6 text-action"></i>
+                            <span class="font-bold text-dark text-sm">Practical checklists</span>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-2">
+                            <i data-lucide="infinity" class="w-6 h-6 text-action"></i>
+                            <span class="font-bold text-dark text-sm">Lifetime access</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 4 – Access state -->
+                <div
+                    class="bg-white rounded-[2rem] p-8 text-center space-y-6 shadow-sm border border-gray-100 relative overflow-hidden group">
+                    <!-- Background decoration -->
+                    <div
+                        class="absolute top-0 right-0 w-40 h-40 bg-action/5 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-action/10 transition-colors duration-500">
+                    </div>
+
+                    <div class="relative z-10 space-y-4">
+                        <div
+                            class="w-12 h-12 bg-action/10 rounded-2xl flex items-center justify-center mx-auto mb-2 text-action shadow-sm">
+                            <i data-lucide="lock" class="w-6 h-6"></i>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-2xl font-bold text-dark">Unlock Full Access</h3>
+                            <p class="text-text text-sm leading-relaxed px-4">Access to this content requires an
+                                additional upgrade.</p>
+                        </div>
+                    </div>
+                    <button onclick="openVbmappVideos()"
+                        class="w-full py-4 rounded-xl bg-action text-white font-bold hover:bg-green-600 transition-all flex items-center justify-center gap-3 relative z-10 shadow-lg shadow-action/20 hover:scale-[1.02] active:scale-95 text-lg">
+                        <span>Unlock Full Access</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- VB-MAPP Implementation Companion View -->
+    <div id="program-view-vbmapp-companion"
+        class="tab-content hidden fixed inset-0 z-[60] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+        <!-- Header -->
+        <div
+            class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+            <button onclick="closeVbmappCompanion()"
+                class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+            </button>
+            <div class="flex-1 text-center pr-14">
+                <span class="text-xs font-bold uppercase tracking-widest text-action">VB-MAPP Implementation
+                    Companion</span>
+            </div>
+        </div>
+
+        <div class="max-w-md mx-auto px-6 py-8 space-y-12">
+            <!-- Header Section -->
+            <div class="space-y-4">
+                <h1 class="text-3xl font-black text-dark leading-tight">VB-MAPP Implementation Companion</h1>
+                <p class="text-lg text-text leading-relaxed font-medium">Turn assessment results into clear, effective
+                    intervention decisions.</p>
+            </div>
+
+            <!-- Section 1 – The real challenge after assessment -->
+            <div class="space-y-4">
+                <div class="bg-orange-50 rounded-[2rem] p-6 border border-orange-100 space-y-4">
+                    <p class="text-orange-900 font-medium leading-relaxed">
+                        Completing a VB-MAPP assessment is a critical milestone.
+                        But knowing what to do after the assessment is where many professionals feel uncertain.
+                    </p>
+                    <p class="text-orange-900 font-medium leading-relaxed">
+                        Scores alone don’t create progress.
+                        The real challenge is translating assessment data into meaningful teaching decisions that guide
+                        daily sessions.
+                    </p>
+                    <div class="h-px bg-orange-200 w-full"></div>
+                    <p class="text-orange-900 font-bold">
+                        This is where many programs lose clarity, consistency, and impact.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Section 2 – What this companion supports -->
+            <div class="space-y-6">
+                <div class="space-y-2">
+                    <h2 class="text-2xl font-bold text-dark">What this companion supports</h2>
+                    <p class="text-text leading-relaxed">The VB-MAPP Implementation Companion was created to support
+                        professionals in turning assessment data into structured, confident intervention plans.</p>
+                    <p class="text-text leading-relaxed">This content helps you:</p>
+                </div>
+
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-3">
+                        <div
+                            class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                        </div>
+                        <span class="text-dark font-medium leading-relaxed">Interpret VB-MAPP results with practical
+                            clarity</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div
+                            class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                        </div>
+                        <span class="text-dark font-medium leading-relaxed">Decide what to teach next — and why</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div
+                            class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                        </div>
+                        <span class="text-dark font-medium leading-relaxed">Choose between DTT and naturalistic teaching
+                            based on data</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div
+                            class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                        </div>
+                        <span class="text-dark font-medium leading-relaxed">Adjust reinforcement and prompting
+                            strategically</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div
+                            class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                        </div>
+                        <span class="text-dark font-medium leading-relaxed">Maintain and generalize skills over
+                            time</span>
+                    </li>
+                </ul>
+
+                <p class="text-sm text-gray-500 italic border-l-4 border-blue-200 pl-3 py-1">
+                    The focus is not theory, but applied clinical reasoning.
+                </p>
+            </div>
+
+            <!-- Section 3 – What’s included -->
+            <div class="space-y-6">
+                <h2 class="text-2xl font-bold text-dark">What’s included</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-2">
+                        <i data-lucide="film" class="w-6 h-6 text-action"></i>
+                        <span class="font-bold text-dark text-sm">Guided video explanations</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-2">
+                        <i data-lucide="brain-circuit" class="w-6 h-6 text-action"></i>
+                        <span class="font-bold text-dark text-sm">Decision-making frameworks</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-2">
+                        <i data-lucide="bar-chart-3" class="w-6 h-6 text-action"></i>
+                        <span class="font-bold text-dark text-sm">Practical examples using real assessment
+                            scenarios</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-2">
+                        <i data-lucide="infinity" class="w-6 h-6 text-action"></i>
+                        <span class="font-bold text-dark text-sm">Lifetime access</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4 – Access state -->
+            <div
+                class="bg-white rounded-[2rem] p-8 text-center space-y-6 shadow-sm border border-gray-100 relative overflow-hidden group">
+                <!-- Background decoration -->
+                <div
+                    class="absolute top-0 right-0 w-40 h-40 bg-action/5 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-action/10 transition-colors duration-500">
+                </div>
+
+                <div class="relative z-10 space-y-4">
+                    <div
+                        class="w-12 h-12 bg-action/10 rounded-2xl flex items-center justify-center mx-auto mb-2 text-action shadow-sm">
+                        <i data-lucide="lock" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-2xl font-bold text-dark">Unlock Full Access</h3>
+                        <p class="text-text text-sm leading-relaxed px-4">Access to this content requires an
+                            additional upgrade.</p>
+                    </div>
+                </div>
+                <button onclick="openVbmappVideos()"
+                    class="w-full py-4 rounded-xl bg-action text-white font-bold hover:bg-green-600 transition-all flex items-center justify-center gap-3 relative z-10 shadow-lg shadow-action/20 hover:scale-[1.02] active:scale-95 text-lg">
+                    <span>Unlock Full Access</span>
+                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- VB-MAPP Videos List View -->
+    <div id="vbmapp-videos-view"
+        class="tab-content hidden fixed inset-0 z-[70] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+        <!-- Header -->
+        <div
+            class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+            <button onclick="closeVbmappVideos()"
+                class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+            </button>
+            <div class="flex-1 text-center pr-14">
+                <span class="text-xs font-bold uppercase tracking-widest text-action">Course Modules</span>
+            </div>
+        </div>
+
+        <div class="max-w-md mx-auto px-6 py-8 space-y-6">
+            <div class="space-y-4">
+                <h1 class="text-2xl font-black text-dark leading-tight">Video Lessons</h1>
+                <p class="text-text leading-relaxed">Select a lesson to start watching.</p>
+            </div>
+
+            <!-- Video List Container -->
+            <div id="vbmapp-video-list-container" class="space-y-3">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- VB-MAPP Video Player View -->
+    <div id="vbmapp-video-player-view"
+        class="tab-content hidden fixed inset-0 z-[80] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+        <!-- Header -->
+        <div
+            class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+            <button onclick="closeVbmappPlayer()"
+                class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+            </button>
+            <div class="flex-1 text-center pr-14">
+                <span class="text-xs font-bold uppercase tracking-widest text-action">Now Playing</span>
+            </div>
+        </div>
+
+        <div class="max-w-md mx-auto px-6 py-6 space-y-6">
+            <h2 id="video-player-title" class="text-xl font-bold text-dark leading-tight"></h2>
+
+            <div id="video-player-container" class="w-full rounded-2xl overflow-hidden shadow-lg bg-black">
+                <!-- Video Embed Injected Here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-t border-gray-100 z-50">
+        <div class="max-w-md mx-auto px-6 h-20 flex items-center justify-around">
+
+            <button class="nav-btn w-12 h-12 flex flex-col items-center justify-center gap-1 text-action transition-all"
+                onclick="switchTab('home')">
+                <i data-lucide="home" class="w-6 h-6"></i>
+                <span class="text-[0.6rem] font-bold">Home</span>
+            </button>
+
+            <button
+                class="nav-btn w-12 h-12 flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-action transition-all"
+                onclick="switchTab('programs')">
+                <i data-lucide="layers" class="w-6 h-6"></i>
+                <span class="text-[0.6rem] font-bold">Programs</span>
+            </button>
+
+            <button
+                class="nav-btn w-12 h-12 flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-action transition-all"
+                onclick="switchTab('feed')">
+                <i data-lucide="newspaper" class="w-6 h-6"></i>
+                <span class="text-[0.6rem] font-bold">Feed</span>
+            </button>
+
+            <button
+                class="nav-btn w-12 h-12 flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-action transition-all"
+                onclick="switchTab('profile')">
+                <i data-lucide="user" class="w-6 h-6"></i>
+                <span class="text-[0.6rem] font-bold">Profile</span>
+            </button>
+
+        </div>
+    </nav>
+
+    <script src="app.js"></script>
+
+    <!-- Supabase SDK & Access Validation -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const CHECKOUT_LINKS = {
+            '35_protocols': 'https://en.abatools.pro/nap?utm_source=app',
+            'naturalistic_mastery': 'https://pay.snappcheckout.com/c/rqu8tk5byn00t5sl?utm_source=app',
+            'pratical_toolkit': 'https://en.abatools.pro/pat?utm_source=app',
+            'vbmapp_implementation': 'https://pay.abatools.pro/checkout/194050229:1?utm_source=app',
+            '20_session_plans': 'https://pay.snappcheckout.com/c/3rmqp3gzivpqhnil?utm_source=app',
+            '30_functional_play': 'https://pay.snappcheckout.com/c/up3pi4p7qqwzo7wd?utm_source=app',
+            '15_intervention_protocols': 'https://pay.snappcheckout.com/c/ghu8lwopsm5jolpw?utm_source=app',
+            '17_guided_aba': 'https://pay.snappcheckout.com/c/9lwxyl17p769gu6h?utm_source=app',
+            'school_readiness': 'https://pay.abatools.pro/checkout/194049769:1?utm_source=app',
+            'aba_playful': 'https://pay.abatools.pro/checkout/194049401:1?utm_source=app',
+            'emotional_recognition': 'https://pay.abatools.pro/checkout/194049893:1?utm_source=app',
+            'autism_safety': 'https://pay.abatools.pro/checkout/194049274:1?utm_source=app'
+        };
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const SUPABASE_URL = 'https://tjxfjwhpillhudgqtusf.supabase.co';
+            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqeGZqd2hwaWxsaHVkZ3F0dXNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMzE3ODMsImV4cCI6MjA4NTkwNzc4M30.on32sO1OAx9NWZZr4oOA2b2Z_Gk5BesQ7xhtMAMDpXc';
+
+            // Product Mapping (Reference)
+            const PRODUCT_MAPPING = {
+                '35_protocols': '35 Naturalistic ABA Protocols',
+                'naturalistic_mastery': 'Naturalistic Application Mastery',
+                'pratical_toolkit': 'Pratical Autism Transformation Toolkit',
+                'vbmapp_implementation': 'VB-MAPP Implementation Companion',
+                '20_session_plans': '20 Session Plans for Sensory Regulation',
+                '30_functional_play': '30 Functional Play Activities for OT in ASD',
+                '15_intervention_protocols': '15 Intervention Protocols for Daily Living Skills (ADLs)',
+                '17_guided_aba': '17 Guided ABA Protocols for Autism Sessions',
+                'school_readiness': 'School Readiness Strategies Kit for Autism',
+                'aba_playful': 'ABA Playful Approaches',
+                'emotional_recognition': 'Emotional Recognition Training',
+                'autism_safety': 'Autism Safety Pack'
+            };
+
+
+
+            let supabase;
+
+            try {
+                if (window.supabase) {
+                    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                    window.supabaseClient = supabase; // Expose globally
+                } else {
+                    throw new Error('Supabase SDK not loaded.');
+                }
+
+                await verifyAccess(supabase);
+
+            } catch (err) {
+                console.error('Critical Error in Access System:', err);
+                // Fallback: Lock everything if system fails
+                lockAllFallback();
+            }
+        });
+
+        async function verifyAccess(supabase) {
+            const storedAuth = localStorage.getItem('abatools_auth');
+            let email = null;
+
+            if (storedAuth) {
+                try {
+                    const parsed = JSON.parse(storedAuth);
+                    if (parsed && parsed.email) email = parsed.email.trim();
+                } catch (e) { console.error('Auth parse error', e); }
+            }
+
+            if (!email) {
+                console.warn('No authenticated user found. Locking all content.');
+                applyLocks(new Set());
+                return;
+            }
+
+            console.log('Verifying access for:', email);
+
+            // 1. Get User Product IDs
+            // Note: Using ILIKE for case-insensitive email match
+            const { data: userAccess, error: accessError } = await supabase
+                .from('user_access')
+                .select('product_id')
+                .ilike('email', email);
+
+            // Update Last Access Timestamp
+            supabase.from('user_access')
+                .update({ last_access: new Date().toISOString() })
+                .ilike('email', email)
+                .then(({ error }) => {
+                    if (error) console.error('Error updating last_access:', error);
+                });
+
+            if (accessError || !userAccess || userAccess.length === 0) {
+                console.warn('No access records found for user or error:', accessError);
+                applyLocks(new Set());
+                return;
+            }
+
+            // Use raw string matching for IDs to handle "000001" text columns correctly
+            // Robustly handle both multiple rows AND comma-separated values in a single row
+            const productIds = userAccess
+                .map(ua => ua.product_id ? String(ua.product_id) : '')
+                .join(',') // Join all potential rows (normalize)
+                .split(',') // Split by comma to separate any combined IDs
+                .map(id => id.trim())
+                .filter(id => id.length > 0);
+
+            console.log('Found Product IDs:', productIds);
+
+            if (productIds.length === 0) {
+                console.warn('User has records but no valid numeric product_ids found.');
+                applyLocks(new Set());
+                return;
+            }
+
+            // 2. Map Product IDs to Internal Slugs
+            let allowedSlugs = new Set();
+
+            // Fetch ALL rules to correctly handle comma-separated checkout_id strings in the database
+            const { data: rules, error: rulesError } = await supabase
+                .from('product_rules')
+                .select('internal_slug, checkout_id');
+
+            if (rules && !rulesError) {
+                console.log('Verifying rules against user products:', productIds);
+
+                const userProductIdsSet = new Set(productIds);
+
+                rules.forEach(r => {
+                    if (!r.checkout_id) return;
+
+                    // Split the rule's checkout_id string into individual IDs if it's a CSV string
+                    const ruleIds = String(r.checkout_id).split(',').map(id => id.trim());
+
+                    // Check if ANY of the rule's IDs are in the user's product ID set
+                    const match = ruleIds.some(id => userProductIdsSet.has(id));
+
+                    if (match && r.internal_slug) {
+                        allowedSlugs.add(r.internal_slug.trim());
+                    }
+                });
+                console.log('Matched Rules:', Array.from(allowedSlugs));
+            } else if (rulesError) {
+                console.error('Error fetching product rules:', rulesError);
+            }
+
+            console.log('Final Allowed Slugs:', Array.from(allowedSlugs));
+
+            // Update UI Active Count
+            const activeTag = document.getElementById('active-products-tag');
+            if (activeTag) {
+                const count = allowedSlugs.size;
+                activeTag.textContent = `${count} ACTIVES`;
+                activeTag.classList.remove('hidden');
+            }
+
+            // 3. Apply Locks
+            applyLocks(allowedSlugs);
+        }
+
+        function lockAllFallback() {
+            applyLocks(new Set());
+        }
+
+        function applyLocks(allowedSlugs) {
+            const cards = document.querySelectorAll('[data-slug]');
+            console.log(`Processing ${cards.length} program cards...`);
+
+            cards.forEach(card => {
+                const slug = card.getAttribute('data-slug');
+                const isAllowed = allowedSlugs.has(slug);
+
+                // console.log(`Card [${slug}]: ${isAllowed ? 'UNLOCKED' : 'LOCKED'}`);
+
+                if (!isAllowed) {
+                    lockCard(card);
+                } else {
+                    // Ensure it's unlocked (remove overlay if exists, though we start clean usually)
+                    unlockCard(card);
+                }
+            });
+
+            // Re-render icons for any newly added overlays
+            try { lucide.createIcons(); } catch (e) { }
+        }
+
+        function lockCard(card) {
+            // Check if already locked
+            if (card.querySelector('.locked-overlay')) return;
+
+            const slug = card.getAttribute('data-slug');
+            const checkoutUrl = CHECKOUT_LINKS[slug];
+
+            // Create Overlay with centered icon
+            const overlay = document.createElement('div');
+            overlay.className = 'locked-overlay animate-in fade-in duration-500';
+            overlay.innerHTML = `
+                <div class="locked-icon">
+                    <i data-lucide="lock" class="w-8 h-8"></i>
+                </div>
+            `;
+
+            // Append as first child or strictly on top? Append is fine due to z-index.
+            card.appendChild(overlay);
+
+            // Handle Redirection if URL exists
+            if (checkoutUrl) {
+                card.style.cursor = 'pointer';
+                card.onclick = function (e) {
+                    // Prevent propagation if needed, but here we want the card click
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Redirecting to checkout:', checkoutUrl);
+                    window.location.href = checkoutUrl;
+                };
+                overlay.title = "Click to unlock this program";
+            } else {
+                card.style.cursor = 'default';
+            }
+
+            // Disable buttons and links specific to each card
+            const actionElements = card.querySelectorAll('button, a');
+            actionElements.forEach(el => {
+                el.disabled = true;
+                el.style.pointerEvents = 'none';
+                el.classList.add('opacity-50', 'cursor-not-allowed');
+
+                // Neutralize actions
+                if (el.tagName === 'A') {
+                    el.removeAttribute('href');
+                    el.removeAttribute('download');
+                }
+                if (el.tagName === 'BUTTON') {
+                    el.removeAttribute('onclick');
+                    el.onclick = null; // Clear event handler property
+                }
+            });
+
+            try { lucide.createIcons(); } catch (e) { }
+        }
+
+        function unlockCard(card) {
+            // Remove overlay if present (useful for re-verification without reload)
+            const overlay = card.querySelector('.locked-overlay');
+            if (overlay) overlay.remove();
+            // We do not restore buttons automatically because we removed attributes. 
+            // This function assumes page load state is "unlocked" by default HTML.
+        }
+
+        function logout() {
+            localStorage.removeItem('abatools_auth');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+
+</html>

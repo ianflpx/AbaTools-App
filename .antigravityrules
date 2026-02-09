@@ -1,0 +1,61 @@
+REGRAS DE CÓDIGO E DESIGN (SEM EXCEÇÃO)
+
+Prioridade técnica
+
+Gere páginas em HTML puro (sem React/Next/Vue).
+
+Pode separar em arquivos: index.html, styles.css, app.js (opcional).
+
+Use Tailwind CSS via CDN no <head> (obrigatório).
+
+JavaScript apenas para interações simples (ex: trocar telas/abas). Sem bibliotecas/frameworks.
+
+Mobile-first (cara de app)
+
+Layout mobile obrigatório.
+
+Conteúdo centralizado com max-w-md mx-auto.
+
+Fundo sempre bg-[#F8FAFC].
+
+Top bar fixa (logo/título) + bottom navigation fixa (4 abas).
+
+Reserve espaço para nav: use pb-24 no conteúdo.
+
+Paleta de cores
+
+Ação (botões/checks): #05A045
+
+Urgência/Bônus: #E64A19
+
+Títulos: #0F172A
+
+Texto: #475569
+
+Fundo: #F8FAFC
+
+Destaques: #FACC15
+
+Tipografia (obrigatória)
+
+Importar no <head> Google Fonts: Montserrat (700–900) e Inter (400–600).
+
+Títulos: Montserrat 700–900.
+
+Corpo: Inter 400–600 com leading-relaxed.
+
+Títulos de seção em UPPERCASE.
+
+UI (Tailwind)
+
+Arredondamento: rounded-2xl em cards e botões; rounded-[3rem] em containers principais.
+
+Sombras: shadow-2xl (suaves).
+
+Espaçamento amplo entre blocos (ex: py-10 / py-12 / space-y-6).
+
+Ícones
+
+Usar apenas Lucide via CDN no <head>.
+
+Padrão: <i data-lucide="home"></i> e inicializar no JS.
