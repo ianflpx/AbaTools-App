@@ -10,6 +10,11 @@ function switchTab(tabId) {
             el.id === 'program-view-toolkit' ||
             el.id === 'toolkit-materials-view' ||
             el.id === 'program-view-naturalistic-mastery' ||
+            el.id === 'program-view-aba-business-kit' ||
+            el.id === 'program-view-parent-training-kit' ||
+            el.id === 'program-view-aba-emergency-pack' ||
+            el.id === 'program-view-aba-facilitation-techniques' ||
+            el.id === 'program-view-therapist-survival-guide' ||
             el.id === 'program-view-vbmapp-companion' ||
             el.id === 'vbmapp-videos-view' ||
             el.id === 'vbmapp-video-player-view') {
@@ -176,6 +181,27 @@ function closeNaturalisticMastery() {
     if (!view) return;
     view.classList.add('hidden');
     view.classList.remove('block');
+}
+
+function openUpsellView(viewId) {
+    const view = document.getElementById(viewId);
+    if (!view) {
+        console.error(`Upsell view ${viewId} not found`);
+        return;
+    }
+    view.classList.remove('hidden');
+    view.classList.add('block');
+    view.style.display = 'block';
+    view.scrollTop = 0;
+    lucide.createIcons();
+}
+
+function closeUpsellView(viewId) {
+    const view = document.getElementById(viewId);
+    if (!view) return;
+    view.classList.add('hidden');
+    view.classList.remove('block');
+    view.style.display = '';
 }
 
 function openVbmappCompanion() {

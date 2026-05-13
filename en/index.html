@@ -300,8 +300,14 @@
                             <span>Email</span>
                         </a>
                         <a href="https://www.instagram.com/aba.tools/" target="_blank"
-                            class="py-3 px-4 rounded-xl bg-white border border-gray-200 text-dark font-bold text-sm hover:border-pink-500/30 hover:text-pink-600 transition-colors flex flex-col items-center gap-2 shadow-sm">
-                            <i data-lucide="instagram" class="w-5 h-5 text-gray-400"></i>
+                            class="group py-3 px-4 rounded-xl bg-white border border-gray-200 text-dark font-bold text-sm hover:border-pink-500/30 hover:text-pink-600 transition-colors flex flex-col items-center gap-2 shadow-sm">
+                            <svg class="w-5 h-5 text-gray-400 group-hover:text-pink-600 transition-colors" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" aria-hidden="true">
+                                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+                            </svg>
                             <span>Instagram</span>
                         </a>
                     </div>
@@ -592,10 +598,10 @@
                                     Your Value, and Grow as a Respected ABA Professional</p>
                             </div>
                         </div>
-                        <a href="../assets/en/pat/ABA Business Kit.pdf" download="ABA Business Kit.pdf"
+                        <button onclick="openUpsellView('program-view-aba-business-kit')" type="button"
                             class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
                             View Program
-                        </a>
+                        </button>
                     </div>
 
                     <!-- Card 10 -->
@@ -612,10 +618,10 @@
                                     Skills at Home and Accelerate Progress</p>
                             </div>
                         </div>
-                        <a href="../assets/en/pat/Parent Training Kit.pdf" download="Parent Training Kit.pdf"
+                        <button onclick="openUpsellView('program-view-parent-training-kit')" type="button"
                             class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
                             View Program
-                        </a>
+                        </button>
                     </div>
 
                     <!-- Card 11 -->
@@ -632,10 +638,10 @@
                                     Aggression, and Session Crises with Confidence</p>
                             </div>
                         </div>
-                        <a href="../assets/en/pat/ABA Emergency Pack.pdf" download="ABA Emergency Pack.pdf"
+                        <button onclick="openUpsellView('program-view-aba-emergency-pack')" type="button"
                             class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
                             View Program
-                        </a>
+                        </button>
                     </div>
 
                     <!-- Card 12 -->
@@ -652,11 +658,10 @@
                                     Burnout, and Keep Growing as a Therapist</p>
                             </div>
                         </div>
-                        <a href="../assets/en/pat/Therapist Survival Guide.pdf"
-                            download="Therapist Survival Guide.pdf"
+                        <button onclick="openUpsellView('program-view-therapist-survival-guide')" type="button"
                             class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
                             View Program
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1572,6 +1577,704 @@
             </div>
         </div>
 
+        <!-- ABA Business Kit View -->
+        <div id="program-view-aba-business-kit"
+            class="tab-content hidden fixed inset-0 z-[60] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+            <div
+                class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+                <button onclick="closeUpsellView('program-view-aba-business-kit')"
+                    class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div class="flex-1 text-center pr-14">
+                    <span class="text-xs font-bold uppercase tracking-widest text-action">ABA Business Kit</span>
+                </div>
+            </div>
+
+            <div class="max-w-md mx-auto px-6 py-8 space-y-10">
+                <div class="space-y-4">
+                    <div class="w-14 h-14 rounded-2xl bg-cyan-50 text-cyan-600 flex items-center justify-center">
+                        <i data-lucide="briefcase-business" class="w-7 h-7"></i>
+                    </div>
+                    <h1 class="text-3xl font-black text-dark leading-tight">Premium Positioning in ABA</h1>
+                    <p class="text-lg text-text leading-relaxed font-medium">A practical positioning guide for becoming
+                        the first choice for families, schools, and referral partners.</p>
+                    <p class="text-sm text-gray-500 leading-relaxed border-l-4 border-cyan-200 pl-4 py-1 italic">
+                        Premium positioning is not about charging more without substance. It is about making your
+                        expertise visible, trustworthy, and clearly differentiated.</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                        <i data-lucide="badge-check" class="w-6 h-6 text-cyan-600 mb-3"></i>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Pillar 1</p>
+                        <h3 class="font-bold text-dark text-sm leading-tight">Show your expertise</h3>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                        <i data-lucide="line-chart" class="w-6 h-6 text-cyan-600 mb-3"></i>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Pillar 2</p>
+                        <h3 class="font-bold text-dark text-sm leading-tight">Document outcomes</h3>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                        <i data-lucide="user-check" class="w-6 h-6 text-cyan-600 mb-3"></i>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Pillar 3</p>
+                        <h3 class="font-bold text-dark text-sm leading-tight">Professional presence</h3>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                        <i data-lucide="network" class="w-6 h-6 text-cyan-600 mb-3"></i>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Pillar 4</p>
+                        <h3 class="font-bold text-dark text-sm leading-tight">Strategic network</h3>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Build professional authority</h2>
+                    <div
+                        class="relative pl-8 space-y-7 before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-cyan-500 before:to-gray-200">
+                        <div class="relative">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-cyan-600 text-white text-xs font-bold flex items-center justify-center ring-4 ring-background">1</span>
+                            <h3 class="font-bold text-dark">Choose 2 to 3 specialties</h3>
+                            <p class="text-sm text-text leading-relaxed">Communication, school inclusion, independence,
+                                parent coaching, or severe behavior. Depth creates more authority than broad claims.</p>
+                        </div>
+                        <div class="relative">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-cyan-600 text-white text-xs font-bold flex items-center justify-center ring-4 ring-background">2</span>
+                            <h3 class="font-bold text-dark">Connect decisions to evidence</h3>
+                            <p class="text-sm text-text leading-relaxed">Explain your work in plain language: goal,
+                                procedure, observed data, and the next clinical step.</p>
+                        </div>
+                        <div class="relative">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-cyan-600 text-white text-xs font-bold flex items-center justify-center ring-4 ring-background">3</span>
+                            <h3 class="font-bold text-dark">Name your method</h3>
+                            <p class="text-sm text-text leading-relaxed">A signature framework makes your approach
+                                memorable. It should describe the problem, the strategy, and the expected result.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Magnetic bio formula</h2>
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
+                        <div class="flex gap-3">
+                            <i data-lucide="sparkles" class="w-5 h-5 text-cyan-600 flex-shrink-0 mt-1"></i>
+                            <p class="text-sm text-text leading-relaxed">Use this structure: mission, specialization,
+                                outcomes, intervention philosophy, and one professional human detail.</p>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-4 space-y-2">
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Ready-to-adapt template</p>
+                            <p class="text-sm text-dark leading-relaxed">“I specialize in helping [learner profile] build
+                                [priority skill] through [specific ABA approach], so progress shows up where it matters
+                                most: at home, at school, and in the community.”</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Professional scripts</h2>
+                    <div class="space-y-3">
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <p class="text-xs font-bold text-cyan-600 uppercase tracking-wider mb-2">Parent consultation</p>
+                            <p class="text-sm text-text leading-relaxed">“My role is to turn your priorities into observable
+                                goals, then show you exactly how progress will be measured and generalized at home.”</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <p class="text-xs font-bold text-cyan-600 uppercase tracking-wider mb-2">School team</p>
+                            <p class="text-sm text-text leading-relaxed">“I build ABA supports that fit into the classroom
+                                without isolating the learner: less friction, more access to instruction.”</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <p class="text-xs font-bold text-cyan-600 uppercase tracking-wider mb-2">Networking</p>
+                            <p class="text-sm text-text leading-relaxed">“I look for partnerships with professionals who
+                                want intervention plans that are clear, measurable, and family-centered.”</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Your value proposition</h2>
+                    <div class="bg-cyan-50 rounded-2xl border border-cyan-100 p-5 space-y-4">
+                        <p class="text-cyan-900 font-medium leading-relaxed">A strong value proposition answers four
+                            questions: what you do especially well, who you serve, what method you use, and what concrete
+                            result families can expect.</p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <span class="bg-white rounded-xl p-3 text-xs font-bold text-dark">Clinical strengths</span>
+                            <span class="bg-white rounded-xl p-3 text-xs font-bold text-dark">Client need</span>
+                            <span class="bg-white rounded-xl p-3 text-xs font-bold text-dark">Measured result</span>
+                            <span class="bg-white rounded-xl p-3 text-xs font-bold text-dark">Differentiation</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">90-day action plan</h2>
+                    <div class="space-y-3">
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Days 1-30: foundation</h3>
+                            <p class="text-sm text-text leading-relaxed">Clarify your specialty, rewrite your bio, organize
+                                anonymized case examples, and make your materials visually consistent.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Days 31-60: visibility</h3>
+                            <p class="text-sm text-text leading-relaxed">Reach out to referral sources, share educational
+                                content, and present your intervention framework with simple data.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Days 61-90: optimization</h3>
+                            <p class="text-sm text-text leading-relaxed">Track inquiries, objections, conversions, and
+                                refine your message without weakening your positioning.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-7 text-center space-y-5 shadow-sm border border-gray-100">
+                    <div class="w-12 h-12 bg-action/10 rounded-2xl flex items-center justify-center mx-auto text-action">
+                        <i data-lucide="download" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-2xl font-bold text-dark">Download the full guide</h3>
+                        <p class="text-sm text-text leading-relaxed">Keep the PDF for your bio, scripts, positioning plan,
+                            and offline review.</p>
+                    </div>
+                    <a href="../assets/en/pat/ABA Business Kit.pdf" download="ABA Business Kit.pdf"
+                        class="w-full py-4 rounded-xl bg-action text-white font-bold hover:bg-green-600 transition-all flex items-center justify-center gap-3 shadow-lg shadow-action/20 active:scale-95">
+                        <span>Download PDF</span>
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Parent Training Kit View -->
+        <div id="program-view-parent-training-kit"
+            class="tab-content hidden fixed inset-0 z-[60] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+            <div
+                class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+                <button onclick="closeUpsellView('program-view-parent-training-kit')"
+                    class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div class="flex-1 text-center pr-14">
+                    <span class="text-xs font-bold uppercase tracking-widest text-action">Parent Training Kit</span>
+                </div>
+            </div>
+
+            <div class="max-w-md mx-auto px-6 py-8 space-y-10">
+                <div class="space-y-4">
+                    <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                        <i data-lucide="users-round" class="w-7 h-7"></i>
+                    </div>
+                    <h1 class="text-3xl font-black text-dark leading-tight">Natural Reinforcement at Home</h1>
+                    <p class="text-lg text-text leading-relaxed font-medium">Turn everyday family routines into learning
+                        opportunities without relying on stickers, candy, or threats.</p>
+                </div>
+
+                <div class="bg-amber-50 rounded-2xl border border-amber-100 p-5 space-y-3">
+                    <p class="text-xs font-bold text-amber-700 uppercase tracking-wider">Core principle</p>
+                    <p class="text-amber-950 font-medium leading-relaxed">The positive consequence should come from the
+                        action itself: more play after a smooth routine, easier conversation after kind table manners, or
+                        more independence after reliable responsibility.</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                        <i data-lucide="x-circle" class="w-6 h-6 text-rose-500 mb-3"></i>
+                        <h3 class="font-bold text-dark text-sm mb-1">Artificial</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">External rewards, constant monitoring, short-term
+                            compliance.</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                        <i data-lucide="check-circle-2" class="w-6 h-6 text-green-600 mb-3"></i>
+                        <h3 class="font-bold text-dark text-sm mb-1">Natural</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">Logical consequences, internal motivation,
+                            self-regulated behavior.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Routines to transform</h2>
+                    <div class="space-y-3">
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="flex items-center gap-3 mb-3">
+                                <i data-lucide="sun" class="w-5 h-5 text-amber-600"></i>
+                                <h3 class="font-bold text-dark">Morning</h3>
+                            </div>
+                            <p class="text-sm text-text leading-relaxed">Structure dressing, breakfast, and packing so
+                                completing responsibilities naturally leads to a preferred choice, a song in the car, or a few
+                                minutes of play.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="flex items-center gap-3 mb-3">
+                                <i data-lucide="utensils" class="w-5 h-5 text-amber-600"></i>
+                                <h3 class="font-bold text-dark">Meals</h3>
+                            </div>
+                            <p class="text-sm text-text leading-relaxed">Use preparation, table manners, tasting, and cleanup
+                                as real opportunities to participate in family life.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="flex items-center gap-3 mb-3">
+                                <i data-lucide="puzzle" class="w-5 h-5 text-amber-600"></i>
+                                <h3 class="font-bold text-dark">Play</h3>
+                            </div>
+                            <p class="text-sm text-text leading-relaxed">Sharing, creative ideas, and quick cleanup directly
+                                improve the fun and extend positive interaction.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="flex items-center gap-3 mb-3">
+                                <i data-lucide="moon" class="w-5 h-5 text-amber-600"></i>
+                                <h3 class="font-bold text-dark">Bedtime</h3>
+                            </div>
+                            <p class="text-sm text-text leading-relaxed">A smooth routine creates more connection: reading,
+                                calm, cuddles, and a sense of mastery at the end of the day.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Ready-to-use phrases</h2>
+                    <div class="space-y-3">
+                        <p class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-sm text-dark leading-relaxed">
+                            “Since you helped set the table, you get to choose where everyone sits tonight.”</p>
+                        <p class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-sm text-dark leading-relaxed">
+                            “Your gentle hands help your friend want to keep playing with you.”</p>
+                        <p class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-sm text-dark leading-relaxed">
+                            “Your room feels calmer now that it is cleaned up. You have more space to play.”</p>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Responsibilities by age</h2>
+                    <div class="grid gap-3">
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Ages 2-4</h3>
+                            <p class="text-sm text-text leading-relaxed">Put toys in bins, carry light items, feed a pet with
+                                supervision, place napkins on the table.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Ages 5-8</h3>
+                            <p class="text-sm text-text leading-relaxed">Make the bed, put away clean clothes, clear dishes,
+                                water plants.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Ages 9-12</h3>
+                            <p class="text-sm text-text leading-relaxed">Handle simple laundry, prepare a snack, organize a
+                                workspace, help with groceries.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Prepare for public settings</h2>
+                    <div
+                        class="relative pl-8 space-y-7 before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-amber-500 before:to-gray-200">
+                        <div class="relative">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-amber-500 text-white text-xs font-bold flex items-center justify-center ring-4 ring-background">1</span>
+                            <h3 class="font-bold text-dark">Preview</h3>
+                            <p class="text-sm text-text leading-relaxed">Describe where you are going, what will happen, and
+                                what behavior will help the experience go well.</p>
+                        </div>
+                        <div class="relative">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-amber-500 text-white text-xs font-bold flex items-center justify-center ring-4 ring-background">2</span>
+                            <h3 class="font-bold text-dark">Connect choices to outcomes</h3>
+                            <p class="text-sm text-text leading-relaxed">Explain how staying close, using a calm voice, or
+                                waiting makes the outing more enjoyable.</p>
+                        </div>
+                        <div class="relative">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-amber-500 text-white text-xs font-bold flex items-center justify-center ring-4 ring-background">3</span>
+                            <h3 class="font-bold text-dark">Plan for success</h3>
+                            <p class="text-sm text-text leading-relaxed">Choose the right time, plan for sensory needs, and
+                                start with low-stakes settings.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Common mistakes to avoid</h2>
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
+                        <p class="text-sm text-text leading-relaxed"><strong class="text-dark">Over-praising:</strong> replace
+                            automatic “good job” with the natural consequence you can observe.</p>
+                        <p class="text-sm text-text leading-relaxed"><strong class="text-dark">Rescuing:</strong> protecting
+                            the child from every logical outcome blocks learning.</p>
+                        <p class="text-sm text-text leading-relaxed"><strong class="text-dark">Inconsistency:</strong> adults
+                            do not need to be identical, but the principles should stay aligned.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-7 text-center space-y-5 shadow-sm border border-gray-100">
+                    <div class="w-12 h-12 bg-action/10 rounded-2xl flex items-center justify-center mx-auto text-action">
+                        <i data-lucide="download" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-2xl font-bold text-dark">Download the parent guide</h3>
+                        <p class="text-sm text-text leading-relaxed">Use the PDF to share the full framework with parents or
+                            revisit examples by routine.</p>
+                    </div>
+                    <a href="../assets/en/pat/Parent Training Kit.pdf" download="Parent Training Kit.pdf"
+                        class="w-full py-4 rounded-xl bg-action text-white font-bold hover:bg-green-600 transition-all flex items-center justify-center gap-3 shadow-lg shadow-action/20 active:scale-95">
+                        <span>Download PDF</span>
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABA Emergency Pack View -->
+        <div id="program-view-aba-emergency-pack"
+            class="tab-content hidden fixed inset-0 z-[60] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+            <div
+                class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+                <button onclick="closeUpsellView('program-view-aba-emergency-pack')"
+                    class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div class="flex-1 text-center pr-14">
+                    <span class="text-xs font-bold uppercase tracking-widest text-action">ABA Emergency Pack</span>
+                </div>
+            </div>
+
+            <div class="max-w-md mx-auto px-6 py-8 space-y-10">
+                <div class="space-y-4">
+                    <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center">
+                        <i data-lucide="siren" class="w-7 h-7"></i>
+                    </div>
+                    <h1 class="text-3xl font-black text-dark leading-tight">Instant Crisis Protocol Guide</h1>
+                    <p class="text-lg text-text leading-relaxed font-medium">A rapid-response panel for meltdowns,
+                        aggression, shutdown, freeze responses, and post-crisis recovery.</p>
+                </div>
+
+                <div class="bg-rose-50 rounded-2xl border border-rose-100 p-5 space-y-3">
+                    <p class="text-xs font-bold text-rose-700 uppercase tracking-wider">Critical rule</p>
+                    <p class="text-rose-950 font-medium leading-relaxed">The first 30 seconds shape the entire crisis
+                        trajectory. Safety, a lower voice, reduced demands, and calm presence come before teaching.</p>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Identify the crisis type</h2>
+                    <div class="grid gap-3">
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Explosive meltdown</h3>
+                            <p class="text-sm text-text leading-relaxed">Intense crying, screaming, agitation, and inability
+                                to process directions. Reasoning is temporarily offline.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Aggressive behavior</h3>
+                            <p class="text-sm text-text leading-relaxed">Hitting, biting, threats, throwing objects, or
+                                aggressive language. Safety without shame is the priority.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Shutdown or freeze</h3>
+                            <p class="text-sm text-text leading-relaxed">Silence, withdrawal, distant gaze, or minimal
+                                responses. Verbal pressure can deepen the shutdown.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Immediate protocols</h2>
+                    <div class="space-y-4">
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span
+                                    class="w-8 h-8 rounded-full bg-rose-100 text-rose-600 text-sm font-bold flex items-center justify-center">1</span>
+                                <h3 class="font-bold text-dark">Meltdown</h3>
+                            </div>
+                            <p class="text-sm text-text leading-relaxed">Check safety, lower your voice, reduce demands, wait
+                                for intensity to drop, and support without arguing.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span
+                                    class="w-8 h-8 rounded-full bg-rose-100 text-rose-600 text-sm font-bold flex items-center justify-center">2</span>
+                                <h3 class="font-bold text-dark">Aggression</h3>
+                            </div>
+                            <p class="text-sm text-text leading-relaxed">Move others away, stay visible but out of reach,
+                                set a firm limit, and offer an alternative action: push a cushion, stomp feet, squeeze hands.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span
+                                    class="w-8 h-8 rounded-full bg-rose-100 text-rose-600 text-sm font-bold flex items-center justify-center">3</span>
+                                <h3 class="font-bold text-dark">Shutdown / freeze</h3>
+                            </div>
+                            <p class="text-sm text-text leading-relaxed">Reduce stimulation, sit nearby without requiring eye
+                                contact, offer two simple choices, and allow 10 to 20 minutes if needed.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">What not to do</h2>
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
+                        <p class="text-sm text-text leading-relaxed">Do not raise your voice or match the child's volume.</p>
+                        <p class="text-sm text-text leading-relaxed">Do not ask “why” questions during the episode.</p>
+                        <p class="text-sm text-text leading-relaxed">Do not teach, lecture, or threaten consequences at the
+                            peak of the crisis.</p>
+                        <p class="text-sm text-text leading-relaxed">Do not use physical restraint except for immediate
+                            danger and only according to required policy and training.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">De-escalation phrases</h2>
+                    <div class="space-y-3">
+                        <p class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-sm text-dark leading-relaxed">
+                            “I can see this is really hard for you.”</p>
+                        <p class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-sm text-dark leading-relaxed">
+                            “You are safe here with me.”</p>
+                        <p class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-sm text-dark leading-relaxed">
+                            “I am going to stay right here.”</p>
+                        <p class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-sm text-dark leading-relaxed">
+                            “We have time.”</p>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Body, space, and regulation</h2>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                            <i data-lucide="hand" class="w-6 h-6 text-rose-600 mb-3"></i>
+                            <h3 class="font-bold text-dark text-sm">Safe posture</h3>
+                            <p class="text-xs text-gray-500 leading-relaxed">Visible palms, relaxed shoulders, slow movement.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                            <i data-lucide="volume-1" class="w-6 h-6 text-rose-600 mb-3"></i>
+                            <h3 class="font-bold text-dark text-sm">Soft voice</h3>
+                            <p class="text-xs text-gray-500 leading-relaxed">Tone often regulates more than words.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                            <i data-lucide="sofa" class="w-6 h-6 text-rose-600 mb-3"></i>
+                            <h3 class="font-bold text-dark text-sm">Calm zone</h3>
+                            <p class="text-xs text-gray-500 leading-relaxed">Cushions, textures, fidgets, breathing cards.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                            <i data-lucide="activity" class="w-6 h-6 text-rose-600 mb-3"></i>
+                            <h3 class="font-bold text-dark text-sm">Movement</h3>
+                            <p class="text-xs text-gray-500 leading-relaxed">Wall pushes, heavy work, rhythmic walking.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">After the crisis</h2>
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
+                        <p class="text-sm text-text leading-relaxed"><strong class="text-dark">Gentle re-engagement:</strong>
+                            use a preferred, low-demand activity before discussion.</p>
+                        <p class="text-sm text-text leading-relaxed"><strong class="text-dark">Check needs:</strong> water,
+                            bathroom, snack, sensory break.</p>
+                        <p class="text-sm text-text leading-relaxed"><strong class="text-dark">Document:</strong> date,
+                            duration, triggers, observable behavior, interventions used, and follow-up needed.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-7 text-center space-y-5 shadow-sm border border-gray-100">
+                    <div class="w-12 h-12 bg-action/10 rounded-2xl flex items-center justify-center mx-auto text-action">
+                        <i data-lucide="download" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-2xl font-bold text-dark">Download the full pack</h3>
+                        <p class="text-sm text-text leading-relaxed">Keep the PDF for detailed procedures, documentation,
+                            and profile-specific adaptations.</p>
+                    </div>
+                    <a href="../assets/en/pat/ABA Emergency Pack.pdf" download="ABA Emergency Pack.pdf"
+                        class="w-full py-4 rounded-xl bg-action text-white font-bold hover:bg-green-600 transition-all flex items-center justify-center gap-3 shadow-lg shadow-action/20 active:scale-95">
+                        <span>Download PDF</span>
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Therapist Survival Guide View -->
+        <div id="program-view-therapist-survival-guide"
+            class="tab-content hidden fixed inset-0 z-[60] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+            <div
+                class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+                <button onclick="closeUpsellView('program-view-therapist-survival-guide')"
+                    class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div class="flex-1 text-center pr-14">
+                    <span class="text-xs font-bold uppercase tracking-widest text-action">Therapist Survival Guide</span>
+                </div>
+            </div>
+
+            <div class="max-w-md mx-auto px-6 py-8 space-y-10">
+                <div class="space-y-4">
+                    <div class="w-14 h-14 rounded-2xl bg-lime-50 text-lime-600 flex items-center justify-center">
+                        <i data-lucide="leaf" class="w-7 h-7"></i>
+                    </div>
+                    <h1 class="text-3xl font-black text-dark leading-tight">The Armored Routine</h1>
+                    <p class="text-lg text-text leading-relaxed font-medium">A practical framework for staying productive
+                        without draining the emotional energy required for therapeutic work.</p>
+                    <p class="text-sm text-gray-500 leading-relaxed border-l-4 border-lime-200 pl-4 py-1 italic">
+                        Therapeutic productivity is not about seeing more clients. It is about protecting the quality of
+                        presence that makes intervention effective.</p>
+                </div>
+
+                <div class="bg-lime-50 rounded-2xl border border-lime-100 p-5 space-y-3">
+                    <p class="text-xs font-bold text-lime-700 uppercase tracking-wider">Starting point</p>
+                    <p class="text-lime-950 font-medium leading-relaxed">Emotional labor is a finite resource. If your
+                        schedule does not include recovery, your system borrows energy from tomorrow.</p>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Map your energy</h2>
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
+                        <p class="text-sm text-text leading-relaxed">For two weeks, rate your energy from 1 to 10 before
+                            sessions, after sessions, and at the end of the day. Look for patterns, not perfection.</p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <span class="bg-gray-50 rounded-xl p-3 text-xs font-bold text-dark">Peak hours</span>
+                            <span class="bg-gray-50 rounded-xl p-3 text-xs font-bold text-dark">Heavy sessions</span>
+                            <span class="bg-gray-50 rounded-xl p-3 text-xs font-bold text-dark">Easy tasks</span>
+                            <span class="bg-gray-50 rounded-xl p-3 text-xs font-bold text-dark">Energy dips</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Daily energy budget</h2>
+                    <div class="grid gap-3">
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i data-lucide="battery-full" class="w-5 h-5 text-lime-600"></i>
+                                <h3 class="font-bold text-dark">High energy</h3>
+                            </div>
+                            <p class="text-sm text-text leading-relaxed">Crises, initial assessments, trauma work, and
+                                difficult meetings. Limit to 2 or 3 blocks per day and place them during your strongest hours.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i data-lucide="battery-medium" class="w-5 h-5 text-lime-600"></i>
+                                <h3 class="font-bold text-dark">Medium energy</h3>
+                            </div>
+                            <p class="text-sm text-text leading-relaxed">Routine sessions, supervision, material prep, and
+                                scheduled calls.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i data-lucide="battery-low" class="w-5 h-5 text-lime-600"></i>
+                                <h3 class="font-bold text-dark">Low energy</h3>
+                            </div>
+                            <p class="text-sm text-text leading-relaxed">Filing, templates, simple emails, and light planning.
+                                Save these for natural dips.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">The 5-minute reset</h2>
+                    <div
+                        class="relative pl-8 space-y-7 before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-lime-500 before:to-gray-200">
+                        <div class="relative">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-lime-600 text-white text-xs font-bold flex items-center justify-center ring-4 ring-background">1</span>
+                            <h3 class="font-bold text-dark">Breathe</h3>
+                            <p class="text-sm text-text leading-relaxed">Use two minutes of slow breathing to signal safety to
+                                your nervous system.</p>
+                        </div>
+                        <div class="relative">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-lime-600 text-white text-xs font-bold flex items-center justify-center ring-4 ring-background">2</span>
+                            <h3 class="font-bold text-dark">Unload the key details</h3>
+                            <p class="text-sm text-text leading-relaxed">Write a few words about what must be remembered
+                                before drafting the full note.</p>
+                        </div>
+                        <div class="relative">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-lime-600 text-white text-xs font-bold flex items-center justify-center ring-4 ring-background">3</span>
+                            <h3 class="font-bold text-dark">Shift your body</h3>
+                            <p class="text-sm text-text leading-relaxed">Stand, drink water, soften your jaw and shoulders,
+                                then enter the next session cleanly.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Protective scheduling</h2>
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
+                        <p class="text-sm text-text leading-relaxed">Spacing sessions is not only time management. It is a
+                            clinical strategy that prevents the emotional load of one session from spilling into the next.</p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <span class="bg-lime-50 text-lime-900 rounded-xl p-3 text-xs font-bold">10-15 min buffer</span>
+                            <span class="bg-lime-50 text-lime-900 rounded-xl p-3 text-xs font-bold">Quick notes</span>
+                            <span class="bg-lime-50 text-lime-900 rounded-xl p-3 text-xs font-bold">Breathing</span>
+                            <span class="bg-lime-50 text-lime-900 rounded-xl p-3 text-xs font-bold">Sensory reset</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Efficient documentation</h2>
+                    <div class="grid gap-3">
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Note templates</h3>
+                            <p class="text-sm text-text leading-relaxed">Create repeatable structures for goals,
+                                interventions, data, client response, and next steps.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Brief voice capture</h3>
+                            <p class="text-sm text-text leading-relaxed">After a session, record 2 to 3 minutes of key
+                                observations before details fade.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Batch admin work</h3>
+                            <p class="text-sm text-text leading-relaxed">Group administrative tasks to reduce context
+                                switching, one of the quietest energy drains.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Say no professionally</h2>
+                    <div class="space-y-3">
+                        <p class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-sm text-dark leading-relaxed">
+                            “Thank you for thinking of me. To protect the quality of my current clinical work, I cannot add
+                            that slot this week.”</p>
+                        <p class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-sm text-dark leading-relaxed">
+                            “A more sustainable option would be to begin with a brief consultation, then decide what level of
+                            support is actually needed.”</p>
+                        <p class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-sm text-dark leading-relaxed">
+                            “This need deserves availability I cannot guarantee right now. Here is the next realistic date.”</p>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Weekly balance check</h2>
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
+                        <p class="text-sm text-text leading-relaxed"><strong class="text-dark">Energy:</strong> did I maintain
+                            steady energy, or did I ignore burnout signals?</p>
+                        <p class="text-sm text-text leading-relaxed"><strong class="text-dark">Boundaries:</strong> which
+                            “yes” cost too much this week?</p>
+                        <p class="text-sm text-text leading-relaxed"><strong class="text-dark">Recovery:</strong> did my
+                            breaks actually restore my system?</p>
+                        <p class="text-sm text-text leading-relaxed"><strong class="text-dark">Support:</strong> did I use
+                            supervision, colleagues, or my professional network when needed?</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-7 text-center space-y-5 shadow-sm border border-gray-100">
+                    <div class="w-12 h-12 bg-action/10 rounded-2xl flex items-center justify-center mx-auto text-action">
+                        <i data-lucide="download" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-2xl font-bold text-dark">Download the full guide</h3>
+                        <p class="text-sm text-text leading-relaxed">Keep the PDF for the complete routine, documentation
+                            systems, and long-term career sustainability plan.</p>
+                    </div>
+                    <a href="../assets/en/pat/Therapist Survival Guide.pdf"
+                        download="Therapist Survival Guide.pdf"
+                        class="w-full py-4 rounded-xl bg-action text-white font-bold hover:bg-green-600 transition-all flex items-center justify-center gap-3 shadow-lg shadow-action/20 active:scale-95">
+                        <span>Download PDF</span>
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- VB-MAPP Implementation Companion View -->
