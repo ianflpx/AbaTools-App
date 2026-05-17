@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anmelden – AbaTools</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        action: '#05A045',
+                        urgency: '#E64A19',
+                        dark: '#0F172A', // Titles
+                        text: '#475569',
+                        background: '#F8FAFC',
+                        highlight: '#FACC15',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Smooth fade in */
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-background text-text min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+
+    <!-- Background Decor -->
+    <div
+        class="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-action/5 rounded-full blur-3xl pointer-events-none">
+    </div>
+    <div
+        class="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-3xl pointer-events-none">
+    </div>
+
+    <div class="w-full max-w-md space-y-8 z-10 fade-in">
+        <!-- Logo -->
+        <div class="flex justify-center mb-10">
+            <img src="../assets/images/logo-abatools.png" alt="AbaTools" class="h-10 w-auto">
+        </div>
+
+        <!-- Login Card -->
+        <div
+            class="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-xl shadow-gray-200/50 border border-gray-100 space-y-6 relative overflow-hidden">
+            <!-- Top Gradient Line -->
+            <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-action/40 via-action to-action/40">
+            </div>
+
+            <div class="text-center space-y-3">
+                <h1 class="text-2xl font-black text-dark">Willkommen zurück</h1>
+                <p class="text-gray-400 font-medium">Geben Sie Ihre E-Mail-Adresse ein, um auf Ihre Materialien zuzugreifen.</p>
+            </div>
+
+            <form onsubmit="handleLogin(event)" class="space-y-5 pt-2">
+                <div class="space-y-2 group">
+                    <label for="email"
+                        class="text-sm font-bold text-dark ml-1 block group-focus-within:text-action transition-colors">E-Mail</label>
+                    <div class="relative">
+                        <div
+                            class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-action transition-colors">
+                            <i data-lucide="mail" class="w-5 h-5"></i>
+                        </div>
+                        <input type="email" id="email" required placeholder="name@email.de"
+                            class="w-full pl-12 pr-4 py-4 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-action focus:ring-4 focus:ring-action/10 outline-none transition-all font-medium text-dark placeholder:text-gray-400">
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full py-4 rounded-xl bg-action text-white font-bold text-lg shadow-lg shadow-action/30 hover:bg-green-700 hover:scale-[1.02] transform transition-all active:scale-95 flex items-center justify-center gap-2 group">
+                    <span>Einloggen</span>
+                    <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                </button>
+            </form>
+
+            <div class="pt-2 text-center">
+                <p class="text-xs text-gray-400 font-medium">Sicherer und verschlüsselter Zugriff</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <p class="text-center text-xs text-gray-300 font-medium">
+            © 2026 AbaTools. Alle Rechte vorbehalten.
+        </p>
+    </div>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://tjxfjwhpillhudgqtusf.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqeGZqd2hwaWxsaHVkZ3F0dXNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMzE3ODMsImV4cCI6MjA4NTkwNzc4M30.on32sO1OAx9NWZZr4oOA2b2Z_Gk5BesQ7xhtMAMDpXc';
+
+        let supabaseClient;
+
+        // Initialize Supabase
+        try {
+            // The UMD build exposes a global 'supabase' object with 'createClient'
+            if (window.supabase && window.supabase.createClient) {
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                console.log('Supabase-Client erfolgreich initialisiert.');
+            } else {
+                console.error('Supabase-Bibliothek nicht korrekt geladen.');
+                alert('Systemfehler: Supabase-Bibliothek konnte nicht geladen werden.');
+            }
+        } catch (error) {
+            console.error('Supabase Initialisierungsfehler:', error);
+            alert('Systemfehler während der Supabase-Initialisierung: ' + error.message);
+        }
+
+        // Logic to check persistence on load
+        window.addEventListener('load', () => {
+            const storedAuth = localStorage.getItem('abatools_auth');
+            if (storedAuth) {
+                try {
+                    const authData = JSON.parse(storedAuth);
+                    if (authData && authData.email) {
+                        // User is already logged in, redirect to home
+                        console.log('Der Benutzer ist bereits angemeldet und wird zu index.html weitergeleitet');
+                        window.location.href = 'index.html';
+                    }
+                } catch (e) {
+                    console.error('Fehler beim Parsen der gespeicherten Authentifizierungsdaten:', e);
+                    localStorage.removeItem('abatools_auth');
+                }
+            }
+        });
+
+        // Lucide icons
+        lucide.createIcons();
+
+        async function handleLogin(event) {
+            event.preventDefault();
+
+            if (!supabaseClient) {
+                alert('System nicht initialisiert. Bitte aktualisieren Sie die Seite.');
+                console.error('Anmeldeversuch fehlgeschlagen: Supabase-Client nicht initialisiert.');
+                return;
+            }
+
+            const emailInput = document.getElementById('email');
+            const email = emailInput.value.trim();
+            const btn = event.target.querySelector('button');
+
+            if (!email) return;
+
+            console.log('Attempting login for:', email);
+
+            // Reset visual state
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Überprüfung...</span>';
+            lucide.createIcons();
+            btn.disabled = true;
+            btn.classList.add('opacity-80', 'cursor-wait');
+
+            // Remove existing error logic
+            const existingError = document.getElementById('error-message');
+            if (existingError) existingError.remove();
+
+            try {
+                // Query Supabase
+                const { data, error } = await supabaseClient
+                    .from('user_access')
+                    .select('*')
+                    .ilike('email', email) // Case-insensitive check
+                    .eq('status', 'active');
+
+                if (error) {
+                    throw error;
+                }
+
+                if (data && data.length > 0) {
+                    // Success: User found and active
+
+                    // Save persistence
+                    localStorage.setItem('abatools_auth', JSON.stringify({
+                        email: email,
+                        accessDate: new Date().toISOString(),
+                        status: 'active'
+                    }));
+
+                    // Redirect
+                    window.location.href = 'index.html';
+
+                } else {
+                    // User not found or not active
+                    showError('Benutzer nicht gefunden. Wir haben überprüft, dass Ihr Kauf noch nicht bearbeitet wurde oder dass die E-Mail-Adresse nicht mit der für den Kauf verwendeten E-Mail-Adresse übereinstimmt.');
+                    resetButton(btn, originalContent);
+                }
+
+            } catch (err) {
+                console.error('Anmeldefehler:', err);
+                showError('Überprüfen Sie Ihre Verbindung oder versuchen Sie es später noch einmal.');
+                resetButton(btn, originalContent);
+            }
+        }
+
+        function resetButton(btn, originalContent) {
+            btn.innerHTML = originalContent;
+            btn.disabled = false;
+            btn.classList.remove('opacity-80', 'cursor-wait');
+            lucide.createIcons();
+        }
+
+        function showError(message) {
+            // Check if error box exists, simple implementation
+            let errorBox = document.getElementById('error-message');
+            if (errorBox) errorBox.remove();
+
+            const form = document.querySelector('form');
+            errorBox = document.createElement('div');
+            errorBox.id = 'error-message';
+            errorBox.className = 'p-4 rounded-xl bg-red-50 text-red-600 text-sm font-medium border border-red-100 flex items-start gap-3 animate-in fade-in slide-in-from-top-2 mt-4';
+
+            errorBox.innerHTML = `\n                <i data-lucide="alert-circle" class="w-5 h-5 flex-shrink-0 mt-0.5"></i>\n                <span>${Nachricht}</span>\n            `;
+
+            form.appendChild(errorBox);
+            lucide.createIcons();
+        }
+    </script>
+</body>
+
+</html>

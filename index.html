@@ -67,7 +67,7 @@
     </style>
 </head>
 
-<body class="bg-background text-text min-h-screen flex flex-col items-center p-6 pt-16 relative overflow-hidden">
+<body class="bg-background text-text min-h-screen flex flex-col items-center p-6 pt-16 relative overflow-x-hidden overflow-y-auto">
 
     <!-- Decorative Bottom Bar -->
     <div class="fixed bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-action via-highlight to-urgency z-50"></div>
@@ -91,7 +91,7 @@
         </div>
 
         <!-- Language Options -->
-        <div class="w-full space-y-4">
+        <div class="w-full space-y-4 pb-24">
 
             <!-- English -->
             <a href="./en/index.html"
@@ -134,6 +134,38 @@
                         <img src="https://flagcdn.com/w160/fr.png" alt="Français" class="w-full h-full object-cover">
                     </div>
                     <span class="font-bold text-dark text-lg group-hover:text-action transition-colors">Français</span>
+                </div>
+                <div
+                    class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all">
+                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </div>
+            </a>
+
+            <!-- Deutsch -->
+            <a href="./de/index.html"
+                class="lang-card bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between group transition-all duration-300 cursor-pointer no-underline block">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center shadow-inner border border-gray-100 overflow-hidden">
+                        <img src="https://flagcdn.com/w160/de.png" alt="Deutsch" class="w-full h-full object-cover">
+                    </div>
+                    <span class="font-bold text-dark text-lg group-hover:text-action transition-colors">Deutsch</span>
+                </div>
+                <div
+                    class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all">
+                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </div>
+            </a>
+
+            <!-- Italiano -->
+            <a href="./it/index.html"
+                class="lang-card bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between group transition-all duration-300 cursor-pointer no-underline block">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center shadow-inner border border-gray-100 overflow-hidden">
+                        <img src="https://flagcdn.com/w160/it.png" alt="Italiano" class="w-full h-full object-cover">
+                    </div>
+                    <span class="font-bold text-dark text-lg group-hover:text-action transition-colors">Italiano</span>
                 </div>
                 <div
                     class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all">

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Supabase Verbindungstest</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Supabase Verbindungstest</h2>
+    <div id="output">Wird initialisiert...</div>
+
+    <script>
+        const SUPABASE_URL = 'https://tjxfjwhpillhudgqtusf.supabase.co';
+        // Using the provided ANON key
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqeGZqd2hwaWxsaHVkZ3F0dXNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMzE3ODMsImV4cCI6MjA4NTkwNzc4M30.on32sO1OAx9NWZZr4oOA2b2Z_Gk5BesQ7xhtMAMDpXc';
+
+        const output = document.getElementById('output');
+        const log = (msg) => { output.innerHTML += `<div>${msg}</div>`; console.log(msg); };
+
+        async function testConnection() {
+            try {
+                if (!window.supabase || !window.supabase.createClient) {
+                    throw new Error('Supabase SDK not loaded');
+                }
+
+                const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                log('Client initialisiert.');
+
+                // Test 1: Simple Select
+                log('Test 1: Abrufen eines bestimmten Benutzers (savu.florin@gmail.com)...');
+                const { data: user, error: userError } = await supabaseClient
+                    .from('user_access')
+                    .select('*')
+                    .eq('email', 'savu.florin@gmail.com');
+
+                if (userError) {
+                    log(`<span style="color:red">Fehler beim Abrufen des Benutzers: ${JSON.stringify(userError)}</span>`);
+                } else {
+                    log(`<span style="color:lightgreen">Erfolgreicher Benutzerabruf. Anzahl: ${user.length}</span>`);
+                    if (user.length > 0) {
+                        log('Benutzerdaten gefunden: ' + JSON.stringify(user[0]));
+                    } else {
+                        log('<span style="color:orange">Mit dieser E-Mail wurde kein Benutzer gefunden. Spezifischer Status wird überprüft...</span>');
+                    }
+                }
+
+                // Test 2: List any users (to check RLS)
+                log('<br>Test 2: Auflisten aller 3 Zeilen von user_access (um Berechtigungen zu überprüfen)...');
+                const { data: list, error: listError } = await supabaseClient
+                    .from('user_access')
+                    .select('*')
+                    .limit(3);
+
+                if (listError) {
+                    log(`<span style="color:red">Fehlerauflistungstabelle: ${JSON.stringify(listError)}</span>`);
+                    if (listError.code === '42501') {
+                        log('<br><b>DIAGNOSE: Berechtigung verweigert (42501)</b>. Dies bedeutet normalerweise, dass Row Level Security (RLS) für die Tabelle „user_access“ aktiviert ist, aber keine Richtlinie öffentlichen/anonischen Lesezugriff zulässt.');
+                    }
+                } else {
+                    log(`<span style="color:lightgreen">Listenerfolg. Zurückgegebene Zeilen: ${list.length}</span>`);
+                    if (list.length > 0) {
+                        log('Example Row: ' + JSON.stringify(list[0]));
+                    } else {
+                        log('Die Tabelle erscheint diesem Benutzer leer.');
+                    }
+                }
+
+            } catch (err) {
+                log(`<span style="color:red">KRITISCHER FEHLER: ${err.message}</span>`);
+            }
+        }
+
+        testConnection();
+    </script>
+</body>
+
+</html>
