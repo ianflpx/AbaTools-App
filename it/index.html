@@ -89,25 +89,7 @@
         }
 
         /* Locked Overlay - Robust Design */
-        .locked-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(218, 218, 218, 0.493);
-            /* Slate gray, semi-transparent */
-            backdrop-filter: none;
-            /* No blur as requested */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 20;
-            border-radius: inherit;
-        }
-
-        .locked-icon {
-            color: white;
-            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
-            /* Shadow for visibility */
-        }
+        /* Locked products are no longer masked; the CTA button shows the locked state. */
     </style>
 
     <!-- Auth Check & Security -->
@@ -313,7 +295,7 @@
         </div>
 
         <!-- Tab 2: Programs (My Programs) -->
-        <div id="tab-programs" class="tab-content space-y-8">
+        <div id="tab-programs" class="tab-content space-y-6">
             <div class="space-y-4">
                 <div class="flex items-center justify-between">
                     <h2 class="text-2xl font-black text-dark uppercase tracking-wide">I miei programmi</h2>
@@ -322,8 +304,76 @@
                         0 ATTIVI
                     </span>
                 </div>
-                <div class="h-px w-full bg-gray-200"></div>
             </div>
+
+            <!-- Program Sub-tab Selector -->
+            <div class="bg-gray-100 p-1.5 rounded-2xl flex items-center gap-1.5">
+                <button id="subtab-btn-owned" type="button" onclick="switchProgramSubtab('owned')"
+                    class="flex-1 py-2.5 px-3 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 bg-white text-dark shadow-sm">
+                    <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                    <span>I miei programmi</span>
+                </button>
+                <button id="subtab-btn-offers" type="button" onclick="switchProgramSubtab('offers')"
+                    class="flex-1 py-2.5 px-3 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 text-gray-500">
+                    <i data-lucide="tag" class="w-4 h-4"></i>
+                    <span>Offerte</span>
+                    <span id="offers-count-badge"
+                        class="hidden bg-urgency text-white text-[0.65rem] font-bold min-w-[1.25rem] h-5 px-1 rounded-full flex items-center justify-center">0</span>
+                </button>
+            </div>
+
+            <!-- Owned Pane -->
+            <div id="programs-pane-owned" class="space-y-6">
+                <div id="owned-container" class="space-y-4"></div>
+
+                <!-- Empty state -->
+                <div id="owned-empty-state" class="hidden text-center py-12 px-6 space-y-3">
+                    <div class="w-16 h-16 rounded-2xl bg-gray-100 text-gray-400 flex items-center justify-center mx-auto">
+                        <i data-lucide="package-open" class="w-8 h-8"></i>
+                    </div>
+                    <h4 class="font-bold text-dark">Nessun programma attivo</h4>
+                    <p class="text-sm text-gray-500 leading-relaxed max-w-xs mx-auto">I tuoi programmi attivi
+                        appariranno qui. Esplora le offerte per iniziare.</p>
+                </div>
+
+                <!-- Offers nudge banner -->
+                <button id="offers-banner" type="button" onclick="switchProgramSubtab('offers')"
+                    class="hidden w-full bg-orange-50 border border-orange-100 rounded-2xl p-4 flex items-center justify-between gap-4 hover:bg-orange-100/60 transition-colors text-left active:scale-[0.99]">
+                    <div class="flex items-center gap-4">
+                        <div class="w-11 h-11 rounded-xl bg-urgency/10 text-urgency flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="tag" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-dark text-sm leading-tight"><span id="offers-banner-count">0</span>
+                                nuove offerte per te</p>
+                            <p class="text-xs text-gray-500 mt-0.5">Le trovi nella scheda Offerte</p>
+                        </div>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-5 h-5 text-urgency flex-shrink-0"></i>
+                </button>
+            </div>
+
+            <!-- Offers Pane -->
+            <div id="programs-pane-offers" class="hidden space-y-6">
+                <div id="offers-intro"
+                    class="hidden bg-blue-50 border border-blue-100 rounded-2xl p-4 flex items-start gap-3">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5"></i>
+                    <p class="text-sm text-blue-800 font-medium leading-relaxed">Sblocca nuovi programmi per ampliare i
+                        tuoi strumenti di intervento.</p>
+                </div>
+                <div id="offers-container" class="space-y-4"></div>
+                <div id="offers-empty-state" class="hidden text-center py-12 px-6 space-y-3">
+                    <div class="w-16 h-16 rounded-2xl bg-green-100 text-green-600 flex items-center justify-center mx-auto">
+                        <i data-lucide="party-popper" class="w-8 h-8"></i>
+                    </div>
+                    <h4 class="font-bold text-dark">Hai tutti i programmi!</h4>
+                    <p class="text-sm text-gray-500 leading-relaxed max-w-xs mx-auto">Complimenti! Hai già accesso a tutti
+                        i programmi disponibili.</p>
+                </div>
+            </div>
+
+            <!-- Hidden source: original program cards (distributed by JS) -->
+            <div id="programs-source" class="hidden">
 
             <!-- Naturalistic ABA Section -->
             <div class="space-y-4">
@@ -331,30 +381,36 @@
 
                 <!-- Primary Program Card 1 -->
                 <div data-slug="35_protocols"
-                    class="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100 group hover:shadow-lg transition-all duration-300 relative overflow-hidden">
-                    <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4">
-                        <i data-lucide="book-open-check" class="w-7 h-7"></i>
+                    class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="book-open-check" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-dark leading-tight mb-1">35 Protocolli Naturalistici ABA</h4>
+                            <p class="text-xs text-gray-500 leading-relaxed">Protocolli pronti all'uso per un'interazione naturale.</p>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold text-dark leading-tight mb-2">35 Protocolli Naturalistici ABA</h3>
-                    <p class="text-sm text-gray-500 mb-6">Protocolli pronti all'uso per un'interazione naturale.</p>
-
                     <button onclick="openProgram35()"
-                        class="w-full py-3 rounded-xl bg-dark text-white font-bold hover:bg-gray-800 transition-colors flex items-center justify-center gap-2">
-                        <span>Apri programma</span>
-                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                        Apri programma
                     </button>
                 </div>
 
                 <!-- Upsell Card 1 -->
                 <div data-slug="naturalistic_mastery"
-                    class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 relative overflow-hidden">
-                    <div class="space-y-1">
-                        <h4 class="font-bold text-dark text-base">Padroneggiare l'applicazione naturalistica</h4>
-                        <p class="text-xs text-gray-500 leading-relaxed">Formazione passo dopo passo per usare i 35
-                            protocolli con sicurezza nelle sessioni reali.</p>
+                    class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="target" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-dark leading-tight mb-1">Padroneggiare l'applicazione naturalistica</h4>
+                            <p class="text-xs text-gray-500 leading-relaxed">Formazione passo dopo passo per usare i 35 protocolli con sicurezza nelle sessioni reali.</p>
+                        </div>
                     </div>
                     <button onclick="openNaturalisticMastery()" type="button"
-                        class="w-full py-2.5 rounded-xl border border-gray-200 bg-white text-dark font-bold text-sm hover:bg-gray-50 transition-colors shadow-sm">
+                        class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
                         Consulta i dettagli
                     </button>
                 </div>
@@ -368,19 +424,19 @@
 
                 <!-- Primary Program Card 2 -->
                 <div data-slug="pratical_toolkit"
-                    class="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100 group hover:shadow-lg transition-all duration-300 relative overflow-hidden">
-                    <div
-                        class="w-14 h-14 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center mb-4">
-                        <i data-lucide="boxes" class="w-7 h-7"></i>
+                    class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="boxes" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-dark leading-tight mb-1">Kit pratico di strumenti per la trasformazione dell'autismo</h4>
+                            <p class="text-xs text-gray-500 leading-relaxed">Un quadro passo dopo passo per insegnare la comunicazione.</p>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold text-dark leading-tight mb-2">Kit pratico di strumenti per la trasformazione dell'autismo
-                    </h3>
-                    <p class="text-sm text-gray-500 mb-6">Un quadro passo dopo passo per insegnare la comunicazione.</p>
-
                     <button onclick="openProgramToolkit()"
-                        class="w-full py-3 rounded-xl bg-dark text-white font-bold hover:bg-gray-800 transition-colors flex items-center justify-center gap-2">
-                        <span>Apri programma</span>
-                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                        Apri programma
                     </button>
                 </div>
 
@@ -474,7 +530,144 @@
                             Visualizza programma
                         </a>
                     </div>
+
+                    <!-- Card: School Readiness -->
+                    <div data-slug="school_readiness"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">Kit di Preparazione Scolastica per l'Autismo</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Strategie VB-MAPP per lettura, scrittura, routine e matematica.</p>
+                            </div>
+                        </div>
+                        <a href="../assets/it/pat/Kit di Preparazione Scolastica.pdf"
+                            download="Kit di Preparazione Scolastica.pdf"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            Visualizza programma
+                        </a>
+                    </div>
+
+                    <!-- Card: Emotional Recognition -->
+                    <div data-slug="emotional_recognition"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-pink-50 text-pink-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="smile" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">Riconoscimento Emotivo nel DSA</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Strumenti per identificare, nominare e rispondere alle emozioni.</p>
+                            </div>
+                        </div>
+                        <a href="../assets/it/pat/Riconoscimento Emotivo.pdf"
+                            download="Riconoscimento Emotivo.pdf"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            Visualizza programma
+                        </a>
+                    </div>
+
+                    <!-- Card: Autism Safety -->
+                    <div data-slug="autism_safety"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="shield-check" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">Kit Sicurezza Autismo</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Abilità essenziali di autoprotezione, inclusione sociale e autonomia.</p>
+                            </div>
+                        </div>
+                        <a href="../assets/it/pat/Kit Sicurezza Autismo.pdf"
+                            download="Kit Sicurezza Autismo.pdf"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            Visualizza programma
+                        </a>
+                    </div>
+
+                    <!-- Card 5 -->
+                    <div data-slug="aba_business_kit"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="briefcase-business" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">Kit Successo nella Pratica ABA</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Come posizionarti, comunicare il tuo valore e crescere come professionista ABA rispettato.</p>
+                            </div>
+                        </div>
+                        <button onclick="openUpsellView('program-view-aba-business-kit')" type="button"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            Visualizza programma
+                        </button>
+                    </div>
+
+                    <!-- Card 6 -->
+                    <div data-slug="parent_training_kit"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="users-round" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">Kit di Coaching per i Genitori</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Come guidare i genitori a rinforzare le abilità a casa e accelerare i progressi.</p>
+                            </div>
+                        </div>
+                        <button onclick="openUpsellView('program-view-parent-training-kit')" type="button"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            Visualizza programma
+                        </button>
+                    </div>
+
+                    <!-- Card 7 -->
+                    <div data-slug="aba_emergency_pack"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="siren" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">Kit di Emergenza ABA</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Protocolli rapidi per gestire crisi comportamentali, aggressività e momenti critici di sessione con sicurezza.</p>
+                            </div>
+                        </div>
+                        <button onclick="openUpsellView('program-view-aba-emergency-pack')" type="button"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            Visualizza programma
+                        </button>
+                    </div>
+
+                    <!-- Card 8 -->
+                    <div data-slug="therapist_survival_guide"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-lime-50 text-lime-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="leaf" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">Guida al Benessere per Professionisti ABA</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Come proteggere la tua energia, evitare il burnout e continuare a crescere come terapista.</p>
+                            </div>
+                        </div>
+                        <button onclick="openUpsellView('program-view-therapist-survival-guide')" type="button"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            Visualizza programma
+                        </button>
+                    </div>
                 </div>
+            </div>
             </div>
         </div>
 
@@ -967,7 +1160,7 @@
                         </div>
                         <div class="space-y-2">
                             <h3 class="text-2xl font-bold text-dark">Inizia a utilizzare il toolkit</h3>
-                            <p class="text-text text-sm leading-relaxed px-4">Accedi ai 6 programmi cardine VB-MAPP disponibili in italiano, pronti per essere applicati in sessioni terapeutiche, scuole o interventi a domicilio.</p>
+                            <p class="text-text text-sm leading-relaxed px-4">Accedi ai 12 programmi cardine VB-MAPP disponibili in italiano, pronti per essere applicati in sessioni terapeutiche, scuole o interventi a domicilio.</p>
                         </div>
                     </div>
                     <button onclick="openToolkitMaterials()"
@@ -975,6 +1168,56 @@
                         <span>Accedi ai Materiali</span>
                         <i data-lucide="arrow-right" class="w-5 h-5"></i>
                     </button>
+                </div>
+
+                <!-- Included Bonuses -->
+                <div class="space-y-6">
+                    <h2 class="text-2xl font-bold text-dark">Bonus inclusi</h2>
+
+                    <!-- Bonus 01 -->
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Bonus 01</span>
+                            <h4 class="font-bold text-dark text-base">Tecniche di Facilitazione ABA</h4>
+                            <p class="text-xs text-gray-400">Strategie pratiche per ottimizzare l'insegnamento</p>
+                        </div>
+                        <a href="../assets/it/pat/Tecniche di Facilitazione ABA.pdf"
+                            download="Tecniche di Facilitazione ABA.pdf"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+
+                    <!-- Bonus 02 -->
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Bonus 02</span>
+                            <h4 class="font-bold text-dark text-base">Guida Completa all'Insegnamento dell'Imitazione</h4>
+                            <p class="text-xs text-gray-400">Costruire le abilità di imitazione passo dopo passo</p>
+                        </div>
+                        <a href="../assets/it/pat/Guida Completa all'Insegnamento dell'Imitazione.pdf"
+                            download="Guida Completa all'Insegnamento dell'Imitazione.pdf"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+
+                    <!-- Bonus 03 -->
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Bonus 03</span>
+                            <h4 class="font-bold text-dark text-base">Analisi del Comportamento Applicata</h4>
+                            <p class="text-xs text-gray-400">Guida introduttiva ai principi e alla scienza dell'ABA</p>
+                        </div>
+                        <a href="../assets/it/pat/Analisi del Comportamento Applicata.pdf"
+                            download="Analisi del Comportamento Applicata.pdf"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
                 </div>
 
             </div>
@@ -1049,14 +1292,79 @@
                     </a>
                 </div>
 
-                <!-- 8 Imitation -->
+                <!-- 5 Intraverbals -->
                 <div
                     class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
                     <div class="flex items-center gap-4">
                         <span class="text-action font-bold text-lg w-6">05</span>
+                        <h4 class="font-bold text-dark">Intraverbali</h4>
+                    </div>
+                    <a href="../assets/it/pat/Intraverbali ( Intraverbal ).pdf" download="Intraverbali ( Intraverbal ).pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <!-- 7 Vocal Skills -->
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">06</span>
+                        <h4 class="font-bold text-dark">Abilità vocali</h4>
+                    </div>
+                    <a href="../assets/it/pat/Abilità Vocali ( Vocal Skills ).pdf" download="Abilità Vocali ( Vocal Skills ).pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <!-- 8 Imitation -->
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">07</span>
                         <h4 class="font-bold text-dark">Imitazione</h4>
                     </div>
                     <a href="../assets/it/pat/Imitazione.PDF" download="Imitazione.PDF"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <!-- 9 Social Skills -->
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">08</span>
+                        <h4 class="font-bold text-dark">Abilità sociali</h4>
+                    </div>
+                    <a href="../assets/it/pat/Abilità Sociali ( Social Skills ).pdf" download="Abilità Sociali ( Social Skills ).pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <!-- 10 Play Skills -->
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">09</span>
+                        <h4 class="font-bold text-dark">Abilità di gioco</h4>
+                    </div>
+                    <a href="../assets/it/pat/Abilità di Gioco ( Play Skills ).pdf" download="Abilità di Gioco ( Play Skills ).pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <!-- 11 Language Development -->
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">10</span>
+                        <h4 class="font-bold text-dark">Sviluppo del linguaggio</h4>
+                    </div>
+                    <a href="../assets/it/pat/Sviluppo del Linguaggio ( Language Development ).pdf" download="Sviluppo del Linguaggio ( Language Development ).pdf"
                         class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
                         <i data-lucide="download" class="w-5 h-5"></i>
                     </a>
@@ -1066,10 +1374,23 @@
                 <div
                     class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
                     <div class="flex items-center gap-4">
-                        <span class="text-action font-bold text-lg w-6">06</span>
+                        <span class="text-action font-bold text-lg w-6">11</span>
                         <h4 class="font-bold text-dark">Percezione visiva (VP-MTS)</h4>
                     </div>
                     <a href="../assets/it/pat/VPMTS.pdf" download="VPMTS.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <!-- 13 Listener Responding by Function, Feature and Class (LRFFC) -->
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">12</span>
+                        <h4 class="font-bold text-dark">Risposta dell'ascoltatore per funzione, caratteristica e classe (LRFFC)</h4>
+                    </div>
+                    <a href="../assets/it/pat/LRFFC.pdf" download="LRFFC.pdf"
                         class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
                         <i data-lucide="download" class="w-5 h-5"></i>
                     </a>
@@ -1224,7 +1545,7 @@
                     <i data-lucide="arrow-left" class="w-5 h-5"></i>
                 </button>
                 <div class="flex-1 text-center pr-14">
-                    <span class="text-xs font-bold uppercase tracking-widest text-action">ABA Kit aziendale</span>
+                    <span class="text-xs font-bold uppercase tracking-widest text-action">Kit Successo nella Pratica ABA</span>
                 </div>
             </div>
 
@@ -1358,10 +1679,11 @@
                         <h3 class="text-2xl font-bold text-dark">Scarica la guida completa</h3>
                         <p class="text-sm text-text leading-relaxed">Conserva il PDF per la tua biografia, i copioni, il piano di posizionamento e la revisione offline.</p>
                     </div>
-                    <div
-                        class="w-full py-4 rounded-xl bg-gray-100 text-gray-400 font-bold flex items-center justify-center gap-3">
-                        <span>PDF non disponibile in italiano</span>
-                    </div>
+                    <a href="../assets/it/pat/Kit Successo nella Pratica ABA.pdf" download="Kit Successo nella Pratica ABA.pdf"
+                        class="w-full py-4 rounded-xl bg-action text-white font-bold hover:bg-green-600 transition-all flex items-center justify-center gap-3 shadow-lg shadow-action/20 active:scale-95">
+                        <span>Scarica PDF</span>
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -1376,7 +1698,7 @@
                     <i data-lucide="arrow-left" class="w-5 h-5"></i>
                 </button>
                 <div class="flex-1 text-center pr-14">
-                    <span class="text-xs font-bold uppercase tracking-widest text-action">Kit di formazione per genitori</span>
+                    <span class="text-xs font-bold uppercase tracking-widest text-action">Kit di Coaching per i Genitori</span>
                 </div>
             </div>
 
@@ -1513,10 +1835,11 @@
                         <h3 class="text-2xl font-bold text-dark">Scarica la guida per i genitori</h3>
                         <p class="text-sm text-text leading-relaxed">Utilizza il PDF per condividere il quadro completo con i genitori o rivisitare gli esempi di routine.</p>
                     </div>
-                    <div
-                        class="w-full py-4 rounded-xl bg-gray-100 text-gray-400 font-bold flex items-center justify-center gap-3">
-                        <span>PDF non disponibile in italiano</span>
-                    </div>
+                    <a href="../assets/it/pat/Kit di Coaching per i Genitori.pdf" download="Kit di Coaching per i Genitori.pdf"
+                        class="w-full py-4 rounded-xl bg-action text-white font-bold hover:bg-green-600 transition-all flex items-center justify-center gap-3 shadow-lg shadow-action/20 active:scale-95">
+                        <span>Scarica PDF</span>
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -1531,7 +1854,7 @@
                     <i data-lucide="arrow-left" class="w-5 h-5"></i>
                 </button>
                 <div class="flex-1 text-center pr-14">
-                    <span class="text-xs font-bold uppercase tracking-widest text-action">ABA Pacchetto di emergenza</span>
+                    <span class="text-xs font-bold uppercase tracking-widest text-action">Kit di Emergenza ABA</span>
                 </div>
             </div>
 
@@ -1665,10 +1988,11 @@
                         <h3 class="text-2xl font-bold text-dark">Scarica il pacchetto completo</h3>
                         <p class="text-sm text-text leading-relaxed">Conserva il PDF per procedure dettagliate, documentazione e adattamenti specifici del profilo.</p>
                     </div>
-                    <div
-                        class="w-full py-4 rounded-xl bg-gray-100 text-gray-400 font-bold flex items-center justify-center gap-3">
-                        <span>PDF non disponibile in italiano</span>
-                    </div>
+                    <a href="../assets/it/pat/Kit di Emergenza ABA.pdf" download="Kit di Emergenza ABA.pdf"
+                        class="w-full py-4 rounded-xl bg-action text-white font-bold hover:bg-green-600 transition-all flex items-center justify-center gap-3 shadow-lg shadow-action/20 active:scale-95">
+                        <span>Scarica PDF</span>
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -1683,7 +2007,7 @@
                     <i data-lucide="arrow-left" class="w-5 h-5"></i>
                 </button>
                 <div class="flex-1 text-center pr-14">
-                    <span class="text-xs font-bold uppercase tracking-widest text-action">Guida alla sopravvivenza del terapeuta</span>
+                    <span class="text-xs font-bold uppercase tracking-widest text-action">Guida al Benessere per Professionisti ABA</span>
                 </div>
             </div>
 
@@ -1829,10 +2153,11 @@
                         <h3 class="text-2xl font-bold text-dark">Scarica la guida completa</h3>
                         <p class="text-sm text-text leading-relaxed">Conserva il PDF per la routine completa, i sistemi di documentazione e il piano di sostenibilità della carriera a lungo termine.</p>
                     </div>
-                    <div
-                        class="w-full py-4 rounded-xl bg-gray-100 text-gray-400 font-bold flex items-center justify-center gap-3">
-                        <span>PDF non disponibile in italiano</span>
-                    </div>
+                    <a href="../assets/it/pat/Guida al Benessere per Professionisti ABA.pdf" download="Guida al Benessere per Professionisti ABA.pdf"
+                        class="w-full py-4 rounded-xl bg-action text-white font-bold hover:bg-green-600 transition-all flex items-center justify-center gap-3 shadow-lg shadow-action/20 active:scale-95">
+                        <span>Scarica PDF</span>
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -2077,7 +2402,14 @@
             '20_session_plans': '',
             '30_functional_play': '',
             '15_intervention_protocols': '',
-            '17_guided_aba': ''
+            '17_guided_aba': '',
+            'school_readiness': '',
+            'emotional_recognition': '',
+            'autism_safety': '',
+            'aba_business_kit': 'https://pay.snappcheckout.com/d45xawe2emquwom8?utm_source=bio',
+            'parent_training_kit': 'https://pay.snappcheckout.com/6nbtz6tu0iipe4p1?utm_source=bio',
+            'aba_emergency_pack': 'https://pay.snappcheckout.com/i1tzw47ydsr51aue?utm_source=bio',
+            'therapist_survival_guide': 'https://pay.snappcheckout.com/85yyt4o5hkcnhbk0?utm_source=bio'
         };
         const AVAILABLE_PRODUCT_SLUGS = new Set(Object.keys(CHECKOUT_LINKS));
 
@@ -2093,7 +2425,14 @@
                 '20_session_plans': '20 Session Plans for Sensory Regulation',
                 '30_functional_play': '30 Functional Play Activities for OT in ASD',
                 '15_intervention_protocols': '15 Intervention Protocols for Daily Living Skills (ADLs)',
-                '17_guided_aba': '17 Guided ABA Protocols for Autism Sessions'
+                '17_guided_aba': '17 Guided ABA Protocols for Autism Sessions',
+                'school_readiness': 'School Readiness Strategies Kit for Autism',
+                'emotional_recognition': 'Emotional Recognition Training',
+                'autism_safety': 'Autism Safety Pack',
+                'aba_business_kit': 'Kit Successo nella Pratica ABA',
+                'parent_training_kit': 'Kit di Coaching per i Genitori',
+                'aba_emergency_pack': 'Kit di Emergenza ABA',
+                'therapist_survival_guide': 'Guida al Benessere per Professionisti ABA'
             };
 
 
@@ -2246,58 +2585,93 @@
 
             // Re-render icons for any newly added overlays
             try { lucide.createIcons(); } catch (e) { }
+
+            // Distribute cards between the "My Programs" and "Offers" sub-tabs
+            organizePrograms(allowedSlugs);
+        }
+
+        // Move owned cards into the "My Programs" pane and locked cards into the "Offers"
+        // pane, then update counters, the nudge banner and the empty states.
+        function organizePrograms(allowedSlugs) {
+            const ownedContainer = document.getElementById('owned-container');
+            const offersContainer = document.getElementById('offers-container');
+            if (!ownedContainer || !offersContainer) return;
+
+            const cards = document.querySelectorAll('#tab-programs [data-slug]');
+            let ownedCount = 0;
+            let offersCount = 0;
+
+            cards.forEach(card => {
+                const slug = card.getAttribute('data-slug');
+                if (allowedSlugs.has(slug)) {
+                    ownedContainer.appendChild(card);
+                    ownedCount++;
+                } else {
+                    offersContainer.appendChild(card);
+                    offersCount++;
+                }
+            });
+
+            // Empty states
+            const ownedEmpty = document.getElementById('owned-empty-state');
+            if (ownedEmpty) ownedEmpty.classList.toggle('hidden', ownedCount > 0);
+            const offersEmpty = document.getElementById('offers-empty-state');
+            if (offersEmpty) offersEmpty.classList.toggle('hidden', offersCount > 0);
+            const offersIntro = document.getElementById('offers-intro');
+            if (offersIntro) offersIntro.classList.toggle('hidden', offersCount === 0);
+
+            // Offers count badge on the selector
+            const badge = document.getElementById('offers-count-badge');
+            if (badge) {
+                badge.textContent = offersCount;
+                badge.classList.toggle('hidden', offersCount === 0);
+            }
+
+            // "X new offers for you" nudge banner on the My Programs pane
+            const banner = document.getElementById('offers-banner');
+            const bannerCount = document.getElementById('offers-banner-count');
+            if (bannerCount) bannerCount.textContent = offersCount;
+            if (banner) banner.classList.toggle('hidden', offersCount === 0);
+
+            try { lucide.createIcons(); } catch (e) { }
         }
 
         function lockCard(card) {
-            // Check if already locked
-            if (card.querySelector('.locked-overlay')) return;
+            // Already processed?
+            if (card.dataset.locked === 'true') return;
+            card.dataset.locked = 'true';
 
             const slug = card.getAttribute('data-slug');
             const checkoutUrl = CHECKOUT_LINKS[slug];
 
-            // Create Overlay with centered icon
-            const overlay = document.createElement('div');
-            overlay.className = 'locked-overlay animate-in fade-in duration-500';
-            overlay.innerHTML = `
-                <div class="locked-icon">
-                    <i data-lucide="lock" class="w-8 h-8"></i>
-                </div>
-            `;
+            const goToCheckout = function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (checkoutUrl) window.location.href = checkoutUrl;
+            };
 
-            // Append as first child or strictly on top? Append is fine due to z-index.
-            card.appendChild(overlay);
-
-            // Handle Redirection if URL exists
+            // No gray mask and no center lock icon: the card text stays fully readable.
+            // The whole card is clickable toward the checkout.
             if (checkoutUrl) {
                 card.style.cursor = 'pointer';
-                card.onclick = function (e) {
-                    // Prevent propagation if needed, but here we want the card click
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('Redirecting to checkout:', checkoutUrl);
-                    window.location.href = checkoutUrl;
-                };
-                overlay.title = "Fai clic per sbloccare questo programma";
+                card.onclick = goToCheckout;
             } else {
                 card.style.cursor = 'default';
             }
 
-            // Disable buttons and links specific to each card
+            // Turn the action button/link into an orange "locked" CTA.
             const actionElements = card.querySelectorAll('button, a');
             actionElements.forEach(el => {
-                el.disabled = true;
-                el.style.pointerEvents = 'none';
-                el.classList.add('opacity-50', 'cursor-not-allowed');
-
-                // Neutralize actions
                 if (el.tagName === 'A') {
                     el.removeAttribute('href');
                     el.removeAttribute('download');
                 }
-                if (el.tagName === 'BUTTON') {
-                    el.removeAttribute('onclick');
-                    el.onclick = null; // Clear event handler property
-                }
+                el.removeAttribute('onclick');
+                el.disabled = false;
+                el.style.pointerEvents = '';
+                el.onclick = checkoutUrl ? goToCheckout : null;
+                el.className = 'w-full py-2.5 rounded-xl border border-orange-300 bg-orange-50 text-orange-600 font-bold text-sm hover:bg-orange-100 transition-colors flex items-center justify-center gap-2';
+                el.innerHTML = '<i data-lucide="lock" class="w-4 h-4"></i><span>Sblocca programma</span>';
             });
 
             try { lucide.createIcons(); } catch (e) { }

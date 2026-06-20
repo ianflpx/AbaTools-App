@@ -50,6 +50,32 @@ function switchTab(tabId) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// Switch between the "My Programs" (owned) and "Offers" sub-tabs inside the Programs tab
+function switchProgramSubtab(which) {
+    const ownedPane = document.getElementById('programs-pane-owned');
+    const offersPane = document.getElementById('programs-pane-offers');
+    const ownedBtn = document.getElementById('subtab-btn-owned');
+    const offersBtn = document.getElementById('subtab-btn-offers');
+    if (!ownedPane || !offersPane) return;
+
+    const showOffers = which === 'offers';
+    ownedPane.classList.toggle('hidden', showOffers);
+    offersPane.classList.toggle('hidden', !showOffers);
+
+    const activeBtn = showOffers ? offersBtn : ownedBtn;
+    const inactiveBtn = showOffers ? ownedBtn : offersBtn;
+    if (activeBtn) {
+        activeBtn.classList.add('bg-white', 'text-dark', 'shadow-sm');
+        activeBtn.classList.remove('text-gray-500');
+    }
+    if (inactiveBtn) {
+        inactiveBtn.classList.remove('bg-white', 'text-dark', 'shadow-sm');
+        inactiveBtn.classList.add('text-gray-500');
+    }
+
+    try { lucide.createIcons(); } catch (e) { }
+}
+
 // Hub Data
 const hubContent = {
     verbal: {
@@ -227,50 +253,130 @@ const feedData = [
     {
         type: "Estudio",
         colorClass: "bg-indigo-50 text-indigo-700",
-        date: "18 Ene",
-        timestamp: new Date('2026-01-18').getTime(),
+        date: "22 Ene",
+        timestamp: new Date('2026-01-22').getTime(),
         title: "El contacto visual aumenta de manera más confiable durante el juego compartido.",
         text: "La investigación sobre Intervenciones Conductuales del Desarrollo Naturalista muestra que es más probable que surja el contacto visual cuando el adulto sigue la iniciativa del niño durante el juego, en lugar de durante tareas estructuradas en mesa."
     },
     {
         type: "Nota Clínica",
         colorClass: "bg-blue-50 text-blue-700",
-        date: "27 Ene",
-        timestamp: new Date('2026-01-27').getTime(),
+        date: "5 Feb",
+        timestamp: new Date('2026-02-05').getTime(),
         title: "Los terapeutas a menudo observan una reducción en las conductas de escape cuando se disminuye temporalmente la dificultad de la tarea.",
         text: "El compromiso tiende a recuperarse antes que la precisión, y eso es lo esperado."
     },
     {
         type: "Dato Clínico",
         colorClass: "bg-blue-50 text-blue-700",
-        date: "31 Ene",
-        timestamp: new Date('2026-01-31').getTime(),
+        date: "19 Feb",
+        timestamp: new Date('2026-02-19').getTime(),
         title: "La práctica breve y consistente en diferentes entornos fortalece el aprendizaje mucho más que las sesiones aisladas de alta intensidad.",
         text: "La generalización se construye a través de la repetición, no del volumen."
     },
     {
         type: "Consejo",
         colorClass: "bg-amber-50 text-amber-700",
-        date: "2 Feb",
-        timestamp: new Date('2026-02-02').getTime(),
+        date: "3 Mar",
+        timestamp: new Date('2026-03-03').getTime(),
         title: "El silencio puede ser una estrategia.",
         text: "Esperar unos segundos antes de instigar da al niño tiempo para procesar y responder independientemente. Muchas respuestas espontáneas ocurren en esa pausa."
     },
     {
         type: "Perspectiva de Investigación",
         colorClass: "bg-purple-50 text-purple-700",
-        date: "2 Feb",
-        timestamp: new Date('2026-02-02T12:00:00').getTime(),
+        date: "16 Mar",
+        timestamp: new Date('2026-03-16').getTime(),
         title: "El refuerzo natural sostiene la motivación por más tiempo.",
         text: "Los estudios que comparan reforzadores artificiales vs. naturales indican que el acceso a la actividad misma mantiene el compromiso por períodos más largos y apoya la generalización."
     },
     {
         type: "Observación",
         colorClass: "bg-teal-50 text-teal-700",
-        date: "4 Feb",
-        timestamp: new Date('2026-02-04').getTime(),
+        date: "27 Mar",
+        timestamp: new Date('2026-03-27').getTime(),
         title: "Es más probable que los niños se comuniquen espontáneamente cuando los adultos responden de manera inmediata y significativa, incluso a las aproximaciones.",
         text: "La capacidad de respuesta importa más que la perfección."
+    },
+    {
+        type: "Estudio",
+        colorClass: "bg-indigo-50 text-indigo-700",
+        date: "2 Abr",
+        timestamp: new Date("2026-04-02").getTime(),
+        title: "El coaching a padres por telesalud puede igualar los resultados presenciales.",
+        text: "Ensayos recientes muestran que los cuidadores formados a distancia logran avances de comunicación comparables al coaching en clínica, ampliando el acceso para familias lejos de los centros."
+    },
+    {
+        type: "Perspectiva de Investigación",
+        colorClass: "bg-purple-50 text-purple-700",
+        date: "14 Abr",
+        timestamp: new Date("2026-04-14").getTime(),
+        title: "Las intervenciones conductuales naturalistas del desarrollo siguen sumando evidencia.",
+        text: "Los enfoques que integran el aprendizaje en el juego y las rutinas diarias están hoy entre los más respaldados para la comunicación temprana."
+    },
+    {
+        type: "Consejo Práctico",
+        colorClass: "bg-amber-50 text-amber-700",
+        date: "24 Abr",
+        timestamp: new Date("2026-04-24").getTime(),
+        title: "Incorporar el asentimiento del niño a las sesiones reduce las conductas de escape.",
+        text: "Ofrecer opciones reales y detectar pronto las señales de incomodidad mantiene alta la cooperación y hace que aprender se sienta más seguro."
+    },
+    {
+        type: "Dato Clínico",
+        colorClass: "bg-blue-50 text-blue-700",
+        date: "6 May",
+        timestamp: new Date("2026-05-06").getTime(),
+        title: "La CAA no frena el habla.",
+        text: "La investigación es consistente: dar al niño imágenes o un dispositivo de comunicación apoya, nunca bloquea, el desarrollo del lenguaje verbal."
+    },
+    {
+        type: "Observación",
+        colorClass: "bg-teal-50 text-teal-700",
+        date: "15 May",
+        timestamp: new Date("2026-05-15").getTime(),
+        title: "Un diagnóstico más temprano abre una ventana de intervención más amplia.",
+        text: "Como las señales fiables se identifican antes, más familias pueden empezar el apoyo en los años en que el aprendizaje es más flexible."
+    },
+    {
+        type: "Consejo",
+        colorClass: "bg-amber-50 text-amber-700",
+        date: "23 May",
+        timestamp: new Date("2026-05-23").getTime(),
+        title: "Haz comprobaciones rápidas de preferencias en lugar de evaluaciones mensuales.",
+        text: "Una elección de 30 segundos justo antes de la sesión suele predecir la motivación mejor que la evaluación formal del mes pasado."
+    },
+    {
+        type: "Nota Clínica",
+        colorClass: "bg-blue-50 text-blue-700",
+        date: "1 Jun",
+        timestamp: new Date("2026-06-01").getTime(),
+        title: "La recogida de datos digital devuelve tiempo a los profesionales.",
+        text: "Los equipos que pasan del papel al registro en tableta informan de menos tiempo en documentación y más en enseñanza directa."
+    },
+    {
+        type: "Estudio",
+        colorClass: "bg-indigo-50 text-indigo-700",
+        date: "9 Jun",
+        timestamp: new Date("2026-06-09").getTime(),
+        title: "La calidad de la supervisión predice la permanencia del terapeuta más que el número de casos.",
+        text: "El apoyo, la retroalimentación y la mentoría mantienen a los profesionales cualificados en el campo, protegiendo la constancia de la que dependen los niños."
+    },
+    {
+        type: "Perspectiva de Investigación",
+        colorClass: "bg-purple-50 text-purple-700",
+        date: "13 Jun",
+        timestamp: new Date("2026-06-13").getTime(),
+        title: "Combinar ABA con terapia ocupacional ayuda a niños con fuertes necesidades sensoriales.",
+        text: "Los planes interdisciplinarios tienden a generalizar mejor que una sola disciplina trabajando sola."
+    },
+    {
+        type: "Observación",
+        colorClass: "bg-teal-50 text-teal-700",
+        date: "18 Jun",
+        timestamp: new Date("2026-06-18").getTime(),
+        title: "El sueño y la conducta van más unidos de lo que suponemos.",
+        text: "Muchos aumentos repentinos de conducta desafiante se deben a un sueño alterado: conviene revisarlo antes de cambiar un protocolo."
     }
 ];
 

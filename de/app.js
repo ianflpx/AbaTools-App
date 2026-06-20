@@ -55,6 +55,32 @@ function switchTab(tabId) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// Switch between the "My Programs" (owned) and "Offers" sub-tabs inside the Programs tab
+function switchProgramSubtab(which) {
+    const ownedPane = document.getElementById('programs-pane-owned');
+    const offersPane = document.getElementById('programs-pane-offers');
+    const ownedBtn = document.getElementById('subtab-btn-owned');
+    const offersBtn = document.getElementById('subtab-btn-offers');
+    if (!ownedPane || !offersPane) return;
+
+    const showOffers = which === 'offers';
+    ownedPane.classList.toggle('hidden', showOffers);
+    offersPane.classList.toggle('hidden', !showOffers);
+
+    const activeBtn = showOffers ? offersBtn : ownedBtn;
+    const inactiveBtn = showOffers ? ownedBtn : offersBtn;
+    if (activeBtn) {
+        activeBtn.classList.add('bg-white', 'text-dark', 'shadow-sm');
+        activeBtn.classList.remove('text-gray-500');
+    }
+    if (inactiveBtn) {
+        inactiveBtn.classList.remove('bg-white', 'text-dark', 'shadow-sm');
+        inactiveBtn.classList.add('text-gray-500');
+    }
+
+    try { lucide.createIcons(); } catch (e) { }
+}
+
 // Hub Data
 const hubContent = {
     verbal: {
@@ -399,50 +425,130 @@ const feedData = [
     {
         type: "Study",
         colorClass: "bg-indigo-50 text-indigo-700",
-        date: "Jan 18",
-        timestamp: new Date('2026-01-18').getTime(),
+        date: "Jan 22",
+        timestamp: new Date('2026-01-22').getTime(),
         title: "Der Blickkontakt nimmt beim gemeinsamen Spielen zuverlässiger zu.",
         text: "Untersuchungen zu naturalistischen entwicklungsbezogenen Verhaltensinterventionen zeigen, dass Augenkontakt eher entsteht, wenn der Erwachsene beim Spielen der Führung des Kindes folgt, als bei strukturierten Tischaufgaben."
     },
     {
         type: "Clinical Note",
         colorClass: "bg-blue-50 text-blue-700",
-        date: "Jan 27",
-        timestamp: new Date('2026-01-27').getTime(),
+        date: "Feb 5",
+        timestamp: new Date('2026-02-05').getTime(),
         title: "Therapeuten beobachten häufig ein vermindertes Fluchtverhalten, wenn die Aufgabenschwierigkeit vorübergehend verringert wird.",
         text: "Das Engagement erholt sich tendenziell vor der Genauigkeit – und das ist zu erwarten."
     },
     {
         type: "Clinical Fact",
         colorClass: "bg-blue-50 text-blue-700",
-        date: "Jan 31",
-        timestamp: new Date('2026-01-31').getTime(),
+        date: "Feb 19",
+        timestamp: new Date('2026-02-19').getTime(),
         title: "Kurzes, konsistentes Üben in verschiedenen Umgebungen stärkt das Lernen weitaus mehr als isolierte Sitzungen mit hoher Intensität.",
         text: "Die Verallgemeinerung erfolgt durch Wiederholung, nicht durch Lautstärke."
     },
     {
         type: "Tip",
         colorClass: "bg-amber-50 text-amber-700",
-        date: "Feb 2",
-        timestamp: new Date('2026-02-02').getTime(),
+        date: "Mar 3",
+        timestamp: new Date('2026-03-03').getTime(),
         title: "Schweigen kann eine Strategie sein.",
         text: "Wenn das Kind vor der Prompt einige Sekunden wartet, hat es Zeit, es zu verarbeiten und selbstständig zu reagieren. In dieser Pause passieren viele spontane Reaktionen."
     },
     {
         type: "Research Insight",
         colorClass: "bg-purple-50 text-purple-700",
-        date: "Feb 2",
-        timestamp: new Date('2026-02-02T12:00:00').getTime(),
+        date: "Mar 16",
+        timestamp: new Date('2026-03-16').getTime(),
         title: "Natürliche Verstärkung hält die Motivation länger aufrecht.",
         text: "Studien zum Vergleich künstlicher und natürlicher Verstärker zeigen, dass der Zugang zur Aktivität selbst das Engagement über längere Zeiträume aufrechterhält und die Verallgemeinerung unterstützt."
     },
     {
         type: "Observation",
         colorClass: "bg-teal-50 text-teal-700",
-        date: "Feb 4",
-        timestamp: new Date('2026-02-04').getTime(),
+        date: "Mar 27",
+        timestamp: new Date('2026-03-27').getTime(),
         title: "Kinder kommunizieren eher spontan, wenn Erwachsene sofort und bedeutungsvoll reagieren – selbst auf Annäherungsversuche.",
         text: "Reaktionsfähigkeit ist wichtiger als Perfektion."
+    },
+    {
+        type: "Study",
+        colorClass: "bg-indigo-50 text-indigo-700",
+        date: "Apr 2",
+        timestamp: new Date("2026-04-02").getTime(),
+        title: "Eltern-Coaching per Telemedizin kann mit Ergebnissen vor Ort mithalten.",
+        text: "Aktuelle Studien zeigen, dass aus der Ferne geschulte Bezugspersonen ähnliche Kommunikationsfortschritte erzielen wie beim Coaching in der Praxis – das erweitert den Zugang für Familien fernab von Zentren."
+    },
+    {
+        type: "Research Insight",
+        colorClass: "bg-purple-50 text-purple-700",
+        date: "Apr 14",
+        timestamp: new Date("2026-04-14").getTime(),
+        title: "Naturalistische entwicklungsorientierte Verhaltensinterventionen gewinnen weiter an Evidenz.",
+        text: "Ansätze, die das Lernen in Spiel und Alltag einbetten, gehören heute zu den am besten belegten für die frühe Kommunikation."
+    },
+    {
+        type: "Practice Tip",
+        colorClass: "bg-amber-50 text-amber-700",
+        date: "Apr 24",
+        timestamp: new Date("2026-04-24").getTime(),
+        title: "Die Zustimmung des Kindes in die Sitzung einzubauen senkt Fluchtverhalten.",
+        text: "Echte Wahlmöglichkeiten und das frühe Erkennen von Unbehagen halten die Mitarbeit hoch und lassen Lernen sicherer wirken."
+    },
+    {
+        type: "Clinical Fact",
+        colorClass: "bg-blue-50 text-blue-700",
+        date: "May 6",
+        timestamp: new Date("2026-05-06").getTime(),
+        title: "Unterstützte Kommunikation bremst das Sprechen nicht.",
+        text: "Die Forschung ist eindeutig: Bilder oder ein Kommunikationsgerät unterstützen die Lautsprache – sie blockieren sie nie."
+    },
+    {
+        type: "Observation",
+        colorClass: "bg-teal-50 text-teal-700",
+        date: "May 15",
+        timestamp: new Date("2026-05-15").getTime(),
+        title: "Eine frühere Diagnose öffnet ein größeres Fenster für Frühförderung.",
+        text: "Da verlässliche Anzeichen früher erkannt werden, können mehr Familien in den Jahren mit der Förderung beginnen, in denen Lernen am flexibelsten ist."
+    },
+    {
+        type: "Tip",
+        colorClass: "bg-amber-50 text-amber-700",
+        date: "May 23",
+        timestamp: new Date("2026-05-23").getTime(),
+        title: "Mach kurze Präferenz-Checks statt monatlicher Erhebungen.",
+        text: "Eine 30-Sekunden-Wahl direkt vor der Sitzung sagt die Motivation oft besser voraus als die formale Erhebung vom Vormonat."
+    },
+    {
+        type: "Clinical Note",
+        colorClass: "bg-blue-50 text-blue-700",
+        date: "Jun 1",
+        timestamp: new Date("2026-06-01").getTime(),
+        title: "Digitale Datenerfassung gibt Fachkräften Zeit zurück.",
+        text: "Teams, die von Papier auf Tablet-Erfassung umsteigen, berichten von weniger Dokumentationszeit und mehr direktem Unterricht."
+    },
+    {
+        type: "Study",
+        colorClass: "bg-indigo-50 text-indigo-700",
+        date: "Jun 9",
+        timestamp: new Date("2026-06-09").getTime(),
+        title: "Die Qualität der Supervision sagt die Bindung von Therapeuten stärker voraus als die Fallzahl.",
+        text: "Unterstützung, Feedback und Mentoring halten qualifizierte Fachkräfte im Beruf – und schützen die Beständigkeit, auf die Kinder angewiesen sind."
+    },
+    {
+        type: "Research Insight",
+        colorClass: "bg-purple-50 text-purple-700",
+        date: "Jun 13",
+        timestamp: new Date("2026-06-13").getTime(),
+        title: "ABA mit Ergotherapie zu verbinden hilft Kindern mit starken sensorischen Bedürfnissen.",
+        text: "Interdisziplinäre Pläne generalisieren tendenziell besser als eine einzelne Disziplin allein."
+    },
+    {
+        type: "Observation",
+        colorClass: "bg-teal-50 text-teal-700",
+        date: "Jun 18",
+        timestamp: new Date("2026-06-18").getTime(),
+        title: "Schlaf und Verhalten hängen enger zusammen, als wir annehmen.",
+        text: "Viele plötzliche Zunahmen herausfordernden Verhaltens gehen auf gestörten Schlaf zurück – das lohnt sich zu prüfen, bevor man ein Protokoll ändert."
     }
 ];
 

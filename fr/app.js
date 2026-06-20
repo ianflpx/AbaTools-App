@@ -56,6 +56,32 @@ function switchTab(tabId) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// Switch between the "My Programs" (owned) and "Offers" sub-tabs inside the Programs tab
+function switchProgramSubtab(which) {
+    const ownedPane = document.getElementById('programs-pane-owned');
+    const offersPane = document.getElementById('programs-pane-offers');
+    const ownedBtn = document.getElementById('subtab-btn-owned');
+    const offersBtn = document.getElementById('subtab-btn-offers');
+    if (!ownedPane || !offersPane) return;
+
+    const showOffers = which === 'offers';
+    ownedPane.classList.toggle('hidden', showOffers);
+    offersPane.classList.toggle('hidden', !showOffers);
+
+    const activeBtn = showOffers ? offersBtn : ownedBtn;
+    const inactiveBtn = showOffers ? ownedBtn : offersBtn;
+    if (activeBtn) {
+        activeBtn.classList.add('bg-white', 'text-dark', 'shadow-sm');
+        activeBtn.classList.remove('text-gray-500');
+    }
+    if (inactiveBtn) {
+        inactiveBtn.classList.remove('bg-white', 'text-dark', 'shadow-sm');
+        inactiveBtn.classList.add('text-gray-500');
+    }
+
+    try { lucide.createIcons(); } catch (e) { }
+}
+
 // Hub Data
 const hubContent = {
     verbal: {
@@ -421,50 +447,130 @@ const feedData = [
     {
         type: "Étude",
         colorClass: "bg-indigo-50 text-indigo-700",
-        date: "18 janv.",
-        timestamp: new Date('2026-01-18').getTime(),
+        date: "22 janv.",
+        timestamp: new Date('2026-01-22').getTime(),
         title: "Le contact visuel augmente de manière plus fiable lors du jeu partagé.",
         text: "La recherche sur les Interventions Comportementales Développementales Naturalistes montre que le contact visuel est plus susceptible d'émerger lorsque l'adulte suit l'initiative de l'enfant pendant le jeu, plutôt que lors de tâches structurées à table."
     },
     {
         type: "Note Clinique",
         colorClass: "bg-blue-50 text-blue-700",
-        date: "27 janv.",
-        timestamp: new Date('2026-01-27').getTime(),
+        date: "5 févr.",
+        timestamp: new Date('2026-02-05').getTime(),
         title: "Les thérapeutes observent souvent une réduction des comportements d'évitement lorsque la difficulté de la tâche est temporairement réduite.",
         text: "L'engagement a tendance à se rétablir avant la précision — et c'est normal."
     },
     {
         type: "Fait Clinique",
         colorClass: "bg-blue-50 text-blue-700",
-        date: "31 janv.",
-        timestamp: new Date('2026-01-31').getTime(),
+        date: "19 févr.",
+        timestamp: new Date('2026-02-19').getTime(),
         title: "Une pratique courte et cohérente dans différents environnements renforce l'apprentissage bien plus que des séances isolées à haute intensité.",
         text: "La généralisation se construit par la répétition, pas par le volume."
     },
     {
         type: "Conseil",
         colorClass: "bg-amber-50 text-amber-700",
-        date: "2 févr.",
-        timestamp: new Date('2026-02-02').getTime(),
+        date: "3 mars",
+        timestamp: new Date('2026-03-03').getTime(),
         title: "Le silence peut être une stratégie.",
         text: "Attendre quelques secondes avant d'inciter donne à l'enfant le temps de traiter et de répondre indépendamment. De nombreuses réponses spontanées se produisent dans cette pause."
     },
     {
         type: "Aperçu Recherche",
         colorClass: "bg-purple-50 text-purple-700",
-        date: "2 févr.",
-        timestamp: new Date('2026-02-02T12:00:00').getTime(),
+        date: "16 mars",
+        timestamp: new Date('2026-03-16').getTime(),
         title: "Le renforcement naturel soutient la motivation plus longtemps.",
         text: "Les études comparant les renforçateurs artificiels vs naturels indiquent que l'accès à l'activité elle-même maintient l'engagement sur de plus longues périodes et soutient la généralisation."
     },
     {
         type: "Observation",
         colorClass: "bg-teal-50 text-teal-700",
-        date: "4 févr.",
-        timestamp: new Date('2026-02-04').getTime(),
+        date: "27 mars",
+        timestamp: new Date('2026-03-27').getTime(),
         title: "Les enfants sont plus susceptibles de communiquer spontanément lorsque les adultes répondent immédiatement et de manière significative — même aux approximations.",
         text: "La réactivité compte plus que la perfection."
+    },
+    {
+        type: "Étude",
+        colorClass: "bg-indigo-50 text-indigo-700",
+        date: "2 avr.",
+        timestamp: new Date("2026-04-02").getTime(),
+        title: "Le coaching parental en télésanté peut égaler les résultats en présentiel.",
+        text: "Des essais récents montrent que les aidants formés à distance obtiennent des progrès de communication comparables au coaching en clinique, élargissant l’accès pour les familles éloignées des centres."
+    },
+    {
+        type: "Aperçu Recherche",
+        colorClass: "bg-purple-50 text-purple-700",
+        date: "14 avr.",
+        timestamp: new Date("2026-04-14").getTime(),
+        title: "Les interventions comportementales développementales naturalistes continuent de gagner en preuves.",
+        text: "Les approches qui intègrent l’apprentissage au jeu et aux routines quotidiennes figurent aujourd’hui parmi les plus soutenues pour la communication précoce."
+    },
+    {
+        type: "Conseil Pratique",
+        colorClass: "bg-amber-50 text-amber-700",
+        date: "24 avr.",
+        timestamp: new Date("2026-04-24").getTime(),
+        title: "Intégrer l’assentiment de l’enfant aux séances réduit les comportements d’évitement.",
+        text: "Proposer de vrais choix et repérer tôt les signes d’inconfort maintient une forte coopération et rend l’apprentissage plus sécurisant."
+    },
+    {
+        type: "Fait Clinique",
+        colorClass: "bg-blue-50 text-blue-700",
+        date: "6 mai",
+        timestamp: new Date("2026-05-06").getTime(),
+        title: "La CAA ne freine pas la parole.",
+        text: "La recherche est constante : donner à l’enfant des images ou un appareil de communication soutient, et ne bloque jamais, le développement du langage oral."
+    },
+    {
+        type: "Observation",
+        colorClass: "bg-teal-50 text-teal-700",
+        date: "15 mai",
+        timestamp: new Date("2026-05-15").getTime(),
+        title: "Un diagnostic plus précoce ouvre une fenêtre d’intervention plus large.",
+        text: "Comme les signes fiables sont repérés plus tôt, davantage de familles peuvent commencer l’accompagnement durant les années où l’apprentissage est le plus flexible."
+    },
+    {
+        type: "Conseil",
+        colorClass: "bg-amber-50 text-amber-700",
+        date: "23 mai",
+        timestamp: new Date("2026-05-23").getTime(),
+        title: "Faites de rapides vérifications de préférences plutôt que des évaluations mensuelles.",
+        text: "Un choix de 30 secondes juste avant la séance prédit souvent la motivation mieux que l’évaluation formelle du mois dernier."
+    },
+    {
+        type: "Note Clinique",
+        colorClass: "bg-blue-50 text-blue-700",
+        date: "1 juin",
+        timestamp: new Date("2026-06-01").getTime(),
+        title: "La collecte de données numérique redonne du temps aux cliniciens.",
+        text: "Les équipes qui passent du papier au suivi sur tablette rapportent moins de temps de documentation et plus d’enseignement direct."
+    },
+    {
+        type: "Étude",
+        colorClass: "bg-indigo-50 text-indigo-700",
+        date: "9 juin",
+        timestamp: new Date("2026-06-09").getTime(),
+        title: "La qualité de la supervision prédit la fidélisation des thérapeutes plus que le nombre de dossiers.",
+        text: "Le soutien, le retour d’information et le mentorat gardent les professionnels qualifiés dans le métier, protégeant la constance dont les enfants dépendent."
+    },
+    {
+        type: "Aperçu Recherche",
+        colorClass: "bg-purple-50 text-purple-700",
+        date: "13 juin",
+        timestamp: new Date("2026-06-13").getTime(),
+        title: "Associer l’ABA à l’ergothérapie aide les enfants ayant de forts besoins sensoriels.",
+        text: "Les plans interdisciplinaires tendent à mieux se généraliser qu’une seule discipline travaillant seule."
+    },
+    {
+        type: "Observation",
+        colorClass: "bg-teal-50 text-teal-700",
+        date: "18 juin",
+        timestamp: new Date("2026-06-18").getTime(),
+        title: "Le sommeil et le comportement sont plus liés qu’on ne le pense.",
+        text: "De nombreuses hausses soudaines de comportements difficiles s’expliquent par un sommeil perturbé : à vérifier avant de modifier un protocole."
     }
 ];
 

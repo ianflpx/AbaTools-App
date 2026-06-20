@@ -89,25 +89,7 @@
         }
 
         /* Locked Overlay - Robust Design */
-        .locked-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(218, 218, 218, 0.493);
-            /* Slate gray, semi-transparent */
-            backdrop-filter: none;
-            /* No blur as requested */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 20;
-            border-radius: inherit;
-        }
-
-        .locked-icon {
-            color: white;
-            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
-            /* Shadow for visibility */
-        }
+        /* Locked products are no longer masked; the CTA button shows the locked state. */
     </style>
 
     <!-- Auth Check & Security -->
@@ -313,7 +295,7 @@
         </div>
 
         <!-- Tab 2: Programs (My Programs) -->
-        <div id="tab-programs" class="tab-content space-y-8">
+        <div id="tab-programs" class="tab-content space-y-6">
             <div class="space-y-4">
                 <div class="flex items-center justify-between">
                     <h2 class="text-2xl font-black text-dark uppercase tracking-wide">Meine Programme</h2>
@@ -322,8 +304,76 @@
                         0 AKTIVITÄTEN
                     </span>
                 </div>
-                <div class="h-px w-full bg-gray-200"></div>
             </div>
+
+            <!-- Program Sub-tab Selector -->
+            <div class="bg-gray-100 p-1.5 rounded-2xl flex items-center gap-1.5">
+                <button id="subtab-btn-owned" type="button" onclick="switchProgramSubtab('owned')"
+                    class="flex-1 py-2.5 px-3 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 bg-white text-dark shadow-sm">
+                    <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                    <span>Meine Programme</span>
+                </button>
+                <button id="subtab-btn-offers" type="button" onclick="switchProgramSubtab('offers')"
+                    class="flex-1 py-2.5 px-3 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 text-gray-500">
+                    <i data-lucide="tag" class="w-4 h-4"></i>
+                    <span>Angebote</span>
+                    <span id="offers-count-badge"
+                        class="hidden bg-urgency text-white text-[0.65rem] font-bold min-w-[1.25rem] h-5 px-1 rounded-full flex items-center justify-center">0</span>
+                </button>
+            </div>
+
+            <!-- Owned Pane -->
+            <div id="programs-pane-owned" class="space-y-6">
+                <div id="owned-container" class="space-y-4"></div>
+
+                <!-- Empty state -->
+                <div id="owned-empty-state" class="hidden text-center py-12 px-6 space-y-3">
+                    <div class="w-16 h-16 rounded-2xl bg-gray-100 text-gray-400 flex items-center justify-center mx-auto">
+                        <i data-lucide="package-open" class="w-8 h-8"></i>
+                    </div>
+                    <h4 class="font-bold text-dark">Noch keine aktiven Programme</h4>
+                    <p class="text-sm text-gray-500 leading-relaxed max-w-xs mx-auto">Deine aktiven Programme erscheinen
+                        hier. Entdecke die Angebote, um zu starten.</p>
+                </div>
+
+                <!-- Offers nudge banner -->
+                <button id="offers-banner" type="button" onclick="switchProgramSubtab('offers')"
+                    class="hidden w-full bg-orange-50 border border-orange-100 rounded-2xl p-4 flex items-center justify-between gap-4 hover:bg-orange-100/60 transition-colors text-left active:scale-[0.99]">
+                    <div class="flex items-center gap-4">
+                        <div class="w-11 h-11 rounded-xl bg-urgency/10 text-urgency flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="tag" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-dark text-sm leading-tight"><span id="offers-banner-count">0</span>
+                                neue Angebote für dich</p>
+                            <p class="text-xs text-gray-500 mt-0.5">Du findest sie im Tab „Angebote“.</p>
+                        </div>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-5 h-5 text-urgency flex-shrink-0"></i>
+                </button>
+            </div>
+
+            <!-- Offers Pane -->
+            <div id="programs-pane-offers" class="hidden space-y-6">
+                <div id="offers-intro"
+                    class="hidden bg-blue-50 border border-blue-100 rounded-2xl p-4 flex items-start gap-3">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5"></i>
+                    <p class="text-sm text-blue-800 font-medium leading-relaxed">Schalte neue Programme frei, um deine
+                        Interventionswerkzeuge zu erweitern.</p>
+                </div>
+                <div id="offers-container" class="space-y-4"></div>
+                <div id="offers-empty-state" class="hidden text-center py-12 px-6 space-y-3">
+                    <div class="w-16 h-16 rounded-2xl bg-green-100 text-green-600 flex items-center justify-center mx-auto">
+                        <i data-lucide="party-popper" class="w-8 h-8"></i>
+                    </div>
+                    <h4 class="font-bold text-dark">Du hast alle Programme!</h4>
+                    <p class="text-sm text-gray-500 leading-relaxed max-w-xs mx-auto">Glückwunsch! Du hast bereits Zugriff
+                        auf alle verfügbaren Programme.</p>
+                </div>
+            </div>
+
+            <!-- Hidden source: original program cards (distributed by JS) -->
+            <div id="programs-source" class="hidden">
 
             <!-- Naturalistic ABA Section -->
             <div class="space-y-4">
@@ -331,30 +381,36 @@
 
                 <!-- Primary Program Card 1 -->
                 <div data-slug="35_protocols"
-                    class="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100 group hover:shadow-lg transition-all duration-300 relative overflow-hidden">
-                    <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4">
-                        <i data-lucide="book-open-check" class="w-7 h-7"></i>
+                    class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="book-open-check" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-dark leading-tight mb-1">35 naturalistische ABA-Protokolle</h4>
+                            <p class="text-xs text-gray-500 leading-relaxed">Gebrauchsfertige Protokolle für natürliche Interaktion.</p>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold text-dark leading-tight mb-2">35 naturalistische ABA-Protokolle</h3>
-                    <p class="text-sm text-gray-500 mb-6">Gebrauchsfertige Protokolle für natürliche Interaktion.</p>
-
                     <button onclick="openProgram35()"
-                        class="w-full py-3 rounded-xl bg-dark text-white font-bold hover:bg-gray-800 transition-colors flex items-center justify-center gap-2">
-                        <span>Programm öffnen</span>
-                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                        Programm öffnen
                     </button>
                 </div>
 
                 <!-- Upsell Card 1 -->
                 <div data-slug="naturalistic_mastery"
-                    class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 relative overflow-hidden">
-                    <div class="space-y-1">
-                        <h4 class="font-bold text-dark text-base">Naturalistische Anwendung sicher meistern</h4>
-                        <p class="text-xs text-gray-500 leading-relaxed">Schritt-für-Schritt-Training, um die 35
-                            Protokolle souverän in realen Sitzungen einzusetzen.</p>
+                    class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="target" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-dark leading-tight mb-1">Naturalistische Anwendung sicher meistern</h4>
+                            <p class="text-xs text-gray-500 leading-relaxed">Schritt-für-Schritt-Training, um die 35 Protokolle souverän in realen Sitzungen einzusetzen.</p>
+                        </div>
                     </div>
                     <button onclick="openNaturalisticMastery()" type="button"
-                        class="w-full py-2.5 rounded-xl border border-gray-200 bg-white text-dark font-bold text-sm hover:bg-gray-50 transition-colors shadow-sm">
+                        class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
                         Details ansehen
                     </button>
                 </div>
@@ -368,19 +424,19 @@
 
                 <!-- Primary Program Card 2 -->
                 <div data-slug="pratical_toolkit"
-                    class="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100 group hover:shadow-lg transition-all duration-300 relative overflow-hidden">
-                    <div
-                        class="w-14 h-14 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center mb-4">
-                        <i data-lucide="boxes" class="w-7 h-7"></i>
+                    class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="boxes" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-dark leading-tight mb-1">Praktisches Toolkit zur Autismus-Transformation</h4>
+                            <p class="text-xs text-gray-500 leading-relaxed">Ein schrittweiser Rahmen zum Unterrichten der Kommunikation.</p>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold text-dark leading-tight mb-2">Praktisches Toolkit zur Autismus-Transformation
-                    </h3>
-                    <p class="text-sm text-gray-500 mb-6">Ein schrittweiser Rahmen zum Unterrichten der Kommunikation.</p>
-
                     <button onclick="openProgramToolkit()"
-                        class="w-full py-3 rounded-xl bg-dark text-white font-bold hover:bg-gray-800 transition-colors flex items-center justify-center gap-2">
-                        <span>Programm öffnen</span>
-                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                        Programm öffnen
                     </button>
                 </div>
 
@@ -552,6 +608,7 @@
                     </div>
 
                 </div>
+            </div>
             </div>
         </div>
 
@@ -2339,58 +2396,93 @@
 
             // Re-render icons for any newly added overlays
             try { lucide.createIcons(); } catch (e) { }
+
+            // Distribute cards between the "My Programs" and "Offers" sub-tabs
+            organizePrograms(allowedSlugs);
+        }
+
+        // Move owned cards into the "My Programs" pane and locked cards into the "Offers"
+        // pane, then update counters, the nudge banner and the empty states.
+        function organizePrograms(allowedSlugs) {
+            const ownedContainer = document.getElementById('owned-container');
+            const offersContainer = document.getElementById('offers-container');
+            if (!ownedContainer || !offersContainer) return;
+
+            const cards = document.querySelectorAll('#tab-programs [data-slug]');
+            let ownedCount = 0;
+            let offersCount = 0;
+
+            cards.forEach(card => {
+                const slug = card.getAttribute('data-slug');
+                if (allowedSlugs.has(slug)) {
+                    ownedContainer.appendChild(card);
+                    ownedCount++;
+                } else {
+                    offersContainer.appendChild(card);
+                    offersCount++;
+                }
+            });
+
+            // Empty states
+            const ownedEmpty = document.getElementById('owned-empty-state');
+            if (ownedEmpty) ownedEmpty.classList.toggle('hidden', ownedCount > 0);
+            const offersEmpty = document.getElementById('offers-empty-state');
+            if (offersEmpty) offersEmpty.classList.toggle('hidden', offersCount > 0);
+            const offersIntro = document.getElementById('offers-intro');
+            if (offersIntro) offersIntro.classList.toggle('hidden', offersCount === 0);
+
+            // Offers count badge on the selector
+            const badge = document.getElementById('offers-count-badge');
+            if (badge) {
+                badge.textContent = offersCount;
+                badge.classList.toggle('hidden', offersCount === 0);
+            }
+
+            // "X new offers for you" nudge banner on the My Programs pane
+            const banner = document.getElementById('offers-banner');
+            const bannerCount = document.getElementById('offers-banner-count');
+            if (bannerCount) bannerCount.textContent = offersCount;
+            if (banner) banner.classList.toggle('hidden', offersCount === 0);
+
+            try { lucide.createIcons(); } catch (e) { }
         }
 
         function lockCard(card) {
-            // Check if already locked
-            if (card.querySelector('.locked-overlay')) return;
+            // Already processed?
+            if (card.dataset.locked === 'true') return;
+            card.dataset.locked = 'true';
 
             const slug = card.getAttribute('data-slug');
             const checkoutUrl = CHECKOUT_LINKS[slug];
 
-            // Create Overlay with centered icon
-            const overlay = document.createElement('div');
-            overlay.className = 'locked-overlay animate-in fade-in duration-500';
-            overlay.innerHTML = `
-                <div class="locked-icon">
-                    <i data-lucide="lock" class="w-8 h-8"></i>
-                </div>
-            `;
+            const goToCheckout = function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (checkoutUrl) window.location.href = checkoutUrl;
+            };
 
-            // Append as first child or strictly on top? Append is fine due to z-index.
-            card.appendChild(overlay);
-
-            // Handle Redirection if URL exists
+            // No gray mask and no center lock icon: the card text stays fully readable.
+            // The whole card is clickable toward the checkout.
             if (checkoutUrl) {
                 card.style.cursor = 'pointer';
-                card.onclick = function (e) {
-                    // Prevent propagation if needed, but here we want the card click
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('Redirecting to checkout:', checkoutUrl);
-                    window.location.href = checkoutUrl;
-                };
-                overlay.title = "Klicken, um dieses Programm freizuschalten";
+                card.onclick = goToCheckout;
             } else {
                 card.style.cursor = 'default';
             }
 
-            // Disable buttons and links specific to each card
+            // Turn the action button/link into an orange "locked" CTA.
             const actionElements = card.querySelectorAll('button, a');
             actionElements.forEach(el => {
-                el.disabled = true;
-                el.style.pointerEvents = 'none';
-                el.classList.add('opacity-50', 'cursor-not-allowed');
-
-                // Neutralize actions
                 if (el.tagName === 'A') {
                     el.removeAttribute('href');
                     el.removeAttribute('download');
                 }
-                if (el.tagName === 'BUTTON') {
-                    el.removeAttribute('onclick');
-                    el.onclick = null; // Clear event handler property
-                }
+                el.removeAttribute('onclick');
+                el.disabled = false;
+                el.style.pointerEvents = '';
+                el.onclick = checkoutUrl ? goToCheckout : null;
+                el.className = 'w-full py-2.5 rounded-xl border border-orange-300 bg-orange-50 text-orange-600 font-bold text-sm hover:bg-orange-100 transition-colors flex items-center justify-center gap-2';
+                el.innerHTML = '<i data-lucide="lock" class="w-4 h-4"></i><span>Programm freischalten</span>';
             });
 
             try { lucide.createIcons(); } catch (e) { }

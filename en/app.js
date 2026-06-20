@@ -55,6 +55,32 @@ function switchTab(tabId) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// Switch between the "My Programs" (owned) and "Offers" sub-tabs inside the Programs tab
+function switchProgramSubtab(which) {
+    const ownedPane = document.getElementById('programs-pane-owned');
+    const offersPane = document.getElementById('programs-pane-offers');
+    const ownedBtn = document.getElementById('subtab-btn-owned');
+    const offersBtn = document.getElementById('subtab-btn-offers');
+    if (!ownedPane || !offersPane) return;
+
+    const showOffers = which === 'offers';
+    ownedPane.classList.toggle('hidden', showOffers);
+    offersPane.classList.toggle('hidden', !showOffers);
+
+    const activeBtn = showOffers ? offersBtn : ownedBtn;
+    const inactiveBtn = showOffers ? ownedBtn : offersBtn;
+    if (activeBtn) {
+        activeBtn.classList.add('bg-white', 'text-dark', 'shadow-sm');
+        activeBtn.classList.remove('text-gray-500');
+    }
+    if (inactiveBtn) {
+        inactiveBtn.classList.remove('bg-white', 'text-dark', 'shadow-sm');
+        inactiveBtn.classList.add('text-gray-500');
+    }
+
+    try { lucide.createIcons(); } catch (e) { }
+}
+
 // Hub Data
 const hubContent = {
     verbal: {
@@ -410,50 +436,130 @@ const feedData = [
     {
         type: "Study",
         colorClass: "bg-indigo-50 text-indigo-700",
-        date: "Jan 18",
-        timestamp: new Date('2026-01-18').getTime(),
+        date: "Jan 22",
+        timestamp: new Date('2026-01-22').getTime(),
         title: "Eye contact increases more reliably during shared play.",
         text: "Research on Naturalistic Developmental Behavioral Interventions shows that eye contact is more likely to emerge when the adult follows the child’s lead during play, rather than during structured table tasks."
     },
     {
         type: "Clinical Note",
         colorClass: "bg-blue-50 text-blue-700",
-        date: "Jan 27",
-        timestamp: new Date('2026-01-27').getTime(),
+        date: "Feb 5",
+        timestamp: new Date('2026-02-05').getTime(),
         title: "Therapists often observe reduced escape behaviors when task difficulty is temporarily lowered.",
         text: "Engagement tends to recover before accuracy does — and that’s expected."
     },
     {
         type: "Clinical Fact",
         colorClass: "bg-blue-50 text-blue-700",
-        date: "Jan 31",
-        timestamp: new Date('2026-01-31').getTime(),
+        date: "Feb 19",
+        timestamp: new Date('2026-02-19').getTime(),
         title: "Short, consistent practice across different environments strengthens learning far more than isolated, high-intensity sessions.",
         text: "Generalization is built through repetition, not volume."
     },
     {
         type: "Tip",
         colorClass: "bg-amber-50 text-amber-700",
-        date: "Feb 2",
-        timestamp: new Date('2026-02-02').getTime(),
+        date: "Mar 3",
+        timestamp: new Date('2026-03-03').getTime(),
         title: "Silence can be a strategy.",
         text: "Waiting a few seconds before prompting gives the child time to process and respond independently. Many spontaneous responses happen in that pause."
     },
     {
         type: "Research Insight",
         colorClass: "bg-purple-50 text-purple-700",
-        date: "Feb 2",
-        timestamp: new Date('2026-02-02T12:00:00').getTime(),
+        date: "Mar 16",
+        timestamp: new Date('2026-03-16').getTime(),
         title: "Natural reinforcement sustains motivation longer.",
         text: "Studies comparing artificial vs. natural reinforcers indicate that access to the activity itself maintains engagement for longer periods and supports generalization."
     },
     {
         type: "Observation",
         colorClass: "bg-teal-50 text-teal-700",
-        date: "Feb 4",
-        timestamp: new Date('2026-02-04').getTime(),
+        date: "Mar 27",
+        timestamp: new Date('2026-03-27').getTime(),
         title: "Children are more likely to communicate spontaneously when adults respond immediately and meaningfully — even to approximations.",
         text: "Responsiveness matters more than perfection."
+    },
+    {
+        type: "Study",
+        colorClass: "bg-indigo-50 text-indigo-700",
+        date: "Apr 2",
+        timestamp: new Date("2026-04-02").getTime(),
+        title: "Parent coaching delivered by telehealth can match in-person results.",
+        text: "Recent trials show caregivers trained remotely produce communication gains comparable to clinic-based coaching — widening access for families far from centers."
+    },
+    {
+        type: "Research Insight",
+        colorClass: "bg-purple-50 text-purple-700",
+        date: "Apr 14",
+        timestamp: new Date("2026-04-14").getTime(),
+        title: "Naturalistic Developmental Behavioral Interventions keep gaining evidence.",
+        text: "Approaches that embed learning into play and daily routines are now among the most strongly supported for early communication."
+    },
+    {
+        type: "Practice Tip",
+        colorClass: "bg-amber-50 text-amber-700",
+        date: "Apr 24",
+        timestamp: new Date("2026-04-24").getTime(),
+        title: "Building the child’s assent into sessions lowers escape behavior.",
+        text: "Offering real choices and reading early signs of discomfort keeps cooperation high and makes learning feel safer."
+    },
+    {
+        type: "Clinical Fact",
+        colorClass: "bg-blue-50 text-blue-700",
+        date: "May 6",
+        timestamp: new Date("2026-05-06").getTime(),
+        title: "AAC does not hold back speech.",
+        text: "The research is consistent: giving a child pictures or a communication device supports — never blocks — the development of vocal language."
+    },
+    {
+        type: "Observation",
+        colorClass: "bg-teal-50 text-teal-700",
+        date: "May 15",
+        timestamp: new Date("2026-05-15").getTime(),
+        title: "Earlier diagnosis is opening a wider early-intervention window.",
+        text: "As reliable signs are spotted sooner, more families can start support during the years when learning is most flexible."
+    },
+    {
+        type: "Tip",
+        colorClass: "bg-amber-50 text-amber-700",
+        date: "May 23",
+        timestamp: new Date("2026-05-23").getTime(),
+        title: "Run quick preference checks instead of once-a-month assessments.",
+        text: "A 30-second choice right before a session often predicts motivation better than last month’s formal assessment."
+    },
+    {
+        type: "Clinical Note",
+        colorClass: "bg-blue-50 text-blue-700",
+        date: "Jun 1",
+        timestamp: new Date("2026-06-01").getTime(),
+        title: "Digital data collection is giving clinicians their time back.",
+        text: "Teams moving from paper to tablet-based tracking report less time on documentation and more on direct teaching."
+    },
+    {
+        type: "Study",
+        colorClass: "bg-indigo-50 text-indigo-700",
+        date: "Jun 9",
+        timestamp: new Date("2026-06-09").getTime(),
+        title: "Supervision quality predicts therapist retention more than caseload size.",
+        text: "Support, feedback and mentoring keep skilled professionals in the field — protecting the consistency children rely on."
+    },
+    {
+        type: "Research Insight",
+        colorClass: "bg-purple-50 text-purple-700",
+        date: "Jun 13",
+        timestamp: new Date("2026-06-13").getTime(),
+        title: "Pairing ABA with occupational therapy helps children with strong sensory needs.",
+        text: "Interdisciplinary plans tend to generalize better than any single discipline working alone."
+    },
+    {
+        type: "Observation",
+        colorClass: "bg-teal-50 text-teal-700",
+        date: "Jun 18",
+        timestamp: new Date("2026-06-18").getTime(),
+        title: "Sleep and behavior move together more than we assume.",
+        text: "Many sudden spikes in challenging behavior trace back to disrupted sleep — worth checking before changing a protocol."
     }
 ];
 

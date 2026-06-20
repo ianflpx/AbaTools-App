@@ -55,6 +55,32 @@ function switchTab(tabId) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// Switch between the "My Programs" (owned) and "Offers" sub-tabs inside the Programs tab
+function switchProgramSubtab(which) {
+    const ownedPane = document.getElementById('programs-pane-owned');
+    const offersPane = document.getElementById('programs-pane-offers');
+    const ownedBtn = document.getElementById('subtab-btn-owned');
+    const offersBtn = document.getElementById('subtab-btn-offers');
+    if (!ownedPane || !offersPane) return;
+
+    const showOffers = which === 'offers';
+    ownedPane.classList.toggle('hidden', showOffers);
+    offersPane.classList.toggle('hidden', !showOffers);
+
+    const activeBtn = showOffers ? offersBtn : ownedBtn;
+    const inactiveBtn = showOffers ? ownedBtn : offersBtn;
+    if (activeBtn) {
+        activeBtn.classList.add('bg-white', 'text-dark', 'shadow-sm');
+        activeBtn.classList.remove('text-gray-500');
+    }
+    if (inactiveBtn) {
+        inactiveBtn.classList.remove('bg-white', 'text-dark', 'shadow-sm');
+        inactiveBtn.classList.add('text-gray-500');
+    }
+
+    try { lucide.createIcons(); } catch (e) { }
+}
+
 // Hub Data
 const hubContent = {
     verbal: {
@@ -399,50 +425,130 @@ const feedData = [
     {
         type: "Study",
         colorClass: "bg-indigo-50 text-indigo-700",
-        date: "Jan 18",
-        timestamp: new Date('2026-01-18').getTime(),
+        date: "Jan 22",
+        timestamp: new Date('2026-01-22').getTime(),
         title: "Il contatto visivo aumenta in modo più affidabile durante il gioco condiviso.",
         text: "La ricerca sugli interventi comportamentali sullo sviluppo naturalistico mostra che è più probabile che il contatto visivo emerga quando l’adulto segue l’esempio del bambino durante il gioco, piuttosto che durante compiti a tavola strutturati."
     },
     {
         type: "Clinical Note",
         colorClass: "bg-blue-50 text-blue-700",
-        date: "Jan 27",
-        timestamp: new Date('2026-01-27').getTime(),
+        date: "Feb 5",
+        timestamp: new Date('2026-02-05').getTime(),
         title: "I terapisti spesso osservano comportamenti di fuga ridotti quando la difficoltà del compito viene temporaneamente ridotta.",
         text: "Il coinvolgimento tende a riprendersi prima che lo faccia la precisione, e questo è previsto."
     },
     {
         type: "Clinical Fact",
         colorClass: "bg-blue-50 text-blue-700",
-        date: "Jan 31",
-        timestamp: new Date('2026-01-31').getTime(),
+        date: "Feb 19",
+        timestamp: new Date('2026-02-19').getTime(),
         title: "Una pratica breve e coerente in ambienti diversi rafforza l’apprendimento molto più di sessioni isolate e ad alta intensità.",
         text: "La generalizzazione si costruisce attraverso la ripetizione, non il volume."
     },
     {
         type: "Tip",
         colorClass: "bg-amber-50 text-amber-700",
-        date: "Feb 2",
-        timestamp: new Date('2026-02-02').getTime(),
+        date: "Mar 3",
+        timestamp: new Date('2026-03-03').getTime(),
         title: "Il silenzio può essere una strategia.",
         text: "Aspettare qualche secondo prima del prompt dà al bambino il tempo di elaborare e rispondere in modo indipendente. Molte risposte spontanee avvengono in quella pausa."
     },
     {
         type: "Research Insight",
         colorClass: "bg-purple-50 text-purple-700",
-        date: "Feb 2",
-        timestamp: new Date('2026-02-02T12:00:00').getTime(),
+        date: "Mar 16",
+        timestamp: new Date('2026-03-16').getTime(),
         title: "Il rinforzo naturale sostiene la motivazione più a lungo.",
         text: "Gli studi che confrontano i rinforzi artificiali con quelli naturali indicano che l’accesso all’attività stessa mantiene l’impegno per periodi più lunghi e supporta la generalizzazione."
     },
     {
         type: "Observation",
         colorClass: "bg-teal-50 text-teal-700",
-        date: "Feb 4",
-        timestamp: new Date('2026-02-04').getTime(),
+        date: "Mar 27",
+        timestamp: new Date('2026-03-27').getTime(),
         title: "È più probabile che i bambini comunichino spontaneamente quando gli adulti rispondono immediatamente e in modo significativo, anche alle approssimazioni.",
         text: "La reattività conta più della perfezione."
+    },
+    {
+        type: "Study",
+        colorClass: "bg-indigo-50 text-indigo-700",
+        date: "Apr 2",
+        timestamp: new Date("2026-04-02").getTime(),
+        title: "Il parent coaching erogato in telehealth può eguagliare i risultati in presenza.",
+        text: "Studi recenti mostrano che i caregiver formati a distanza ottengono progressi nella comunicazione paragonabili al coaching in clinica, ampliando l’accesso per le famiglie lontane dai centri."
+    },
+    {
+        type: "Research Insight",
+        colorClass: "bg-purple-50 text-purple-700",
+        date: "Apr 14",
+        timestamp: new Date("2026-04-14").getTime(),
+        title: "Gli interventi comportamentali naturalistici sullo sviluppo continuano a rafforzare le evidenze.",
+        text: "Gli approcci che integrano l’apprendimento nel gioco e nelle routine quotidiane sono oggi tra i più supportati per la comunicazione precoce."
+    },
+    {
+        type: "Practice Tip",
+        colorClass: "bg-amber-50 text-amber-700",
+        date: "Apr 24",
+        timestamp: new Date("2026-04-24").getTime(),
+        title: "Inserire l’assenso del bambino nelle sessioni riduce i comportamenti di fuga.",
+        text: "Offrire scelte reali e cogliere i primi segnali di disagio mantiene alta la collaborazione e rende l’apprendimento più sicuro."
+    },
+    {
+        type: "Clinical Fact",
+        colorClass: "bg-blue-50 text-blue-700",
+        date: "May 6",
+        timestamp: new Date("2026-05-06").getTime(),
+        title: "La CAA non frena il linguaggio.",
+        text: "La ricerca è coerente: dare al bambino immagini o un dispositivo di comunicazione sostiene, non blocca, lo sviluppo del linguaggio verbale."
+    },
+    {
+        type: "Observation",
+        colorClass: "bg-teal-50 text-teal-700",
+        date: "May 15",
+        timestamp: new Date("2026-05-15").getTime(),
+        title: "Una diagnosi più precoce apre una finestra di intervento più ampia.",
+        text: "Poiché i segnali affidabili vengono riconosciuti prima, più famiglie possono iniziare il supporto negli anni in cui l’apprendimento è più flessibile."
+    },
+    {
+        type: "Tip",
+        colorClass: "bg-amber-50 text-amber-700",
+        date: "May 23",
+        timestamp: new Date("2026-05-23").getTime(),
+        title: "Fai rapide verifiche delle preferenze invece di valutazioni mensili.",
+        text: "Una scelta di 30 secondi prima della sessione spesso predice la motivazione meglio della valutazione formale del mese scorso."
+    },
+    {
+        type: "Clinical Note",
+        colorClass: "bg-blue-50 text-blue-700",
+        date: "Jun 1",
+        timestamp: new Date("2026-06-01").getTime(),
+        title: "La raccolta dati digitale restituisce tempo ai clinici.",
+        text: "I team che passano dalla carta al tracciamento su tablet riferiscono meno tempo dedicato alla documentazione e più all’insegnamento diretto."
+    },
+    {
+        type: "Study",
+        colorClass: "bg-indigo-50 text-indigo-700",
+        date: "Jun 9",
+        timestamp: new Date("2026-06-09").getTime(),
+        title: "La qualità della supervisione predice la permanenza dei terapisti più del numero di casi.",
+        text: "Supporto, feedback e mentoring trattengono i professionisti qualificati, proteggendo la continuità su cui i bambini contano."
+    },
+    {
+        type: "Research Insight",
+        colorClass: "bg-purple-50 text-purple-700",
+        date: "Jun 13",
+        timestamp: new Date("2026-06-13").getTime(),
+        title: "Unire l’ABA alla terapia occupazionale aiuta i bambini con forti bisogni sensoriali.",
+        text: "I piani interdisciplinari tendono a generalizzare meglio rispetto a una singola disciplina che lavora da sola."
+    },
+    {
+        type: "Observation",
+        colorClass: "bg-teal-50 text-teal-700",
+        date: "Jun 18",
+        timestamp: new Date("2026-06-18").getTime(),
+        title: "Sonno e comportamento sono più collegati di quanto si pensi.",
+        text: "Molti picchi improvvisi di comportamenti problema derivano da un sonno disturbato: vale la pena verificarlo prima di cambiare un protocollo."
     }
 ];
 
