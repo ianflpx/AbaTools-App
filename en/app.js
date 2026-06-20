@@ -16,7 +16,12 @@ function switchTab(tabId) {
             el.id === 'program-view-therapist-survival-guide' ||
             el.id === 'program-view-vbmapp-companion' ||
             el.id === 'vbmapp-videos-view' ||
-            el.id === 'vbmapp-video-player-view') {
+            el.id === 'vbmapp-video-player-view' ||
+            el.id === 'program-view-atri-framework' ||
+            el.id === 'program-view-atri-scoring' ||
+            el.id === 'program-view-assessment-scales' ||
+            el.id === 'program-view-adhd-pack' ||
+            el.id === 'program-view-adult-asd') {
             el.classList.add('hidden');
         }
     });
