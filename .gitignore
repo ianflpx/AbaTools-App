@@ -1,0 +1,5 @@
+# Build artifacts
+_build/
+
+# Local tooling / editor config
+.claude/
