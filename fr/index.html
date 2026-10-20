@@ -3105,6 +3105,14 @@
                 console.error('Error fetching product rules:', rulesError);
             }
 
+            // Combo order bump whose customId has no row in product_rules.
+            // 27470756 = "Pack complet d’outils ABA" (29 €) sold with "Kit de transformation pratique pour l’autisme":
+            // it includes the four kits below. Same effect as adding the id to those four product_rules rows (safety net).
+            const BUNDLE_IDS = {
+                '27470756': ['school_readiness', 'aba_playful', 'emotional_recognition', 'autism_safety']
+            };
+            productIds.forEach(id => (BUNDLE_IDS[id] || []).forEach(slug => allowedSlugs.add(slug)));
+
             console.log('Final Allowed Slugs:', Array.from(allowedSlugs));
 
             // Update UI Active Count
