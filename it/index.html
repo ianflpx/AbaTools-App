@@ -2565,36 +2565,18 @@
 
             console.log('Verifying access for:', email);
 
-            // 1. Get User Product IDs
-            // Note: Using ILIKE for case-insensitive email match
-            const { data: userAccess, error: accessError } = await supabase
-                .from('user_access')
-                .select('product_id')
-                .ilike('email', email);
+            // 1. Ask the server what this e-mail owns. user_access / product_rules are closed to the
+            //    public key; the app_login RPC returns only this e-mail's customIds and unlocked slugs.
+            //    (It also refreshes last_access, which used to be a client-side UPDATE.)
+            const { data: access, error: accessError } = await supabase.rpc('app_login', { p_email: email });
 
-            // Update Last Access Timestamp
-            supabase.from('user_access')
-                .update({ last_access: new Date().toISOString() })
-                .ilike('email', email)
-                .then(({ error }) => {
-                    if (error) console.error('Error updating last_access:', error);
-                });
-
-            if (accessError || !userAccess || userAccess.length === 0) {
-                console.warn("Nessun record di accesso trovato per l'utente o errore:", accessError);
+            if (accessError || !access || !access.ok) {
+                console.warn('No access records found for user or error:', accessError);
                 applyLocks(new Set());
                 return;
             }
 
-            // Use raw string matching for IDs to handle "000001" text columns correctly
-            // Robustly handle both multiple rows AND comma-separated values in a single row
-            const productIds = userAccess
-                .map(ua => ua.product_id ? String(ua.product_id) : '')
-                .join(',') // Join all potential rows (normalize)
-                .split(',') // Split by comma to separate any combined IDs
-                .map(id => id.trim())
-                .filter(id => id.length > 0);
-
+            const productIds = (access.product_ids || []).map(id => String(id).trim()).filter(id => id.length > 0);
             console.log('Found Product IDs:', productIds);
 
             if (productIds.length === 0) {
@@ -2603,39 +2585,9 @@
                 return;
             }
 
-            // 2. Map Product IDs to Internal Slugs
-            let allowedSlugs = new Set();
-
-            // Fetch ALL rules to correctly handle comma-separated checkout_id strings in the database
-            const { data: rules, error: rulesError } = await supabase
-                .from('product_rules')
-                .select('internal_slug, checkout_id');
-
-            if (rules && !rulesError) {
-                console.log('Verifying rules against user products:', productIds);
-
-                const userProductIdsSet = new Set(productIds);
-
-                rules.forEach(r => {
-                    if (!r.checkout_id) return;
-
-                    // Split the rule's checkout_id string into individual IDs if it's a CSV string
-                    const ruleIds = String(r.checkout_id).split(',').map(id => id.trim());
-
-                    // Check if ANY of the rule's IDs are in the user's product ID set
-                    const match = ruleIds.some(id => userProductIdsSet.has(id));
-
-                    if (match && r.internal_slug) {
-                        const slug = r.internal_slug.trim();
-                        if (AVAILABLE_PRODUCT_SLUGS.has(slug)) {
-                            allowedSlugs.add(slug);
-                        }
-                    }
-                });
-                console.log('Matched Rules:', Array.from(allowedSlugs));
-            } else if (rulesError) {
-                console.error('Error fetching product rules:', rulesError);
-            }
+            // 2. Slugs unlocked by product_rules (matched server side)
+            const allowedSlugs = new Set((access.slugs || []).map(slug => String(slug).trim()).filter(Boolean));
+            console.log('Matched Rules:', Array.from(allowedSlugs));
 
             console.log('Final Allowed Slugs:', Array.from(allowedSlugs));
 

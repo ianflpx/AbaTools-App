@@ -619,19 +619,15 @@ async function loadUserProfile() {
     // Fetch user details suitable for the profile
     // We assume 'user_access' contains the user info.
     // If user has multiple products, they have multiple rows. We update name for all.
-    const { data, error } = await window.supabaseClient
-        .from('user_access')
-        .select('name, email, phone')
-        .ilike('email', email)
-        .limit(1);
+    const { data: profile, error } = await window.supabaseClient.rpc('app_profile_get', { p_email: email });
 
     if (error) {
         console.error('Error fetching profile:', error);
         return;
     }
 
-    if (data && data.length > 0) {
-        const user = data[0];
+    if (profile && profile.ok) {
+        const user = profile;
         const emailField = document.getElementById('profile-email');
         const nameField = document.getElementById('profile-name');
         const phoneField = document.getElementById('profile-phone');
@@ -672,12 +668,10 @@ async function saveProfile() {
 
     try {
         // Update Name and Phone in DB
-        const { error } = await window.supabaseClient
-            .from('user_access')
-            .update({ name: newName, phone: newPhone })
-            .ilike('email', email);
+        const { data: result, error } = await window.supabaseClient
+            .rpc('app_profile_update', { p_email: email, p_name: newName, p_phone: newPhone });
 
-        if (error) throw error;
+        if (error || !result || !result.ok) throw (error || new Error('profile update refused'));
 
         // Success Feedback
         btn.innerHTML = `<span>Saved!</span><i data-lucide="check" class="w-4 h-4"></i>`;

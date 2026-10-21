@@ -210,17 +210,13 @@
 
             try {
                 // Query Supabase
-                const { data, error } = await supabaseClient
-                    .from('user_access')
-                    .select('*')
-                    .ilike('email', email) // Case-insensitive check
-                    .eq('status', 'active');
+                const { data, error } = await supabaseClient.rpc('app_login', { p_email: email });
 
                 if (error) {
                     throw error;
                 }
 
-                if (data && data.length > 0) {
+                if (data && data.ok) {
                     // Success: User found and active
 
                     // Save persistence
