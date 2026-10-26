@@ -110,7 +110,7 @@
                             class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-action transition-colors">
                             <i data-lucide="mail" class="w-5 h-5"></i>
                         </div>
-                        <input type="email" id="email" required placeholder="nome@email.it"
+                        <input type="email" id="email" inputmode="email" autocomplete="email" autocapitalize="none" autocorrect="off" required placeholder="nome@email.it"
                             class="w-full pl-12 pr-4 py-4 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-action focus:ring-4 focus:ring-action/10 outline-none transition-all font-medium text-dark placeholder:text-gray-400">
                     </div>
                 </div>
@@ -189,7 +189,7 @@
             }
 
             const emailInput = document.getElementById('email');
-            const email = emailInput.value.trim();
+            const email = emailInput.value.trim().toLowerCase();
             const btn = event.target.querySelector('button');
 
             if (!email) return;
@@ -230,7 +230,7 @@
 
                 } else {
                     // User not found or not active
-                    showError('Utente non trovato. Abbiamo verificato che il tuo acquisto non è stato ancora elaborato oppure l\'email è diversa da quella utilizzata per l\'acquisto.');
+                    showError("Non abbiamo trovato un acquisto con questa e-mail. Usa la stessa e-mail inserita al checkout e controlla eventuali errori di battitura. Se hai appena acquistato, attendi un minuto e riprova.");
                     resetButton(btn, originalContent);
                 }
 

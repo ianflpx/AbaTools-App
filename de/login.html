@@ -110,7 +110,7 @@
                             class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-action transition-colors">
                             <i data-lucide="mail" class="w-5 h-5"></i>
                         </div>
-                        <input type="email" id="email" required placeholder="name@email.de"
+                        <input type="email" id="email" inputmode="email" autocomplete="email" autocapitalize="none" autocorrect="off" required placeholder="name@email.de"
                             class="w-full pl-12 pr-4 py-4 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-action focus:ring-4 focus:ring-action/10 outline-none transition-all font-medium text-dark placeholder:text-gray-400">
                     </div>
                 </div>
@@ -189,7 +189,7 @@
             }
 
             const emailInput = document.getElementById('email');
-            const email = emailInput.value.trim();
+            const email = emailInput.value.trim().toLowerCase();
             const btn = event.target.querySelector('button');
 
             if (!email) return;
@@ -230,7 +230,7 @@
 
                 } else {
                     // User not found or not active
-                    showError('Benutzer nicht gefunden. Wir haben überprüft, dass Ihr Kauf noch nicht bearbeitet wurde oder dass die E-Mail-Adresse nicht mit der für den Kauf verwendeten E-Mail-Adresse übereinstimmt.');
+                    showError("Wir konnten keinen Kauf mit dieser E-Mail-Adresse finden. Verwende die E-Mail-Adresse aus deiner Bestellung und prüfe sie auf Tippfehler. Wenn du gerade gekauft hast, warte eine Minute und versuche es erneut.");
                     resetButton(btn, originalContent);
                 }
 
@@ -258,7 +258,8 @@
             errorBox.id = 'error-message';
             errorBox.className = 'p-4 rounded-xl bg-red-50 text-red-600 text-sm font-medium border border-red-100 flex items-start gap-3 animate-in fade-in slide-in-from-top-2 mt-4';
 
-            errorBox.innerHTML = `\n                <i data-lucide="alert-circle" class="w-5 h-5 flex-shrink-0 mt-0.5"></i>\n                <span>${Nachricht}</span>\n            `;
+            errorBox.innerHTML = `\n                <i data-lucide="alert-circle" class="w-5 h-5 flex-shrink-0 mt-0.5"></i>\n                <span>${message}</span>
+\n            `;
 
             form.appendChild(errorBox);
             lucide.createIcons();

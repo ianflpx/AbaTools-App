@@ -2553,7 +2553,7 @@
             if (storedAuth) {
                 try {
                     const parsed = JSON.parse(storedAuth);
-                    if (parsed && parsed.email) email = parsed.email.trim();
+                    if (parsed && parsed.email) email = parsed.email.trim().toLowerCase();
                 } catch (e) { console.error('Auth parse error', e); }
             }
 
