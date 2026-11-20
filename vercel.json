@@ -15,6 +15,11 @@
       "source": "/fr",
       "destination": "/fr/",
       "permanent": true
+    },
+    {
+      "source": "/pl",
+      "destination": "/pl/",
+      "permanent": true
     }
   ]
 }

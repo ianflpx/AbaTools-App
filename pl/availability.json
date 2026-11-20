@@ -1,0 +1,185 @@
+{
+  "lang": "pl",
+  "files": [
+    {
+      "path": "assets/pl/pat/umiejetnosci-spoleczne.pdf",
+      "sha256": "04de5a197a9d28f1bc295f3ce45292efa2a4844bb6c79456883b2a5fceee693e",
+      "ready": true,
+      "pages": 30
+    },
+    {
+      "path": "assets/pl/pat/umiejetnosci-zabawy.pdf",
+      "sha256": "d1923bb994345a5dae2ee97fa05943380bbc435468bfd34d6f1cb79beade14c7",
+      "ready": true,
+      "pages": 46
+    },
+    {
+      "path": "assets/pl/pat/tact.pdf",
+      "sha256": "0f97129e3bd32ab3ad17a2c442d85a8bf9f09219531992b076307d805c6def3b",
+      "ready": true,
+      "pages": 36
+    },
+    {
+      "path": "assets/pl/pat/kompletny-przewodnik-po-nauce-nasladowania.pdf",
+      "sha256": "29b555012ea9411b7c64b878bbaad3c08ba8d270764db9c042fbf8dd8658f483",
+      "ready": true,
+      "pages": 30
+    },
+    {
+      "path": "assets/pl/pat/umiejetnosci-intrawerbalne.pdf",
+      "sha256": "dcaab3af4c654526c7c14541a00a717a31dbaf26c6384d611e15410e805a8bb6",
+      "ready": true,
+      "pages": 35
+    },
+    {
+      "path": "assets/pl/pat/zestaw-sukcesu-w-praktyce-aba.pdf",
+      "sha256": "a0c662a418df04b448388b696ffc9292d38bbad4f4ec573de0350c6837387a19",
+      "ready": true,
+      "pages": 35
+    },
+    {
+      "path": "assets/pl/pat/zestaw-awaryjny-aba.pdf",
+      "sha256": "b9fe6c5b61b824b2ab0dc507ff5c31ad557b3bd7cfea4378674f1faf9709cd30",
+      "ready": true,
+      "pages": 34
+    },
+    {
+      "path": "assets/pl/pat/gotowosc-szkolna.pdf",
+      "sha256": "a4038e51ed2f034996c2ace22c161cdc28fe257e41b1a32196c1bd11f27380a4",
+      "ready": true,
+      "pages": 10
+    },
+    {
+      "path": "assets/pl/pat/protokol-skutecznej-korekty-bledow.pdf",
+      "sha256": "61d691089d2a50624f2e5a13a66d36bc8b383938f020763084e7f29323a0fd4e",
+      "ready": true,
+      "pages": 11
+    },
+    {
+      "path": "assets/pl/pat/strategie-aba-motywacja-i-wzmocnienia.pdf",
+      "sha256": "61a2832d4d1c8fdf4b3147be4dc2acd8924b8ea80c05e8d655808bd9fde49318",
+      "ready": true,
+      "pages": 12
+    },
+    {
+      "path": "assets/pl/pat/lista-kontrolna-wzmacnianie-umiejetnosci-sluchania.pdf",
+      "sha256": "31e6465131f1faaf7cf61204a0a3bc3fbf206d70b57259f3106922fae316b595",
+      "ready": true,
+      "pages": 10
+    },
+    {
+      "path": "assets/pl/pat/aba-przez-zabawe.pdf",
+      "sha256": "6e9347659d245029e513def0d004d40136f9c7fae44ae8c5618851e855c584d5",
+      "ready": true,
+      "pages": 10
+    },
+    {
+      "path": "assets/pl/pat/nasladowanie.pdf",
+      "sha256": "7cae9b7bdf308105acfff247ac67eb9147c7051a801bf4a5aef6ab4dd78d9679",
+      "ready": true,
+      "pages": 35
+    },
+    {
+      "path": "assets/pl/pat/bezpieczenstwo.pdf",
+      "sha256": "31ef6263fffdcbc13fb9cff2a5992718752561f6696e2000ebb76e768ca2a0b5",
+      "ready": true,
+      "pages": 10
+    },
+    {
+      "path": "assets/pl/pat/reagowanie-sluchacza.pdf",
+      "sha256": "d91b5114aaf7a53a8964dbfdb5bc3140782d2ff9e6b8c5383521b8eb29ec0602",
+      "ready": true,
+      "pages": 37
+    },
+    {
+      "path": "assets/pl/pat/system-aba-do-zbierania-danych-i-monitorowania.pdf",
+      "sha256": "63cd351306105725b532abbe9dca9e5ab8cb8269d20a84aa890c9b15b901bd35",
+      "ready": true,
+      "pages": 12
+    },
+    {
+      "path": "assets/pl/pat/umiejetnosci-wokalne.pdf",
+      "sha256": "8fa801a03e5cbeed9c69ef7b687b23a1de0e15ad63edab4c693260a090456d30",
+      "ready": true,
+      "pages": 45
+    },
+    {
+      "path": "assets/pl/pat/lista-kontrolna-pobudzanie-komunikacji.pdf",
+      "sha256": "661cf8eef63a2a106bf5fcc8a99df550779dfe89ef3793338aa330438b774651",
+      "ready": true,
+      "pages": 10
+    },
+    {
+      "path": "assets/pl/pat/przewodnik-po-dobrostanie-dla-specjalistow-aba.pdf",
+      "sha256": "9d17d0f053ef2c22f1b65d529acfa873b01c24c8317f66520c80b7d55b835a79",
+      "ready": true,
+      "pages": 26
+    },
+    {
+      "path": "assets/pl/pat/przewodnik-po-poszerzaniu-wzmocnien.pdf",
+      "sha256": "768b36b3e067b7205df397eeba076bc6bdc5aed37338859778125b9b5b1f1933",
+      "ready": true,
+      "pages": 12
+    },
+    {
+      "path": "assets/pl/pat/zestaw-coachingowy-dla-rodzicow.pdf",
+      "sha256": "0f7fb30ba7ab853cc64404fb7da88082fb2032247838c06d90ff42186ca11a2e",
+      "ready": true,
+      "pages": 33
+    },
+    {
+      "path": "assets/pl/pat/mand.pdf",
+      "sha256": "ca9b69bfa8ba29782c7b1017ea3a201583b568475de19e1fa931f350b11d6d9d",
+      "ready": true,
+      "pages": 51
+    },
+    {
+      "path": "assets/pl/pat/rozwoj-jezyka.pdf",
+      "sha256": "8c4a1dca523932af7f68ee2d04019d1fdd8ff88293dad2decff7ca376e173a41",
+      "ready": true,
+      "pages": 15
+    },
+    {
+      "path": "assets/pl/pat/techniki-aba-wsparcie-i-zaangazowanie.pdf",
+      "sha256": "6fc7ac737b330d20172cfbf835c0107f8319edd1858523bdd0b53019275532c3",
+      "ready": true,
+      "pages": 35
+    },
+    {
+      "path": "assets/pl/pat/percepcja-wzrokowa-i-dopasowywanie-do-wzoru.pdf",
+      "sha256": "59d561cab5d969387f4cbfa5534d8c4933b15b47a2a10e40a9a91a1d1c7f47fc",
+      "ready": true,
+      "pages": 56
+    },
+    {
+      "path": "assets/pl/pat/reagowanie-sluchacza-wedlug-funkcji-cechy-i-kategorii.pdf",
+      "sha256": "f730fe64c003d9c53124c0278331981b2d6f11072a7244cd8f68a04f0017a67a",
+      "ready": true,
+      "pages": 25
+    },
+    {
+      "path": "assets/pl/pat/emocje.pdf",
+      "sha256": "14d36fb0fb1bbf87ff4a7bd2a122c17e1d2a60642232d7a613af62f98081bfb8",
+      "ready": true,
+      "pages": 20
+    },
+    {
+      "path": "assets/pl/pat/stosowana-analiza-zachowania.pdf",
+      "sha256": "3ae76f47e72ce3df2eb72f1fc9a962600399722e41ff40f6a62985c19f6c2a45",
+      "ready": true,
+      "pages": 15
+    },
+    {
+      "path": "assets/pl/pat/echoika.pdf",
+      "sha256": "3a0c0c91ae04c0fe93bfa3f0cd5a337ac1a8273823f4385ff5c6a17ec1be3b7e",
+      "ready": true,
+      "pages": 42
+    },
+    {
+      "path": "assets/pl/pat/szkolenie-po-ocenie.pdf",
+      "sha256": "dc74390c8c0934531169bfa7098c7dbb77a28f081358db0941c8876f9e72d8c3",
+      "ready": true,
+      "pages": 15
+    }
+  ]
+}

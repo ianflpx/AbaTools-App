@@ -1,0 +1,2735 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AbaTools</title>
+
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700;800;900&display=swap"
+        rel="stylesheet">
+
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        action: '#05A045',
+                        urgency: '#E64A19',
+                        dark: '#0F172A', // Titles
+                        text: '#475569',
+                        background: '#F8FAFC',
+                        highlight: '#FACC15',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    
+    <script src="https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js" async></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Custom transitions */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Locked Overlay - Robust Design */
+        /* Locked products are no longer masked; the CTA button shows the locked state. */
+    </style>
+
+    
+    <style id="auth-protection">
+        html {
+            display: none;
+        }
+    </style>
+    <script>
+            (function () {
+                // Helper for secure redirect
+                const redirectToLogin = () => {
+                    localStorage.removeItem('abatools_auth');
+                    window.location.replace('login.html');
+                };
+
+                try {
+                    const storedAuth = localStorage.getItem('abatools_auth');
+
+                    if (!storedAuth) {
+                        redirectToLogin();
+                        return;
+                    }
+
+                    const authData = JSON.parse(storedAuth);
+                    if (!authData || !authData.email) {
+                        throw new Error('Invalid auth data');
+                    }
+
+                    // Auth Valid: Reveal Page
+                    const style = document.getElementById('auth-protection');
+                    if (style) style.remove();
+                    document.documentElement.style.display = '';
+
+                } catch (e) {
+                    console.error('Błąd weryfikacji logowania:', e);
+                    redirectToLogin();
+                }
+            })();
+    </script>
+</head>
+
+<body class="bg-background text-text min-h-screen relative overflow-x-hidden">
+
+    
+    <header class="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-gray-100">
+        <div class="max-w-md mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <img src="../assets/images/logo-abatools.png" alt="AbaTools" class="h-8 w-auto">
+            </div>
+
+            <button onclick="logout()" class="text-gray-400 hover:text-urgency transition-colors">
+                <i data-lucide="log-out" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </header>
+
+    
+    <main class="pt-24 pb-32 px-6 max-w-md mx-auto min-h-screen">
+
+        
+        <div id="tab-home" class="tab-content active space-y-12">
+            
+            <div class="space-y-6 pt-4">
+                <div class="space-y-4">
+
+                    <h2 class="text-3xl font-black text-dark leading-tight">Witaj w<br>AbaTools</h2>
+                    <p class="text-text leading-relaxed text-lg">
+                        Twój dostęp jest aktywny. W AbaTools znajdziesz praktyczne programy wspierające rozwój dziecka. Dostępność poszczególnych materiałów sprawdzisz w swoich programach.
+                    </p>
+                </div>
+
+                <button onclick="switchTab('programs')"
+                    class="w-full py-4 rounded-2xl bg-action text-white font-bold text-lg shadow-xl shadow-action/30 hover:bg-green-700 hover:scale-[1.02] transition-all transform active:scale-95 flex items-center justify-center gap-2">
+                    <span>Przejdź do moich programów</span>
+                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            
+            <div class="space-y-4">
+                <h3 class="text-2xl font-bold text-dark px-2">Jak korzystać z materiałów</h3>
+                <div
+                    class="bg-gradient-to-br from-white to-green-50 p-6 rounded-[2rem] shadow-lg shadow-green-900/5 border border-green-100 flex flex-col gap-6 relative overflow-hidden group">
+                    
+                    <div
+                        class="absolute -right-10 -top-10 w-32 h-32 bg-action/5 rounded-full blur-2xl group-hover:bg-action/10 transition-colors">
+                    </div>
+
+                    <p class="text-dark/80 font-medium leading-relaxed relative z-10">
+                        Materiały AbaTools są elastyczne i praktyczne. Możesz dostosować je do swoich warunków. Traktuj je jako wskazówki, a nie sztywny regulamin.
+                    </p>
+                    <ul class="space-y-4 relative z-10">
+                        <li class="flex items-start gap-4">
+                            <div
+                                class="w-8 h-8 rounded-xl bg-action text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-action/20">
+                                <i data-lucide="check" class="w-5 h-5 stroke-[3]"></i>
+                            </div>
+                            <span class="text-dark font-semibold pt-1">Wybierz materiały odpowiadające twojemu aktualnemu celowi</span>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div
+                                class="w-8 h-8 rounded-xl bg-action text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-action/20">
+                                <i data-lucide="check" class="w-5 h-5 stroke-[3]"></i>
+                            </div>
+                            <span class="text-dark font-semibold pt-1">Stosuj je regularnie w codziennych sytuacjach</span>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div
+                                class="w-8 h-8 rounded-xl bg-action text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-action/20">
+                                <i data-lucide="check" class="w-5 h-5 stroke-[3]"></i>
+                            </div>
+                            <span class="text-dark font-semibold pt-1">Dostosuj protokoły do potrzeb każdego dziecka</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            
+            <div class="space-y-6">
+                <div class="space-y-1">
+                    <h3 class="text-2xl font-bold text-dark">Filary rozwoju</h3>
+                    <p class="text-text">Poznaj praktyczne i naukowe podstawy kluczowych umiejętności rozwijanych podczas interwencji ABA.</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    
+                    <div onclick="openHub('verbal')"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:border-action/20 transition-all cursor-pointer group active:scale-95">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="message-circle" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="font-bold text-dark mb-1">Język</h4>
+                        <p class="text-xs text-gray-400">Komunikacja i język</p>
+                    </div>
+
+                    
+                    <div onclick="openHub('logical')"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:border-action/20 transition-all cursor-pointer group active:scale-95">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="puzzle" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="font-bold text-dark mb-1">Myślenie</h4>
+                        <p class="text-xs text-gray-400">Rozumowanie i wzorce</p>
+                    </div>
+
+                    
+                    <div onclick="openHub('social')"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:border-action/20 transition-all cursor-pointer group active:scale-95">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-green-50 text-green-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="smile" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="font-bold text-dark mb-1">Relacje</h4>
+                        <p class="text-xs text-gray-400">Interakcje i emocje</p>
+                    </div>
+
+                    
+                    <div onclick="openHub('motor')"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:border-action/20 transition-all cursor-pointer group active:scale-95">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="hand" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="font-bold text-dark mb-1">Ruch</h4>
+                        <p class="text-xs text-gray-400">Ruch i naśladowanie</p>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="pt-4 pb-2">
+                <div class="bg-gray-50 p-6 rounded-[2rem] border border-gray-100 text-center space-y-6">
+                    <div class="space-y-2">
+                        <h3 class="text-lg font-bold text-dark">Potrzebujesz pomocy?</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed px-4">
+                            Jeśli masz pytania dotyczące materiałów lub protokołów, skontaktuj się z nami.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <a href="mailto:contact@abatools.pro"
+                            class="py-3 px-4 rounded-xl bg-white border border-gray-200 text-dark font-bold text-sm hover:border-action/30 hover:text-action transition-colors flex flex-col items-center gap-2 shadow-sm">
+                            <i data-lucide="mail" class="w-5 h-5 text-gray-400"></i>
+                            <span>E-mail</span>
+                        </a>
+                        <a href="https://www.instagram.com/aba.tools/" target="_blank"
+                            class="group py-3 px-4 rounded-xl bg-white border border-gray-200 text-dark font-bold text-sm hover:border-pink-500/30 hover:text-pink-600 transition-colors flex flex-col items-center gap-2 shadow-sm">
+                            <svg class="w-5 h-5 text-gray-400 group-hover:text-pink-600 transition-colors" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" aria-hidden="true">
+                                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+                            </svg>
+                            <span>Instagram</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div id="tab-programs" class="tab-content space-y-6">
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-black text-dark uppercase tracking-wide">Moje programy</h2>
+                    <span id="active-products-tag"
+                        class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider hidden">
+                        0 AKTYWNYCH
+                    </span>
+                </div>
+            </div>
+
+            
+            <div class="bg-gray-100 p-1.5 rounded-2xl flex items-center gap-1.5">
+                <button id="subtab-btn-owned" type="button" onclick="switchProgramSubtab('owned')"
+                    class="flex-1 py-2.5 px-3 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 bg-white text-dark shadow-sm">
+                    <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                    <span>Moje programy</span>
+                </button>
+                <button id="subtab-btn-offers" type="button" onclick="switchProgramSubtab('offers')"
+                    class="flex-1 py-2.5 px-3 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 text-gray-500">
+                    <i data-lucide="tag" class="w-4 h-4"></i>
+                    <span>Oferty</span>
+                    <span id="offers-count-badge"
+                        class="hidden bg-urgency text-white text-[0.65rem] font-bold min-w-[1.25rem] h-5 px-1 rounded-full flex items-center justify-center">0</span>
+                </button>
+            </div>
+
+            
+            <div id="programs-pane-owned" class="space-y-6">
+                <div id="owned-container" class="space-y-4"></div>
+
+                
+                <div id="owned-empty-state" class="hidden text-center py-12 px-6 space-y-3">
+                    <div class="w-16 h-16 rounded-2xl bg-gray-100 text-gray-400 flex items-center justify-center mx-auto">
+                        <i data-lucide="package-open" class="w-8 h-8"></i>
+                    </div>
+                    <h4 class="font-bold text-dark">Brak aktywnych programów</h4>
+                    <p class="text-sm text-gray-500 leading-relaxed max-w-xs mx-auto">Tutaj pojawią się twoje aktywne programy. Aby rozpocząć, sprawdź dostępne oferty.</p>
+                </div>
+
+                
+                <button id="offers-banner" type="button" onclick="switchProgramSubtab('offers')"
+                    class="hidden w-full bg-orange-50 border border-orange-100 rounded-2xl p-4 flex items-center justify-between gap-4 hover:bg-orange-100/60 transition-colors text-left active:scale-[0.99]">
+                    <div class="flex items-center gap-4">
+                        <div class="w-11 h-11 rounded-xl bg-urgency/10 text-urgency flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="tag" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-dark text-sm leading-tight"><span id="offers-banner-count">0</span>
+                                nowych ofert dla ciebie</p>
+                            <p class="text-xs text-gray-500 mt-0.5">Znajdziesz je w zakładce Oferty</p>
+                        </div>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-5 h-5 text-urgency flex-shrink-0"></i>
+                </button>
+            </div>
+
+            
+            <div id="programs-pane-offers" class="hidden space-y-6">
+                <div id="offers-intro"
+                    class="hidden bg-blue-50 border border-blue-100 rounded-2xl p-4 flex items-start gap-3">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5"></i>
+                    <p class="text-sm text-blue-800 font-medium leading-relaxed">Odblokuj kolejne programy i poszerz swój zestaw narzędzi do pracy.</p>
+                </div>
+                <div id="offers-container" class="space-y-4"></div>
+                <div id="offers-empty-state" class="hidden text-center py-12 px-6 space-y-3">
+                    <div class="w-16 h-16 rounded-2xl bg-green-100 text-green-600 flex items-center justify-center mx-auto">
+                        <i data-lucide="party-popper" class="w-8 h-8"></i>
+                    </div>
+                    <h4 class="font-bold text-dark">Masz wszystkie programy!</h4>
+                    <p class="text-sm text-gray-500 leading-relaxed max-w-xs mx-auto">Masz już dostęp do wszystkich programów w ofercie.</p>
+                </div>
+            </div>
+
+            
+            <div id="programs-source" class="hidden">
+
+            
+            <div class="space-y-4">
+                <h3 class="text-sm font-black text-gray-400 uppercase tracking-widest pl-1">Naturalistyczne ABA</h3>
+
+                
+                <div data-slug="35_protocols"
+                    class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="book-open-check" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-dark leading-tight mb-1">35 naturalistycznych protokołów ABA</h4>
+                            <p class="text-xs text-gray-500 leading-relaxed">Gotowe protokoły do pracy w naturalnych interakcjach.</p>
+                        </div>
+                    </div>
+                    <button onclick="openProgram35()"
+                        class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                        Otwórz program
+                    </button>
+                </div>
+
+                
+                <div data-slug="naturalistic_mastery"
+                    class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="target" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-dark leading-tight mb-1">Praktyczne stosowanie podejścia naturalistycznego</h4>
+                            <p class="text-xs text-gray-500 leading-relaxed">Szkolenie krok po kroku: jak pewnie stosować 35 protokołów podczas sesji.</p>
+                        </div>
+                    </div>
+                    <button onclick="openNaturalisticMastery()" type="button"
+                        class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                        Zobacz szczegóły
+                    </button>
+                </div>
+
+                <div class="border-t border-gray-100 mx-2 pt-2"></div>
+            </div>
+
+            
+            <div class="space-y-4">
+                <h3 class="text-sm font-black text-gray-400 uppercase tracking-widest pl-1">Podstawy VB-MAPP</h3>
+
+                
+                <div data-slug="vbmapp_implementation" class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden"><h3 class="font-bold text-dark text-lg leading-tight">Szkolenie po ocenie</h3><p class="text-sm text-gray-500 leading-relaxed">Przekładaj wyniki VB-MAPP na decyzje dotyczące nauczania.</p><button onclick="openVbmappCompanion()" class="w-full py-2.5 rounded-xl bg-action text-white font-bold text-sm hover:bg-green-700 transition-colors flex items-center justify-center gap-2">Otwórz szkolenie</button><a href="../assets/pl/pat/szkolenie-po-ocenie.pdf" download="szkolenie-po-ocenie.pdf" class="w-full py-2.5 rounded-xl bg-action text-white font-bold text-sm hover:bg-green-700 transition-colors flex items-center justify-center gap-2">Pobierz przewodnik szkolenia</a></div>
+                <div data-slug="pratical_toolkit"
+                    class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="boxes" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-dark leading-tight mb-1">Praktyczny zestaw ABA do rozwoju dziecka z autyzmem</h4>
+                            <p class="text-xs text-gray-500 leading-relaxed">Nauka komunikacji krok po kroku.</p>
+                        </div>
+                    </div>
+                    <button onclick="openProgramToolkit()"
+                        class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                        Otwórz program
+                    </button>
+                </div>
+
+                <div class="border-t border-gray-100 mx-2 pt-2"></div>
+            </div>
+
+            
+            <div class="space-y-4">
+                <div class="space-y-1 px-1">
+                    <h3 class="text-lg font-bold text-dark">Programy uzupełniające</h3>
+                    <p class="text-xs text-gray-400 font-medium">Dodatkowe narzędzia wspierające różne cele interwencji.</p>
+                </div>
+
+                <div class="grid grid-cols-1 gap-4">
+                    
+                    <div data-slug="20_session_plans"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="wind" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">20 planów sesji wspierających regulację sensoryczną</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Aktywności wyciszające i strategie wspierające tolerancję bodźców.</p>
+                            </div>
+                        </div>
+                        <a data-unavailable="true" aria-disabled="true"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            Zobacz program
+                        </a>
+                    </div>
+
+                    
+                    <div data-slug="30_functional_play"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="gamepad-2" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">30 zabaw funkcjonalnych w terapii zajęciowej dzieci z autyzmem</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Zabawy terapeutyczne dopasowane do celów terapii zajęciowej.</p>
+                            </div>
+                        </div>
+                        <a data-unavailable="true" aria-disabled="true"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            Zobacz program
+                        </a>
+                    </div>
+
+                    
+                    <div data-slug="15_intervention_protocols"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">15 protokołów rozwijania umiejętności życia codziennego (ADL)</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Protokoły krok po kroku wspierające samodzielność i niezależność.</p>
+                            </div>
+                        </div>
+                        <a data-unavailable="true" aria-disabled="true"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            Zobacz program
+                        </a>
+                    </div>
+
+                    
+                    <div data-slug="17_guided_aba"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">17 protokołów ABA do prowadzenia sesji z dziećmi z autyzmem</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Uporządkowane plany kompletnych sesji ABA.</p>
+                            </div>
+                        </div>
+                        <a data-unavailable="true" aria-disabled="true"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            Zobacz program
+                        </a>
+                    </div>
+
+                    
+                    <div data-slug="school_readiness"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">Zestaw strategii gotowości szkolnej w autyzmie</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Strategie VB-MAPP wspierające czytanie, pisanie, codzienne rutyny i matematykę.</p>
+                            </div>
+                        </div>
+                        <a href="../assets/pl/pat/gotowosc-szkolna.pdf"
+                            download="gotowosc-szkolna.pdf"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            Zobacz program
+                        </a>
+                    </div>
+
+                    
+                    <div data-slug="aba_playful" class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden"><h3 class="font-bold text-dark text-lg leading-tight">Podejścia ABA przez zabawę</h3><p class="text-sm text-gray-500 leading-relaxed">Podejścia ABA wykorzystujące zabawę do nauki i budowania zaangażowania.</p><a href="../assets/pl/pat/aba-przez-zabawe.pdf" download="aba-przez-zabawe.pdf" class="w-full py-2.5 rounded-xl bg-action text-white font-bold text-sm hover:bg-green-700 transition-colors flex items-center justify-center gap-2">Pobierz PDF</a></div>
+                    <div data-slug="emotional_recognition"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-pink-50 text-pink-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="smile" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">Trening rozpoznawania emocji</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Narzędzia do rozpoznawania i nazywania emocji oraz reagowania na nie.</p>
+                            </div>
+                        </div>
+                        <a href="../assets/pl/pat/emocje.pdf"
+                            download="emocje.pdf"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            Zobacz program
+                        </a>
+                    </div>
+
+                    
+                    <div data-slug="autism_safety"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="shield-check" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">Pakiet bezpieczeństwa w autyzmie</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Kluczowe umiejętności dbania o własne bezpieczeństwo, uczestnictwa w życiu społecznym i samodzielności.</p>
+                            </div>
+                        </div>
+                        <a href="../assets/pl/pat/bezpieczenstwo.pdf"
+                            download="bezpieczenstwo.pdf"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            Zobacz program
+                        </a>
+                    </div>
+
+                    
+                    <div data-slug="aba_business_kit"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="briefcase-business" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">Zestaw sukcesu w praktyce ABA</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Jak budować swoją pozycję, pokazywać wartość swojej pracy i rozwijać się jako ceniony specjalista ABA.</p>
+                            </div>
+                        </div>
+                        <button onclick="openUpsellView('program-view-aba-business-kit')" type="button"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            Zobacz program
+                        </button>
+                    </div>
+
+                    
+                    <div data-slug="parent_training_kit"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="users-round" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">Zestaw coachingowy dla rodziców</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Jak wspierać rodziców we wzmacnianiu umiejętności w domu i przyspieszaniu postępów.</p>
+                            </div>
+                        </div>
+                        <button onclick="openUpsellView('program-view-parent-training-kit')" type="button"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            Zobacz program
+                        </button>
+                    </div>
+
+                    
+                    <div data-slug="aba_emergency_pack"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="siren" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">Zestaw awaryjny ABA</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Szybkie procedury bezpiecznego reagowania na kryzysy behawioralne, agresję i trudne momenty podczas sesji.</p>
+                            </div>
+                        </div>
+                        <button onclick="openUpsellView('program-view-aba-emergency-pack')" type="button"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            Zobacz program
+                        </button>
+                    </div>
+
+                    
+                    <div data-slug="therapist_survival_guide"
+                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-lime-50 text-lime-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="leaf" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark leading-tight mb-1">Przewodnik po dobrostanie dla specjalistów ABA</h4>
+                                <p class="text-xs text-gray-500 leading-relaxed">Jak dbać o energię, zapobiegać wypaleniu i rozwijać się w pracy terapeutycznej.</p>
+                            </div>
+                        </div>
+                        <button onclick="openUpsellView('program-view-therapist-survival-guide')" type="button"
+                            class="w-full py-2.5 rounded-xl border border-gray-200 text-dark font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            Zobacz program
+                        </button>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        
+        <div id="tab-feed" class="tab-content space-y-6">
+            <h2 class="text-2xl font-black text-dark uppercase tracking-wide border-b border-gray-200 pb-4">Aktualności</h2>
+
+            
+            <div id="main-feed-container" class="space-y-6">
+                
+            </div>
+        </div>
+
+        
+        <div id="tab-profile" class="tab-content space-y-6">
+            <h2 class="text-2xl font-black text-dark uppercase tracking-wide border-b border-gray-200 pb-4">Profil</h2>
+
+            <div
+                class="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100 flex flex-col items-center space-y-6">
+                
+                <div
+                    class="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 shadow-inner">
+                    <i data-lucide="user" class="w-12 h-12"></i>
+                </div>
+
+                
+                <div class="w-full space-y-4">
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-dark ml-1">Imię i nazwisko</label>
+                        <div class="relative">
+                            <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                <i data-lucide="smile" class="w-5 h-5"></i>
+                            </div>
+                            <input type="text" id="profile-name"
+                                class="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-action focus:ring-2 focus:ring-action/10 outline-none transition-all font-medium text-dark"
+                                placeholder="Twoje imię i nazwisko">
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-dark ml-1">Telefon</label>
+                        <div class="relative">
+                            <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                <i data-lucide="phone" class="w-5 h-5"></i>
+                            </div>
+                            <input type="tel" id="profile-phone"
+                                class="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-action focus:ring-2 focus:ring-action/10 outline-none transition-all font-medium text-dark"
+                                placeholder="+48 500 000 000">
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-dark ml-1">E-mail</label>
+                        <div class="relative">
+                            <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                <i data-lucide="mail" class="w-5 h-5"></i>
+                            </div>
+                            <input type="email" id="profile-email" disabled
+                                class="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-100 border border-gray-100 text-gray-500 font-medium cursor-not-allowed">
+                        </div>
+                    </div>
+
+                    <button onclick="saveProfile()" id="save-profile-btn"
+                        class="w-full py-3 rounded-xl bg-action text-white font-bold shadow-lg shadow-action/20 hover:bg-green-700 transition-all active:scale-95 flex items-center justify-center gap-2 mt-4">
+                        <span>Zapisz zmiany</span>
+                        <i data-lucide="save" class="w-4 h-4"></i>
+                    </button>
+                    <p id="profile-message" class="text-center text-sm font-medium mt-2 hidden"></p>
+                </div>
+            </div>
+        </div>
+
+        
+        <div id="hub-view"
+            class="tab-content hidden fixed inset-0 z-[60] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+            
+            <div
+                class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+                <button onclick="closeHub()"
+                    class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <h2 id="hub-title" class="text-lg font-bold">Nazwa obszaru</h2>
+            </div>
+
+            <div class="max-w-md mx-auto px-6 py-6 space-y-10">
+
+                
+                <div class="space-y-4">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+                        Codzienna obserwacja
+                    </h3>
+                    <div class="bg-white rounded-[2rem] p-6 shadow-sm border border-gray-100 space-y-4">
+                        <p class="font-medium text-dark italic">Na co zwrócić uwagę u dziecka:</p>
+                        <ul id="hub-observation-list" class="space-y-4">
+                            
+                        </ul>
+                    </div>
+                </div>
+
+                
+                <div class="space-y-3">
+                    <h3 class="text-2xl font-black text-dark">Pojęcie</h3>
+                    <p id="hub-concept-text" class="text-text leading-relaxed text-lg">
+                        
+                    </p>
+                </div>
+
+                
+                <div class="relative overflow-hidden rounded-[2rem] bg-dark text-white p-8 space-y-4 shadow-xl">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
+                    <div class="relative z-10 space-y-2">
+                        <div class="flex items-center gap-2 text-action mb-2">
+                            <i data-lucide="flask-conical" class="w-5 h-5"></i>
+                            <span class="text-xs font-bold uppercase tracking-widest">Podstawy naukowe</span>
+                        </div>
+                        <h4 class="text-xl font-bold">Podstawy metodyczne</h4>
+                        <p id="hub-tech-text" class="text-gray-300 leading-relaxed text-sm">
+                            
+                        </p>
+                    </div>
+                </div>
+
+                
+                <div class="space-y-4">
+                    <h3 class="text-2xl font-bold text-dark">Zastosowanie w praktyce</h3>
+                    <div class="bg-green-50 rounded-[2rem] p-6 border border-green-100 space-y-4">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div
+                                class="w-10 h-10 rounded-full bg-action text-white flex items-center justify-center shadow-lg shadow-action/20">
+                                <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+                            </div>
+                            <span class="font-bold text-action">Wypróbuj dzisiaj</span>
+                        </div>
+                        <p id="hub-practical-text" class="text-dark/80 font-medium leading-relaxed">
+                            
+                        </p>
+                    </div>
+                </div>
+
+                
+                <div class="pt-6 border-t border-gray-200">
+                    <p class="text-xs text-gray-400 font-mono leading-relaxed">
+                        <span class="font-bold text-gray-500 block mb-1">LITERATURA:</span>
+                        <span id="hub-reference-text"></span>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        
+        <div id="program-view-35"
+            class="tab-content hidden fixed inset-0 z-[60] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+            
+            <div
+                class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+                <button onclick="closeProgram35()"
+                    class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div class="flex-1 text-center pr-14">
+                    <span class="text-xs font-bold uppercase tracking-widest text-action">35 naturalistycznych protokołów</span>
+                </div>
+            </div>
+
+            <div class="max-w-md mx-auto px-6 py-8 space-y-12">
+                
+                <div class="space-y-4">
+                    <h1 class="text-3xl font-black text-dark leading-tight">35 naturalistycznych protokołów ABA</h1>
+                    <p class="text-lg text-text leading-relaxed font-medium">Kompletny zestaw wskazówek krok po kroku do nauki komunikacji, interakcji i kluczowych umiejętności poprzez naturalną zabawę i codzienne rutyny.
+                    </p>
+                    <p class="text-sm text-gray-500 leading-relaxed border-l-4 border-action/30 pl-4 py-1 italic">
+                        Pomaga dzieciom uczyć się w rzeczywistych sytuacjach, bez sztywnych ćwiczeń i sztucznie tworzonych warunków.</p>
+                </div>
+
+                
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-bold text-dark">Na czym polega naturalistyczne ABA</h2>
+                    <p class="text-text leading-relaxed">Naturalistyczne ABA włącza naukę w zabawę, rutyny i codzienne interakcje. Dziecko uczy się tam, gdzie ma największą motywację, zamiast wyłącznie przy stoliku z kartami obrazkowymi.</p>
+                    <div class="bg-blue-50 rounded-2xl p-5 border border-blue-100 flex items-start gap-4">
+                        <i data-lucide="lightbulb" class="w-6 h-6 text-blue-600 flex-shrink-0 mt-1"></i>
+                        <p class="text-sm text-blue-800 font-medium leading-relaxed">Najważniejsze cele: motywacja, funkcjonalne wykorzystanie umiejętności i przenoszenie ich na codzienne sytuacje.</p>
+                    </div>
+                </div>
+
+                
+                <div class="space-y-6">
+                    <h2 class="text-2xl font-bold text-dark">Podejścia oparte na dowodach</h2>
+                    <div class="grid gap-4">
+                        
+                        <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center shadow-inner">
+                                    <i data-lucide="zap" class="w-5 h-5"></i>
+                                </div>
+                                <h3 class="font-bold text-dark leading-tight">Trening zachowań kluczowych (PRT)</h3>
+                            </div>
+                            <p class="text-sm text-gray-500 leading-relaxed">Nacisk na motywację, inicjowanie kontaktu i reagowanie.</p>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center shadow-inner">
+                                    <i data-lucide="heart-handshake" class="w-5 h-5"></i>
+                                </div>
+                                <h3 class="font-bold text-dark leading-tight">Model wczesnej interwencji Denver (ESDM)</h3>
+                            </div>
+                            <p class="text-sm text-gray-500 leading-relaxed">Podejście rozwojowe oparte na zabawie, łączone ze strategiami ABA.</p>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="space-y-8">
+                    <h2 class="text-2xl font-bold text-dark">Jak działa ten program</h2>
+                    <div
+                        class="relative pl-8 space-y-10 before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-action before:to-gray-200">
+                        
+                        <div class="relative group">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-action text-white text-xs font-bold flex items-center justify-center ring-4 ring-background shadow-lg shadow-action/20">1</span>
+                            <h3 class="font-bold text-dark mb-1 text-lg">Wybierz obszar pracy</h3>
+                            <p class="text-text leading-relaxed">Określ obszar umiejętności najważniejszy dla aktualnych potrzeb dziecka.</p>
+                        </div>
+                        
+                        <div class="relative group">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-action text-white text-xs font-bold flex items-center justify-center ring-4 ring-background shadow-lg shadow-action/20">2</span>
+                            <h3 class="font-bold text-dark mb-1 text-lg">Podążaj za dzieckiem</h3>
+                            <p class="text-text leading-relaxed">Dołącz do zabawy i zainteresowań dziecka, aby budować zaangażowanie.</p>
+                        </div>
+                        
+                        <div class="relative group">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-action text-white text-xs font-bold flex items-center justify-center ring-4 ring-background shadow-lg shadow-action/20">3</span>
+                            <h3 class="font-bold text-dark mb-1 text-lg">Stosuj w naturalnych sytuacjach</h3>
+                            <p class="text-text leading-relaxed">Wpleć cel nauki w interakcję, nie przerywając jej przebiegu.</p>
+                        </div>
+                        
+                        <div class="relative group">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-action text-white text-xs font-bold flex items-center justify-center ring-4 ring-background shadow-lg shadow-action/20">4</span>
+                            <h3 class="font-bold text-dark mb-1 text-lg">Obserwuj i dostosowuj</h3>
+                            <p class="text-text leading-relaxed">Obserwuj reakcję dziecka i w razie potrzeby zmieniaj swoje podejście.</p>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="space-y-6">
+                    <div class="space-y-2">
+                        <h2 class="text-2xl font-bold text-dark">Obszary pracy w protokołach</h2>
+                        <p class="text-sm text-gray-400">Protokoły można stosować elastycznie, bez obowiązkowej kolejności.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Komunikacja i język</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Interakcje społeczne</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Umiejętności zabawy</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Regulacja emocji</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Samodzielność i życie codzienne</span>
+                    </div>
+                </div>
+
+                
+                
+                <div
+                    class="bg-white rounded-[2rem] p-8 text-center space-y-6 shadow-sm border border-gray-100 relative overflow-hidden group">
+                    
+                    <div
+                        class="absolute top-0 right-0 w-40 h-40 bg-action/5 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-action/10 transition-colors duration-500">
+                    </div>
+
+                    <div class="relative z-10 space-y-4">
+                        <div
+                            class="w-12 h-12 bg-action/10 rounded-2xl flex items-center justify-center mx-auto mb-2 text-action shadow-sm">
+                            <i data-lucide="download" class="w-6 h-6"></i>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-2xl font-bold text-dark">Zacznij korzystać z protokołów</h3>
+                            <p class="text-text text-sm leading-relaxed px-4">Otwórz pełny przewodnik z 35 naturalistycznymi protokołami ABA do wykorzystania w zabawie, rutynach i codziennych interakcjach.</p>
+                        </div>
+                    </div>
+                    <a data-unavailable="true" aria-disabled="true"
+                        class="w-full py-4 rounded-xl bg-action text-white font-bold hover:bg-green-600 transition-all flex items-center justify-center gap-3 relative z-10 shadow-lg shadow-action/20 hover:scale-[1.02] active:scale-95 text-lg">
+                        <span>Pobierz PDF</span>
+                    </a>
+                </div>
+
+                
+                <div class="space-y-6">
+                    <h2 class="text-2xl font-bold text-dark">Dodatki w pakiecie</h2>
+
+                    
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Dodatek 01</span>
+                            <h4 class="font-bold text-dark text-base">Sekwencje zabaw z prowadzeniem</h4>
+                            <p class="text-xs text-gray-400">15 gotowych aktywności</p>
+                        </div>
+                        <a data-unavailable="true" aria-disabled="true"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+
+                    
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Dodatek 02</span>
+                            <h4 class="font-bold text-dark text-base">Naturalistyczne wzorce językowe</h4>
+                            <p class="text-xs text-gray-400">10 gotowych modeli do wykorzystania</p>
+                        </div>
+                        <a data-unavailable="true" aria-disabled="true"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+
+                    
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Dodatek 03</span>
+                            <h4 class="font-bold text-dark text-base">Naturalistyczny przewodnik po samoregulacji</h4>
+                            <p class="text-xs text-gray-400">Kluczowe strategie</p>
+                        </div>
+                        <a data-unavailable="true" aria-disabled="true"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+
+                    
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Dodatek 04</span>
+                            <h4 class="font-bold text-dark text-base">Przewodnik po budowaniu zaangażowania</h4>
+                            <p class="text-xs text-gray-400">Do PRT i ESDM</p>
+                        </div>
+                        <a data-unavailable="true" aria-disabled="true"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div id="program-view-toolkit"
+            class="tab-content hidden fixed inset-0 z-[60] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+            
+            <div
+                class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+                <button onclick="closeProgramToolkit()"
+                    class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div class="flex-1 text-center pr-14">
+                    <span class="text-xs font-bold uppercase tracking-widest text-action">Praktyczny zestaw narzędzi</span>
+                </div>
+            </div>
+
+            <div class="max-w-md mx-auto px-6 py-8 space-y-12">
+                
+                <div class="space-y-4">
+                    <h1 class="text-3xl font-black text-dark leading-tight">Praktyczny zestaw ABA do rozwoju dziecka z autyzmem</h1>
+                    <p class="text-lg text-text leading-relaxed font-medium">Kluczowe umiejętności VB-MAPP</p>
+                    <p class="text-text leading-relaxed">Uporządkowany, praktyczny system nauki podstawowych umiejętności komunikacji, języka i uczenia się u dzieci z autyzmem. Nie musisz przygotowywać wszystkiego od początku.</p>
+                    <p class="text-sm text-gray-500 leading-relaxed border-l-4 border-action/30 pl-4 py-1 italic">
+                        Pomaga terapeutom i nauczycielom uczyć kluczowych umiejętności w sposób jasny, spójny i pewny.
+                    </p>
+                </div>
+
+                
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-bold text-dark">Poznaj zestaw</h2>
+                    <p class="text-text leading-relaxed">Praktyczny zestaw ABA do rozwoju dziecka z autyzmem opiera się na kamieniach milowych VB-MAPP. Zawiera jasne, gotowe programy nauczania dla kluczowych obszarów pracy z dziećmi z autyzmem.</p>
+                    <p class="text-text leading-relaxed">Zamiast poświęcać wiele godzin na planowanie, korzystaj z uporządkowanych protokołów. Poprowadzą cię od wyboru bodźców przez wzmocnienia po ocenę postępów na podstawie danych.</p>
+
+                    <div class="bg-blue-50 rounded-2xl p-5 border border-blue-100 flex items-start gap-4">
+                        <i data-lucide="lightbulb" class="w-6 h-6 text-blue-600 flex-shrink-0 mt-1"></i>
+                        <p class="text-sm text-blue-800 font-medium leading-relaxed">Najważniejsze cele: przejrzyste nauczanie, funkcjonalna komunikacja i rozwój mierzalnych umiejętności.</p>
+                    </div>
+                </div>
+
+                
+                <div class="space-y-6">
+                    <h2 class="text-2xl font-bold text-dark">Podstawy oparte na dowodach</h2>
+                    <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center shadow-inner">
+                                <i data-lucide="book-open" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="font-bold text-dark leading-tight">Podstawy VB-MAPP</h3>
+                        </div>
+                        <p class="text-sm text-gray-500 leading-relaxed">System oparty na kamieniach milowych, skoncentrowany na funkcjonalnej komunikacji, rozwoju języka i gotowości do uczenia się.</p>
+                        <p class="text-sm text-gray-500 leading-relaxed mt-2">Oparty na wieloletnich badaniach nad stosowaną analizą zachowania i praktyce klinicznej.</p>
+                    </div>
+                </div>
+
+                
+                <div class="space-y-8">
+                    <h2 class="text-2xl font-bold text-dark">Jak działa ten program</h2>
+                    <div
+                        class="relative pl-8 space-y-10 before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-action before:to-gray-200">
+                        
+                        <div class="relative group">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-action text-white text-xs font-bold flex items-center justify-center ring-4 ring-background shadow-lg shadow-action/20">1</span>
+                            <h3 class="font-bold text-dark mb-1 text-lg">Wybierz umiejętność docelową</h3>
+                            <p class="text-text leading-relaxed">Wybierz kamień milowy VB-MAPP najlepiej odpowiadający aktualnemu poziomowi dziecka.</p>
+                        </div>
+                        
+                        <div class="relative group">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-action text-white text-xs font-bold flex items-center justify-center ring-4 ring-background shadow-lg shadow-action/20">2</span>
+                            <h3 class="font-bold text-dark mb-1 text-lg">Postępuj według protokołu</h3>
+                            <p class="text-text leading-relaxed">Stosuj jasne procedury nauczania krok po kroku, z określonymi podpowiedziami i wzmocnieniami.</p>
+                        </div>
+                        
+                        <div class="relative group">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-action text-white text-xs font-bold flex items-center justify-center ring-4 ring-background shadow-lg shadow-action/20">3</span>
+                            <h3 class="font-bold text-dark mb-1 text-lg">Ucz i monitoruj</h3>
+                            <p class="text-text leading-relaxed">Realizuj program podczas sesji, obserwując odpowiedzi i postępy dziecka.</p>
+                        </div>
+                        
+                        <div class="relative group">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-action text-white text-xs font-bold flex items-center justify-center ring-4 ring-background shadow-lg shadow-action/20">4</span>
+                            <h3 class="font-bold text-dark mb-1 text-lg">Dostosowuj i uogólniaj</h3>
+                            <p class="text-text leading-relaxed">Zmieniaj poziom trudności, wspieraj uogólnianie umiejętności i utrwalaj postępy.</p>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="space-y-6">
+                    <div class="space-y-2">
+                        <h2 class="text-2xl font-bold text-dark">Obszary pracy w programie</h2>
+                        <p class="text-sm text-gray-400">Programy są niezależne i można je stosować zgodnie z potrzebami dziecka.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Mand</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Tact</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Reagowanie słuchacza</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Echoika</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">Naśladowanie</span>
+                        <span
+                            class="px-4 py-2 bg-white border border-gray-100 text-dark rounded-xl text-sm font-bold shadow-sm">VP-MTS</span>
+                    </div>
+                </div>
+
+                
+                <div
+                    class="bg-white rounded-[2rem] p-8 text-center space-y-6 shadow-sm border border-gray-100 relative overflow-hidden group">
+                    
+                    <div
+                        class="absolute top-0 right-0 w-40 h-40 bg-action/5 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-action/10 transition-colors duration-500">
+                    </div>
+
+                    <div class="relative z-10 space-y-4">
+                        <div
+                            class="w-12 h-12 bg-action/10 rounded-2xl flex items-center justify-center mx-auto mb-2 text-action shadow-sm">
+                            <i data-lucide="layers" class="w-6 h-6"></i>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-2xl font-bold text-dark">Zacznij korzystać z zestawu</h3>
+                            <p class="text-text text-sm leading-relaxed px-4">Poznaj 12 podstawowych programów VB-MAPP do wykorzystania podczas terapii, w szkole i w pracy w domu. Dostępne pliki znajdziesz w materiałach programu.</p>
+                        </div>
+                    </div>
+                    <button onclick="openToolkitMaterials()"
+                        class="w-full py-4 rounded-xl bg-action text-white font-bold hover:bg-green-600 transition-all flex items-center justify-center gap-3 relative z-10 shadow-lg shadow-action/20 hover:scale-[1.02] active:scale-95 text-lg">
+                        <span>Otwórz materiały</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                
+                <div class="space-y-6">
+                    <h2 class="text-2xl font-bold text-dark">Dodatki w pakiecie</h2>
+
+                    
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Dodatek 01</span>
+                            <h4 class="font-bold text-dark text-base">System ABA do zbierania danych i monitorowania</h4>
+                            <p class="text-xs text-gray-400">Gotowy system pomiaru w ABA</p>
+                        </div>
+                        <a href="../assets/pl/pat/system-aba-do-zbierania-danych-i-monitorowania.pdf"
+                            download="system-aba-do-zbierania-danych-i-monitorowania.pdf"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+
+                    
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Dodatek 02</span>
+                            <h4 class="font-bold text-dark text-base">Lista kontrolna dla rodziców i opiekunów: pobudzanie komunikacji w codziennym życiu</h4>
+                            <p class="text-xs text-gray-400">Komunikacja w codziennym życiu</p>
+                        </div>
+                        <a href="../assets/pl/pat/lista-kontrolna-pobudzanie-komunikacji.pdf"
+                            download="lista-kontrolna-pobudzanie-komunikacji.pdf"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+
+                    
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Dodatek 03</span>
+                            <h4 class="font-bold text-dark text-base">Protokół skutecznej korekty błędów</h4>
+                            <p class="text-xs text-gray-400">Ucz precyzyjnie i konsekwentnie koryguj błędy</p>
+                        </div>
+                        <a href="../assets/pl/pat/protokol-skutecznej-korekty-bledow.pdf"
+                            download="protokol-skutecznej-korekty-bledow.pdf"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+
+                    
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Dodatek 04</span>
+                            <h4 class="font-bold text-dark text-base">Techniki ABA: wsparcie i zaangażowanie</h4>
+                            <p class="text-xs text-gray-400">Praktyczne strategie usprawniające nauczanie</p>
+                        </div>
+                        <a href="../assets/pl/pat/techniki-aba-wsparcie-i-zaangazowanie.pdf"
+                            download="techniki-aba-wsparcie-i-zaangazowanie.pdf"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+
+                    
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Dodatek 05</span>
+                            <h4 class="font-bold text-dark text-base">Lista kontrolna dla rodziców i opiekunów: wzmacnianie umiejętności słuchania w domu</h4>
+                            <p class="text-xs text-gray-400">Rozwijanie umiejętności słuchania w domu</p>
+                        </div>
+                        <a href="../assets/pl/pat/lista-kontrolna-wzmacnianie-umiejetnosci-sluchania.pdf"
+                            download="lista-kontrolna-wzmacnianie-umiejetnosci-sluchania.pdf"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+
+                    
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Dodatek 06</span>
+                            <h4 class="font-bold text-dark text-base">Strategie ABA: motywacja i wzmocnienia</h4>
+                            <p class="text-xs text-gray-400">Podstawa każdego programu ABA</p>
+                        </div>
+                        <a href="../assets/pl/pat/strategie-aba-motywacja-i-wzmocnienia.pdf"
+                            download="strategie-aba-motywacja-i-wzmocnienia.pdf"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+
+                    
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Dodatek 07</span>
+                            <h4 class="font-bold text-dark text-base">Przewodnik po poszerzaniu wzmocnień</h4>
+                            <p class="text-xs text-gray-400">Poszerzaj repertuar tego, co motywuje dziecko</p>
+                        </div>
+                        <a href="../assets/pl/pat/przewodnik-po-poszerzaniu-wzmocnien.pdf"
+                            download="przewodnik-po-poszerzaniu-wzmocnien.pdf"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+
+                    
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Dodatek 08</span>
+                            <h4 class="font-bold text-dark text-base">Kompletny przewodnik po nauce naśladowania</h4>
+                            <p class="text-xs text-gray-400">Rozwijanie naśladowania krok po kroku</p>
+                        </div>
+                        <a href="../assets/pl/pat/kompletny-przewodnik-po-nauce-nasladowania.pdf"
+                            download="kompletny-przewodnik-po-nauce-nasladowania.pdf"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+
+                    
+                    <div
+                        class="bg-white p-5 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-between gap-4 group hover:shadow-md transition-all">
+                        <div class="space-y-1">
+                            <span class="text-[0.65rem] font-bold text-action uppercase tracking-widest">Dodatek 09</span>
+                            <h4 class="font-bold text-dark text-base">Stosowana analiza zachowania</h4>
+                            <p class="text-xs text-gray-400">Wprowadzenie do zasad i naukowych podstaw ABA</p>
+                        </div>
+                        <a href="../assets/pl/pat/stosowana-analiza-zachowania.pdf"
+                            download="stosowana-analiza-zachowania.pdf"
+                            class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-action group-hover:text-white transition-all flex-shrink-0 shadow-sm">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        
+        <div id="toolkit-materials-view"
+            class="tab-content hidden fixed inset-0 z-[70] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+            
+            <div
+                class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+                <button onclick="closeToolkitMaterials()"
+                    class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div class="flex-1 text-center pr-14">
+                    <span class="text-xs font-bold uppercase tracking-widest text-action">Materiały zestawu</span>
+                </div>
+            </div>
+
+            <div class="max-w-md mx-auto px-6 py-8 space-y-4">
+                
+                
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">01</span>
+                        <h4 class="font-bold text-dark">Mand</h4>
+                    </div>
+                    <a href="../assets/pl/pat/mand.pdf" download="mand.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">02</span>
+                        <h4 class="font-bold text-dark">Tact</h4>
+                    </div>
+                    <a href="../assets/pl/pat/tact.pdf" download="tact.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">03</span>
+                        <h4 class="font-bold text-dark">Reagowanie słuchacza</h4>
+                    </div>
+                    <a href="../assets/pl/pat/reagowanie-sluchacza.pdf" download="reagowanie-sluchacza.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">04</span>
+                        <h4 class="font-bold text-dark">Echoika</h4>
+                    </div>
+                    <a href="../assets/pl/pat/echoika.pdf" download="echoika.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">05</span>
+                        <h4 class="font-bold text-dark">Umiejętności intrawerbalne</h4>
+                    </div>
+                    <a href="../assets/pl/pat/umiejetnosci-intrawerbalne.pdf" download="umiejetnosci-intrawerbalne.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">06</span>
+                        <h4 class="font-bold text-dark">Umiejętności wokalne</h4>
+                    </div>
+                    <a href="../assets/pl/pat/umiejetnosci-wokalne.pdf" download="umiejetnosci-wokalne.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">07</span>
+                        <h4 class="font-bold text-dark">Naśladowanie</h4>
+                    </div>
+                    <a href="../assets/pl/pat/nasladowanie.pdf" download="nasladowanie.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">08</span>
+                        <h4 class="font-bold text-dark">Umiejętności społeczne</h4>
+                    </div>
+                    <a href="../assets/pl/pat/umiejetnosci-spoleczne.pdf" download="umiejetnosci-spoleczne.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">09</span>
+                        <h4 class="font-bold text-dark">Umiejętności zabawy</h4>
+                    </div>
+                    <a href="../assets/pl/pat/umiejetnosci-zabawy.pdf" download="umiejetnosci-zabawy.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">10</span>
+                        <h4 class="font-bold text-dark">Rozwój języka</h4>
+                    </div>
+                    <a href="../assets/pl/pat/rozwoj-jezyka.pdf" download="rozwoj-jezyka.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">11</span>
+                        <h4 class="font-bold text-dark">Percepcja wzrokowa i dopasowywanie do wzoru (VP-MTS)</h4>
+                    </div>
+                    <a href="../assets/pl/pat/percepcja-wzrokowa-i-dopasowywanie-do-wzoru.pdf" download="percepcja-wzrokowa-i-dopasowywanie-do-wzoru.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                
+                <div
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-action font-bold text-lg w-6">12</span>
+                        <h4 class="font-bold text-dark">Reagowanie słuchacza według funkcji, cechy i kategorii (LRFFC)</h4>
+                    </div>
+                    <a href="../assets/pl/pat/reagowanie-sluchacza-wedlug-funkcji-cechy-i-kategorii.pdf" download="reagowanie-sluchacza-wedlug-funkcji-cechy-i-kategorii.pdf"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-action hover:text-white transition-all flex-shrink-0">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        
+        <div id="program-view-naturalistic-mastery"
+            class="tab-content hidden fixed inset-0 z-[60] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+            
+            <div
+                class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+                <button onclick="closeNaturalisticMastery()"
+                    class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div class="flex-1 text-center pr-14">
+                    <span class="text-xs font-bold uppercase tracking-widest text-action">Praktyczne stosowanie podejścia naturalistycznego</span>
+                </div>
+            </div>
+
+            <div class="max-w-md mx-auto px-6 py-8 space-y-12">
+                
+                <div class="space-y-4">
+                    <h1 class="text-3xl font-black text-dark leading-tight">Praktyczne stosowanie podejścia naturalistycznego</h1>
+                    <p class="text-lg text-text leading-relaxed font-medium">Pewnie stosuj 35 naturalistycznych protokołów ABA i wspieraj konkretne postępy podczas sesji.</p>
+                </div>
+
+                
+                <div class="space-y-4">
+                    <div class="bg-indigo-50 rounded-[2rem] p-6 border border-indigo-100 space-y-4">
+                        <p class="text-indigo-900 font-medium leading-relaxed">
+                            Dobre protokoły to ważny pierwszy krok. Wielu specjalistom trudność sprawia jednak ich pewne stosowanie podczas rzeczywistych sesji.
+                        </p>
+                        <p class="text-indigo-900 font-medium leading-relaxed">
+                            Nawet z dobrymi materiałami nie zawsze łatwo ustalić, kiedy uczyć poprzez zabawę, jak naturalnie podtrzymywać motywację i jak dostosowywać strategie do różnych sytuacji.
+                        </p>
+                        <div class="h-px bg-indigo-200 w-full"></div>
+                        <p class="text-indigo-900 font-bold">
+                            To szkolenie powstało, aby pomóc w tych zadaniach.
+                        </p>
+                    </div>
+                </div>
+
+                
+                <div class="space-y-6">
+                    <div class="space-y-2">
+                        <h2 class="text-2xl font-bold text-dark">Co daje to szkolenie</h2>
+                        <p class="text-text leading-relaxed">Praktyczne szkolenie wideo prowadzi krok po kroku przez stosowanie 35 protokołów w sposób jasny, pewny i dopasowany do codziennych warunków.</p>
+                    </div>
+
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <div
+                                class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                            </div>
+                            <span class="text-dark font-medium leading-relaxed">Stosowanie 35 protokołów w gabinecie, szkole i domu</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div
+                                class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                            </div>
+                            <span class="text-dark font-medium leading-relaxed">Dostosowywanie naturalnych wzmocnień do każdego dziecka</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div
+                                class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                            </div>
+                            <span class="text-dark font-medium leading-relaxed">Łączenie struktury ze spontanicznością przy zachowaniu zaangażowania</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div
+                                class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                            </div>
+                            <span class="text-dark font-medium leading-relaxed">Reagowanie na trudne zachowania w podejściu naturalistycznym</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div
+                                class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                            </div>
+                            <span class="text-dark font-medium leading-relaxed">Prawidłowe monitorowanie postępów i uogólniania umiejętności</span>
+                        </li>
+                    </ul>
+                </div>
+
+                
+                <div class="space-y-6">
+                    <h2 class="text-2xl font-bold text-dark">Co zawiera program</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-2">
+                            <i data-lucide="play-circle" class="w-6 h-6 text-action"></i>
+                            <span class="font-bold text-dark text-sm">Szkolenie wideo krok po kroku</span>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-2">
+                            <i data-lucide="video" class="w-6 h-6 text-action"></i>
+                            <span class="font-bold text-dark text-sm">Przykłady rzeczywistych sesji</span>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-2">
+                            <i data-lucide="list-checks" class="w-6 h-6 text-action"></i>
+                            <span class="font-bold text-dark text-sm">Praktyczne listy kontrolne</span>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-2">
+                            <i data-lucide="infinity" class="w-6 h-6 text-action"></i>
+                            <span class="font-bold text-dark text-sm">Dostęp bez ograniczeń czasowych</span>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div
+                    class="bg-white rounded-[2rem] p-8 text-center space-y-6 shadow-sm border border-gray-100 relative overflow-hidden group">
+                    
+                    <div
+                        class="absolute top-0 right-0 w-40 h-40 bg-action/5 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-action/10 transition-colors duration-500">
+                    </div>
+
+                    <div class="relative z-10 space-y-4">
+                        <div
+                            class="w-12 h-12 bg-action/10 rounded-2xl flex items-center justify-center mx-auto mb-2 text-action shadow-sm">
+                            <i data-lucide="lock" class="w-6 h-6"></i>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-2xl font-bold text-dark">Otwórz szkolenie</h3>
+                            <p class="text-text text-sm leading-relaxed px-4">Dostęp do tego programu wymaga odpowiedniego zakupu.</p>
+                        </div>
+                    </div>
+                    <a data-unavailable="true" aria-disabled="true"
+                        class="w-full py-4 rounded-xl bg-action text-white font-bold hover:bg-green-600 transition-all flex items-center justify-center gap-3 relative z-10 shadow-lg shadow-action/20 hover:scale-[1.02] active:scale-95 text-lg">
+                        <span>Otwórz szkolenie</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+
+            </div>
+        </div>
+
+        
+        <div id="program-view-aba-business-kit"
+            class="tab-content hidden fixed inset-0 z-[60] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+            <div
+                class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+                <button onclick="closeUpsellView('program-view-aba-business-kit')"
+                    class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div class="flex-1 text-center pr-14">
+                    <span class="text-xs font-bold uppercase tracking-widest text-action">Zestaw sukcesu w praktyce ABA</span>
+                </div>
+            </div>
+
+            <div class="max-w-md mx-auto px-6 py-8 space-y-10">
+                <div class="space-y-4">
+                    <div class="w-14 h-14 rounded-2xl bg-cyan-50 text-cyan-600 flex items-center justify-center">
+                        <i data-lucide="briefcase-business" class="w-7 h-7"></i>
+                    </div>
+                    <h1 class="text-3xl font-black text-dark leading-tight">Budowanie pozycji specjalisty ABA</h1>
+                    <p class="text-lg text-text leading-relaxed font-medium">Praktyczny przewodnik po budowaniu pozycji, dzięki której rodziny, szkoły i partnerzy kierujący klientów będą wybierać właśnie ciebie.</p>
+                    <p class="text-sm text-gray-500 leading-relaxed border-l-4 border-cyan-200 pl-4 py-1 italic">
+                        Pozycja specjalisty z wyższej półki wymaga widocznych kompetencji i zaufania. Pokaż jasno, co wyróżnia twoją pracę i uzasadnia jej wartość.</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                        <i data-lucide="badge-check" class="w-6 h-6 text-cyan-600 mb-3"></i>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Filar 1</p>
+                        <h3 class="font-bold text-dark text-sm leading-tight">Pokaż swoje doświadczenie</h3>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                        <i data-lucide="line-chart" class="w-6 h-6 text-cyan-600 mb-3"></i>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Filar 2</p>
+                        <h3 class="font-bold text-dark text-sm leading-tight">Dokumentuj wyniki</h3>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                        <i data-lucide="user-check" class="w-6 h-6 text-cyan-600 mb-3"></i>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Filar 3</p>
+                        <h3 class="font-bold text-dark text-sm leading-tight">Profesjonalny wizerunek</h3>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                        <i data-lucide="network" class="w-6 h-6 text-cyan-600 mb-3"></i>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Filar 4</p>
+                        <h3 class="font-bold text-dark text-sm leading-tight">Strategiczna sieć kontaktów</h3>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Buduj autorytet zawodowy</h2>
+                    <div
+                        class="relative pl-8 space-y-7 before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-cyan-500 before:to-gray-200">
+                        <div class="relative">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-cyan-600 text-white text-xs font-bold flex items-center justify-center ring-4 ring-background">1</span>
+                            <h3 class="font-bold text-dark">Wybierz od 2 do 3 specjalizacji</h3>
+                            <p class="text-sm text-text leading-relaxed">Komunikacja, włączanie do życia szkoły, samodzielność, coaching rodzicielski lub nasilone zachowania trudne. Dogłębna wiedza buduje większy autorytet niż ogólne deklaracje.</p>
+                        </div>
+                        <div class="relative">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-cyan-600 text-white text-xs font-bold flex items-center justify-center ring-4 ring-background">2</span>
+                            <h3 class="font-bold text-dark">Opieraj decyzje na dowodach</h3>
+                            <p class="text-sm text-text leading-relaxed">Wyjaśniaj swoją pracę prostym językiem: cel, procedura, obserwowane dane i kolejny krok kliniczny.</p>
+                        </div>
+                        <div class="relative">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-cyan-600 text-white text-xs font-bold flex items-center justify-center ring-4 ring-background">3</span>
+                            <h3 class="font-bold text-dark">Nazwij swoją metodę</h3>
+                            <p class="text-sm text-text leading-relaxed">Własne ramy pracy ułatwiają zapamiętanie twojego podejścia. Powinny opisywać problem, strategię i oczekiwany rezultat.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Schemat przekonującego biogramu</h2>
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
+                        <div class="flex gap-3">
+                            <i data-lucide="sparkles" class="w-5 h-5 text-cyan-600 flex-shrink-0 mt-1"></i>
+                            <p class="text-sm text-text leading-relaxed">Wykorzystaj następującą strukturę: misja, specjalizacja, wyniki, podejście do interwencji i osobisty szczegół związany z pracą.</p>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-4 space-y-2">
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Wzór do dostosowania</p>
+                            <p class="text-sm text-dark leading-relaxed">„Specjalizuję się we wspieraniu [profil dziecka] w rozwijaniu [priorytetowe umiejętności] poprzez [konkretne podejście ABA], aby postępy były widoczne w domu, szkole i społeczności”.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Gotowe wypowiedzi zawodowe</h2>
+                    <div class="space-y-3">
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <p class="text-xs font-bold text-cyan-600 uppercase tracking-wider mb-2">Rozmowa z rodzicami</p>
+                            <p class="text-sm text-text leading-relaxed">„Moją rolą jest przełożenie państwa priorytetów na obserwowalne cele, a następnie dokładne pokazanie, jak będziemy mierzyć postępy i wspierać przenoszenie umiejętności do domu”.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <p class="text-xs font-bold text-cyan-600 uppercase tracking-wider mb-2">Zespół szkolny</p>
+                            <p class="text-sm text-text leading-relaxed">„Tworzę wsparcie ABA dopasowane do klasy, które pomaga uczniowi uczestniczyć w lekcjach bez izolowania go od innych”.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <p class="text-xs font-bold text-cyan-600 uppercase tracking-wider mb-2">Sieć kontaktów</p>
+                            <p class="text-sm text-text leading-relaxed">„Szukam współpracy ze specjalistami, którym zależy na jasnych, mierzalnych planach interwencji uwzględniających potrzeby rodziny”.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Twoja propozycja wartości</h2>
+                    <div class="bg-cyan-50 rounded-2xl border border-cyan-100 p-5 space-y-4">
+                        <p class="text-cyan-900 font-medium leading-relaxed">Dobra propozycja wartości odpowiada na cztery pytania: w czym jesteś szczególnie dobry, komu pomagasz, jaką metodę stosujesz i jakich konkretnych wyników mogą oczekiwać rodziny.</p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <span class="bg-white rounded-xl p-3 text-xs font-bold text-dark">Mocne strony kliniczne</span>
+                            <span class="bg-white rounded-xl p-3 text-xs font-bold text-dark">Potrzeba klienta</span>
+                            <span class="bg-white rounded-xl p-3 text-xs font-bold text-dark">Mierzony rezultat</span>
+                            <span class="bg-white rounded-xl p-3 text-xs font-bold text-dark">Element wyróżniający</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Plan działania na 90 dni</h2>
+                    <div class="space-y-3">
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Dni od 1 do 30: podstawy</h3>
+                            <p class="text-sm text-text leading-relaxed">Doprecyzuj specjalizację, napisz na nowo swój biogram, uporządkuj zanonimizowane przykłady przypadków i zadbaj o spójny wygląd materiałów.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Dni od 31 do 60: widoczność</h3>
+                            <p class="text-sm text-text leading-relaxed">Nawiąż kontakt z osobami kierującymi klientów, udostępniaj treści edukacyjne i przedstawiaj swoje podejście za pomocą prostych danych.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Dni od 61 do 90: doskonalenie</h3>
+                            <p class="text-sm text-text leading-relaxed">Monitoruj zapytania, obiekcje i konwersje. Doprecyzuj przekaz, zachowując spójną pozycję zawodową.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-7 text-center space-y-5 shadow-sm border border-gray-100">
+                    <div class="w-12 h-12 bg-action/10 rounded-2xl flex items-center justify-center mx-auto text-action">
+                        <i data-lucide="download" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-2xl font-bold text-dark">Pobierz pełny przewodnik</h3>
+                        <p class="text-sm text-text leading-relaxed">Zachowaj PDF, aby wracać do biogramu, gotowych wypowiedzi i planu budowania pozycji także bez internetu.</p>
+                    </div>
+                    <a href="../assets/pl/pat/zestaw-sukcesu-w-praktyce-aba.pdf" download="zestaw-sukcesu-w-praktyce-aba.pdf"
+                        class="w-full py-4 rounded-xl bg-action text-white font-bold hover:bg-green-600 transition-all flex items-center justify-center gap-3 shadow-lg shadow-action/20 active:scale-95">
+                        <span>Pobierz PDF</span>
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        
+        <div id="program-view-parent-training-kit"
+            class="tab-content hidden fixed inset-0 z-[60] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+            <div
+                class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+                <button onclick="closeUpsellView('program-view-parent-training-kit')"
+                    class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div class="flex-1 text-center pr-14">
+                    <span class="text-xs font-bold uppercase tracking-widest text-action">Zestaw coachingowy dla rodziców</span>
+                </div>
+            </div>
+
+            <div class="max-w-md mx-auto px-6 py-8 space-y-10">
+                <div class="space-y-4">
+                    <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                        <i data-lucide="users-round" class="w-7 h-7"></i>
+                    </div>
+                    <h1 class="text-3xl font-black text-dark leading-tight">Naturalne wzmocnienia w domu</h1>
+                    <p class="text-lg text-text leading-relaxed font-medium">Wykorzystuj codzienne rutyny rodzinne jako okazje do nauki, bez polegania na naklejkach, słodyczach i groźbach.</p>
+                </div>
+
+                <div class="bg-amber-50 rounded-2xl border border-amber-100 p-5 space-y-3">
+                    <p class="text-xs font-bold text-amber-700 uppercase tracking-wider">Podstawowa zasada</p>
+                    <p class="text-amber-950 font-medium leading-relaxed">Pozytywna konsekwencja powinna wynikać z samego działania: więcej zabawy po spokojnym wykonaniu rutyny, przyjemniejsza rozmowa dzięki dobremu zachowaniu przy stole lub większa samodzielność po rzetelnym wykonaniu obowiązku.</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                        <i data-lucide="x-circle" class="w-6 h-6 text-rose-500 mb-3"></i>
+                        <h3 class="font-bold text-dark text-sm mb-1">Sztuczne</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">Zewnętrzne nagrody, stałe kontrolowanie i krótkotrwałe podporządkowanie.</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                        <i data-lucide="check-circle-2" class="w-6 h-6 text-green-600 mb-3"></i>
+                        <h3 class="font-bold text-dark text-sm mb-1">Naturalne</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">Logiczne konsekwencje, wewnętrzna motywacja i samoregulacja zachowania.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Rutyny wspierające naukę</h2>
+                    <div class="space-y-3">
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="flex items-center gap-3 mb-3">
+                                <i data-lucide="sun" class="w-5 h-5 text-amber-600"></i>
+                                <h3 class="font-bold text-dark">Poranek</h3>
+                            </div>
+                            <p class="text-sm text-text leading-relaxed">Zorganizuj ubieranie, śniadanie i pakowanie tak, by wykonanie obowiązków naturalnie prowadziło do lubianego wyboru, piosenki w samochodzie lub kilku minut zabawy.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="flex items-center gap-3 mb-3">
+                                <i data-lucide="utensils" class="w-5 h-5 text-amber-600"></i>
+                                <h3 class="font-bold text-dark">Posiłki</h3>
+                            </div>
+                            <p class="text-sm text-text leading-relaxed">Wykorzystuj przygotowanie posiłku, zachowanie przy stole, próbowanie jedzenia i sprzątanie jako okazje do uczestnictwa w życiu rodziny.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="flex items-center gap-3 mb-3">
+                                <i data-lucide="puzzle" class="w-5 h-5 text-amber-600"></i>
+                                <h3 class="font-bold text-dark">Zabawa</h3>
+                            </div>
+                            <p class="text-sm text-text leading-relaxed">Dzielenie się, pomysłowość i sprawne sprzątanie zwiększają przyjemność z zabawy i wydłużają pozytywną interakcję.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="flex items-center gap-3 mb-3">
+                                <i data-lucide="moon" class="w-5 h-5 text-amber-600"></i>
+                                <h3 class="font-bold text-dark">Pora snu</h3>
+                            </div>
+                            <p class="text-sm text-text leading-relaxed">Spokojna rutyna sprzyja bliskości: czytaniu, wyciszeniu, przytulaniu i poczuciu sprawczości na zakończenie dnia.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Gotowe zdania</h2>
+                    <div class="space-y-3">
+                        <p class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-sm text-dark leading-relaxed">
+                            „Dzięki twojej pomocy przy nakrywaniu do stołu możesz dziś wybrać, gdzie wszyscy usiądą”.</p>
+                        <p class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-sm text-dark leading-relaxed">
+                            „Kiedy dotykasz delikatnie, twój kolega chętniej bawi się z tobą dalej”.</p>
+                        <p class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-sm text-dark leading-relaxed">
+                            „Po sprzątaniu w twoim pokoju jest spokojniej. Masz więcej miejsca do zabawy”.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Obowiązki dopasowane do wieku</h2>
+                    <div class="grid gap-3">
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Wiek od 2 do 4 lat</h3>
+                            <p class="text-sm text-text leading-relaxed">Wkładanie zabawek do pojemników, przenoszenie lekkich rzeczy, karmienie zwierzęcia pod nadzorem i układanie serwetek na stole.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Wiek od 5 do 8 lat</h3>
+                            <p class="text-sm text-text leading-relaxed">Ścielenie łóżka, odkładanie czystych ubrań i naczyń oraz podlewanie roślin.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Wiek od 9 do 12 lat</h3>
+                            <p class="text-sm text-text leading-relaxed">Proste czynności przy praniu, przygotowanie przekąski, organizowanie miejsca pracy i pomoc w zakupach.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Przygotowanie do wyjść w miejsca publiczne</h2>
+                    <div
+                        class="relative pl-8 space-y-7 before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-amber-500 before:to-gray-200">
+                        <div class="relative">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-amber-500 text-white text-xs font-bold flex items-center justify-center ring-4 ring-background">1</span>
+                            <h3 class="font-bold text-dark">Zapowiedź</h3>
+                            <p class="text-sm text-text leading-relaxed">Opisz, dokąd idziecie, co się wydarzy i jakie zachowanie pomoże wam dobrze spędzić czas.</p>
+                        </div>
+                        <div class="relative">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-amber-500 text-white text-xs font-bold flex items-center justify-center ring-4 ring-background">2</span>
+                            <h3 class="font-bold text-dark">Powiąż wybory z ich skutkami</h3>
+                            <p class="text-sm text-text leading-relaxed">Wyjaśnij, jak trzymanie się blisko, spokojny głos i czekanie sprawiają, że wyjście jest przyjemniejsze.</p>
+                        </div>
+                        <div class="relative">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-amber-500 text-white text-xs font-bold flex items-center justify-center ring-4 ring-background">3</span>
+                            <h3 class="font-bold text-dark">Zaplanuj sprzyjające warunki</h3>
+                            <p class="text-sm text-text leading-relaxed">Wybierz odpowiednią porę, uwzględnij potrzeby sensoryczne i zacznij od sytuacji o niewielkich wymaganiach.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Częste błędy, których warto unikać</h2>
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
+                        <p class="text-sm text-text leading-relaxed"><strong class="text-dark">Nadmierne chwalenie:</strong> zamiast automatycznego „świetnie” wskaż naturalną konsekwencję, którą można zaobserwować.</p>
+                        <p class="text-sm text-text leading-relaxed"><strong class="text-dark">Wyręczanie:</strong> chronienie dziecka przed każdą logiczną konsekwencją ogranicza uczenie się.</p>
+                        <p class="text-sm text-text leading-relaxed"><strong class="text-dark">Niespójność:</strong> dorośli mogą działać różnie, ale powinni kierować się zgodnymi zasadami.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-7 text-center space-y-5 shadow-sm border border-gray-100">
+                    <div class="w-12 h-12 bg-action/10 rounded-2xl flex items-center justify-center mx-auto text-action">
+                        <i data-lucide="download" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-2xl font-bold text-dark">Pobierz przewodnik dla rodziców</h3>
+                        <p class="text-sm text-text leading-relaxed">Wykorzystaj PDF, aby przekazać rodzicom pełne założenia lub wrócić do przykładów codziennych rutyn.</p>
+                    </div>
+                    <a href="../assets/pl/pat/zestaw-coachingowy-dla-rodzicow.pdf" download="zestaw-coachingowy-dla-rodzicow.pdf"
+                        class="w-full py-4 rounded-xl bg-action text-white font-bold hover:bg-green-600 transition-all flex items-center justify-center gap-3 shadow-lg shadow-action/20 active:scale-95">
+                        <span>Pobierz PDF</span>
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        
+        <div id="program-view-aba-emergency-pack"
+            class="tab-content hidden fixed inset-0 z-[60] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+            <div
+                class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+                <button onclick="closeUpsellView('program-view-aba-emergency-pack')"
+                    class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div class="flex-1 text-center pr-14">
+                    <span class="text-xs font-bold uppercase tracking-widest text-action">Zestaw awaryjny ABA</span>
+                </div>
+            </div>
+
+            <div class="max-w-md mx-auto px-6 py-8 space-y-10">
+                <div class="space-y-4">
+                    <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center">
+                        <i data-lucide="siren" class="w-7 h-7"></i>
+                    </div>
+                    <h1 class="text-3xl font-black text-dark leading-tight">Szybkie procedury reagowania w kryzysie</h1>
+                    <p class="text-lg text-text leading-relaxed font-medium">Zestaw szybkich reakcji na przeciążenie, agresję, wycofanie, zamrożenie i powrót do równowagi po kryzysie.</p>
+                </div>
+
+                <div class="bg-rose-50 rounded-2xl border border-rose-100 p-5 space-y-3">
+                    <p class="text-xs font-bold text-rose-700 uppercase tracking-wider">Kluczowa zasada</p>
+                    <p class="text-rose-950 font-medium leading-relaxed">Pierwsze 30 sekund wpływa na dalszy przebieg kryzysu. Bezpieczeństwo, spokojniejszy głos, ograniczenie wymagań i spokojna obecność mają pierwszeństwo przed nauczaniem.</p>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Rozpoznaj rodzaj kryzysu</h2>
+                    <div class="grid gap-3">
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Gwałtowne przeciążenie</h3>
+                            <p class="text-sm text-text leading-relaxed">Silny płacz, krzyk, pobudzenie i trudność w przetwarzaniu poleceń. Dziecko chwilowo nie jest gotowe na rozumowanie.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Zachowanie agresywne</h3>
+                            <p class="text-sm text-text leading-relaxed">Bicie, gryzienie, groźby, rzucanie przedmiotami lub agresywne wypowiedzi. Priorytetem jest bezpieczeństwo bez zawstydzania.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Wycofanie lub zamrożenie</h3>
+                            <p class="text-sm text-text leading-relaxed">Milczenie, wycofanie, nieobecny wzrok lub minimalne reakcje. Nacisk słowny może nasilać wycofanie.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Procedury natychmiastowe</h2>
+                    <div class="space-y-4">
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span
+                                    class="w-8 h-8 rounded-full bg-rose-100 text-rose-600 text-sm font-bold flex items-center justify-center">1</span>
+                                <h3 class="font-bold text-dark">Przeciążenie</h3>
+                            </div>
+                            <p class="text-sm text-text leading-relaxed">Zadbaj o bezpieczeństwo, ścisz głos, ogranicz wymagania, zaczekaj na spadek napięcia i wspieraj bez wdawania się w dyskusję.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span
+                                    class="w-8 h-8 rounded-full bg-rose-100 text-rose-600 text-sm font-bold flex items-center justify-center">2</span>
+                                <h3 class="font-bold text-dark">Agresja</h3>
+                            </div>
+                            <p class="text-sm text-text leading-relaxed">Odsuń inne osoby. Pozostań w zasięgu wzroku, ale poza zasięgiem uderzenia. Spokojnie postaw granicę i zaproponuj inne działanie: pchanie poduszki, tupanie lub ściskanie dłoni.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span
+                                    class="w-8 h-8 rounded-full bg-rose-100 text-rose-600 text-sm font-bold flex items-center justify-center">3</span>
+                                <h3 class="font-bold text-dark">Wycofanie lub zamrożenie</h3>
+                            </div>
+                            <p class="text-sm text-text leading-relaxed">Ogranicz bodźce, usiądź w pobliżu bez wymagania kontaktu wzrokowego, zaproponuj dwie proste możliwości i w razie potrzeby zaczekaj od 10 do 20 minut.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Czego unikać</h2>
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
+                        <p class="text-sm text-text leading-relaxed">Nie podnoś głosu ani nie próbuj przekrzyczeć dziecka.</p>
+                        <p class="text-sm text-text leading-relaxed">Podczas epizodu nie zadawaj pytań „dlaczego”.</p>
+                        <p class="text-sm text-text leading-relaxed">W szczycie kryzysu nie ucz, nie wygłaszaj pouczeń i nie groź konsekwencjami.</p>
+                        <p class="text-sm text-text leading-relaxed">Nie stosuj ograniczania ruchów, chyba że występuje bezpośrednie zagrożenie, a działanie jest zgodne z wymaganymi procedurami i przeszkoleniem.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Zdania pomagające obniżyć napięcie</h2>
+                    <div class="space-y-3">
+                        <p class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-sm text-dark leading-relaxed">
+                            „Widzę, że jest ci bardzo trudno”.</p>
+                        <p class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-sm text-dark leading-relaxed">
+                            „Przy mnie możesz czuć się bezpiecznie”.</p>
+                        <p class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-sm text-dark leading-relaxed">
+                            „Zostanę tutaj”.</p>
+                        <p class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-sm text-dark leading-relaxed">
+                            „Mamy czas”.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Ciało, przestrzeń i regulacja</h2>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                            <i data-lucide="hand" class="w-6 h-6 text-rose-600 mb-3"></i>
+                            <h3 class="font-bold text-dark text-sm">Bezpieczna postawa</h3>
+                            <p class="text-xs text-gray-500 leading-relaxed">Widoczne dłonie, rozluźnione ramiona i powolne ruchy.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                            <i data-lucide="volume-1" class="w-6 h-6 text-rose-600 mb-3"></i>
+                            <h3 class="font-bold text-dark text-sm">Łagodny głos</h3>
+                            <p class="text-xs text-gray-500 leading-relaxed">Ton głosu często pomaga regulować napięcie bardziej niż same słowa.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                            <i data-lucide="sofa" class="w-6 h-6 text-rose-600 mb-3"></i>
+                            <h3 class="font-bold text-dark text-sm">Spokojne miejsce</h3>
+                            <p class="text-xs text-gray-500 leading-relaxed">Poduszki, różne faktury, zabawki sensoryczne i karty oddechowe.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                            <i data-lucide="activity" class="w-6 h-6 text-rose-600 mb-3"></i>
+                            <h3 class="font-bold text-dark text-sm">Ruch</h3>
+                            <p class="text-xs text-gray-500 leading-relaxed">Pchanie ściany, aktywności z oporem i rytmiczny spacer.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Po kryzysie</h2>
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
+                        <p class="text-sm text-text leading-relaxed"><strong class="text-dark">Łagodny powrót do kontaktu:</strong>
+                            przed rozmową zaproponuj lubianą aktywność o niewielkich wymaganiach.</p>
+                        <p class="text-sm text-text leading-relaxed"><strong class="text-dark">Sprawdź potrzeby:</strong> woda, toaleta, przekąska i przerwa sensoryczna.</p>
+                        <p class="text-sm text-text leading-relaxed"><strong class="text-dark">Zapisz:</strong> datę, czas trwania, czynniki wyzwalające, obserwowalne zachowanie, zastosowane interwencje i potrzebne dalsze działania.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-7 text-center space-y-5 shadow-sm border border-gray-100">
+                    <div class="w-12 h-12 bg-action/10 rounded-2xl flex items-center justify-center mx-auto text-action">
+                        <i data-lucide="download" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-2xl font-bold text-dark">Pobierz pełny pakiet</h3>
+                        <p class="text-sm text-text leading-relaxed">Zachowaj PDF ze szczegółowymi procedurami, dokumentacją i wskazówkami dostosowania do indywidualnych potrzeb.</p>
+                    </div>
+                    <a href="../assets/pl/pat/zestaw-awaryjny-aba.pdf" download="zestaw-awaryjny-aba.pdf"
+                        class="w-full py-4 rounded-xl bg-action text-white font-bold hover:bg-green-600 transition-all flex items-center justify-center gap-3 shadow-lg shadow-action/20 active:scale-95">
+                        <span>Pobierz PDF</span>
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        
+        <div id="program-view-therapist-survival-guide"
+            class="tab-content hidden fixed inset-0 z-[60] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+            <div
+                class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+                <button onclick="closeUpsellView('program-view-therapist-survival-guide')"
+                    class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div class="flex-1 text-center pr-14">
+                    <span class="text-xs font-bold uppercase tracking-widest text-action">Przewodnik po dobrostanie dla specjalistów ABA</span>
+                </div>
+            </div>
+
+            <div class="max-w-md mx-auto px-6 py-8 space-y-10">
+                <div class="space-y-4">
+                    <div class="w-14 h-14 rounded-2xl bg-lime-50 text-lime-600 flex items-center justify-center">
+                        <i data-lucide="leaf" class="w-7 h-7"></i>
+                    </div>
+                    <h1 class="text-3xl font-black text-dark leading-tight">Rutyna chroniąca twoją energię</h1>
+                    <p class="text-lg text-text leading-relaxed font-medium">Praktyczny plan wspierający produktywność bez wyczerpywania zasobów emocjonalnych potrzebnych do pracy terapeutycznej.</p>
+                    <p class="text-sm text-gray-500 leading-relaxed border-l-4 border-lime-200 pl-4 py-1 italic">
+                        Dbaj o jakość swojej obecności podczas sesji. To ona wspiera skuteczność interwencji i wyznacza rozsądne tempo pracy.</p>
+                </div>
+
+                <div class="bg-lime-50 rounded-2xl border border-lime-100 p-5 space-y-3">
+                    <p class="text-xs font-bold text-lime-700 uppercase tracking-wider">Punkt wyjścia</p>
+                    <p class="text-lime-950 font-medium leading-relaxed">Zasoby potrzebne do pracy emocjonalnej są ograniczone. Jeśli w planie dnia brakuje regeneracji, odbędzie się to kosztem energii na kolejny dzień.</p>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Przyjrzyj się swojej energii</h2>
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
+                        <p class="text-sm text-text leading-relaxed">Przez dwa tygodnie oceniaj energię od 1 do 10 przed sesjami, po sesjach i na koniec dnia. Szukaj prawidłowości, nie perfekcji.</p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <span class="bg-gray-50 rounded-xl p-3 text-xs font-bold text-dark">Godziny największej energii</span>
+                            <span class="bg-gray-50 rounded-xl p-3 text-xs font-bold text-dark">Wymagające sesje</span>
+                            <span class="bg-gray-50 rounded-xl p-3 text-xs font-bold text-dark">Łatwe zadania</span>
+                            <span class="bg-gray-50 rounded-xl p-3 text-xs font-bold text-dark">Spadki energii</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Codzienny bilans energii</h2>
+                    <div class="grid gap-3">
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i data-lucide="battery-full" class="w-5 h-5 text-lime-600"></i>
+                                <h3 class="font-bold text-dark">Duży nakład energii</h3>
+                            </div>
+                            <p class="text-sm text-text leading-relaxed">Kryzysy, pierwsze oceny, praca z traumą i trudne spotkania. Ogranicz je do 2 lub 3 bloków dziennie i planuj na godziny, w których masz najwięcej sił.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i data-lucide="battery-medium" class="w-5 h-5 text-lime-600"></i>
+                                <h3 class="font-bold text-dark">Średni nakład energii</h3>
+                            </div>
+                            <p class="text-sm text-text leading-relaxed">Rutynowe sesje, superwizja, przygotowanie materiałów i zaplanowane rozmowy telefoniczne.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i data-lucide="battery-low" class="w-5 h-5 text-lime-600"></i>
+                                <h3 class="font-bold text-dark">Mały nakład energii</h3>
+                            </div>
+                            <p class="text-sm text-text leading-relaxed">Porządkowanie dokumentów, szablony, proste wiadomości i lekkie planowanie. Zostaw je na pory naturalnego spadku energii.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Regeneracja w 5 minut</h2>
+                    <div
+                        class="relative pl-8 space-y-7 before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-lime-500 before:to-gray-200">
+                        <div class="relative">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-lime-600 text-white text-xs font-bold flex items-center justify-center ring-4 ring-background">1</span>
+                            <h3 class="font-bold text-dark">Oddychaj</h3>
+                            <p class="text-sm text-text leading-relaxed">Poświęć dwie minuty na powolne oddychanie, aby przekazać układowi nerwowemu sygnał bezpieczeństwa.</p>
+                        </div>
+                        <div class="relative">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-lime-600 text-white text-xs font-bold flex items-center justify-center ring-4 ring-background">2</span>
+                            <h3 class="font-bold text-dark">Zapisz najważniejsze informacje</h3>
+                            <p class="text-sm text-text leading-relaxed">Zanotuj kilka słów o tym, co trzeba zapamiętać przed sporządzeniem pełnej notatki.</p>
+                        </div>
+                        <div class="relative">
+                            <span
+                                class="absolute -left-[2.15rem] top-0 w-6 h-6 rounded-full bg-lime-600 text-white text-xs font-bold flex items-center justify-center ring-4 ring-background">3</span>
+                            <h3 class="font-bold text-dark">Poruszaj się</h3>
+                            <p class="text-sm text-text leading-relaxed">Wstań, napij się wody, rozluźnij szczękę i ramiona. Dopiero potem przejdź do kolejnej sesji.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Planowanie chroniące zasoby</h2>
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
+                        <p class="text-sm text-text leading-relaxed">Przerwy między sesjami pomagają zarządzać czasem i obciążeniem klinicznym. Ograniczają przenoszenie napięcia z jednej sesji na następną.</p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <span class="bg-lime-50 text-lime-900 rounded-xl p-3 text-xs font-bold">Przerwa od 10 do 15 minut</span>
+                            <span class="bg-lime-50 text-lime-900 rounded-xl p-3 text-xs font-bold">Krótkie notatki</span>
+                            <span class="bg-lime-50 text-lime-900 rounded-xl p-3 text-xs font-bold">Oddychanie</span>
+                            <span class="bg-lime-50 text-lime-900 rounded-xl p-3 text-xs font-bold">Regulacja sensoryczna</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Sprawna dokumentacja</h2>
+                    <div class="grid gap-3">
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Szablony notatek</h3>
+                            <p class="text-sm text-text leading-relaxed">Przygotuj powtarzalną strukturę obejmującą cele, interwencje, dane, reakcję klienta i kolejne kroki.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Krótka notatka głosowa</h3>
+                            <p class="text-sm text-text leading-relaxed">Po sesji nagraj od 2 do 3 minut najważniejszych obserwacji, zanim szczegóły umkną z pamięci.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-dark mb-1">Zadania administracyjne w blokach</h3>
+                            <p class="text-sm text-text leading-relaxed">Grupuj zadania administracyjne, aby ograniczyć częste przełączanie uwagi, które niepostrzeżenie zużywa energię.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Odmawiaj profesjonalnie</h2>
+                    <div class="space-y-3">
+                        <p class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-sm text-dark leading-relaxed">
+                            „Dziękuję za propozycję. Aby zachować jakość obecnej pracy klinicznej, nie mogę przyjąć dodatkowego terminu w tym tygodniu”.</p>
+                        <p class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-sm text-dark leading-relaxed">
+                            „Rozsądniej będzie zacząć od krótkiej konsultacji, a następnie ustalić, jaki zakres wsparcia jest rzeczywiście potrzebny”.</p>
+                        <p class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-sm text-dark leading-relaxed">
+                            „Ta potrzeba wymaga dyspozycyjności, której teraz nie mogę zapewnić. Oto najbliższy realny termin”.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <h2 class="text-2xl font-bold text-dark">Cotygodniowy przegląd równowagi</h2>
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
+                        <p class="text-sm text-text leading-relaxed"><strong class="text-dark">Energia:</strong> czy dbam o stały poziom energii, czy ignoruję sygnały wyczerpania?</p>
+                        <p class="text-sm text-text leading-relaxed"><strong class="text-dark">Granice:</strong> która zgoda na dodatkowe zadanie kosztuje mnie zbyt wiele w tym tygodniu?</p>
+                        <p class="text-sm text-text leading-relaxed"><strong class="text-dark">Regeneracja:</strong> czy przerwy rzeczywiście pomagają mi odzyskać siły?</p>
+                        <p class="text-sm text-text leading-relaxed"><strong class="text-dark">Wsparcie:</strong> czy w razie potrzeby korzystam z superwizji, pomocy współpracowników i kontaktów zawodowych?</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-7 text-center space-y-5 shadow-sm border border-gray-100">
+                    <div class="w-12 h-12 bg-action/10 rounded-2xl flex items-center justify-center mx-auto text-action">
+                        <i data-lucide="download" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-2xl font-bold text-dark">Pobierz pełny przewodnik</h3>
+                        <p class="text-sm text-text leading-relaxed">Zachowaj PDF z pełną rutyną, systemami dokumentacji i planem długofalowego dbania o siebie w pracy.</p>
+                    </div>
+                    <a href="../assets/pl/pat/przewodnik-po-dobrostanie-dla-specjalistow-aba.pdf" download="przewodnik-po-dobrostanie-dla-specjalistow-aba.pdf"
+                        class="w-full py-4 rounded-xl bg-action text-white font-bold hover:bg-green-600 transition-all flex items-center justify-center gap-3 shadow-lg shadow-action/20 active:scale-95">
+                        <span>Pobierz PDF</span>
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    
+    <div id="program-view-vbmapp-companion"
+        class="tab-content hidden fixed inset-0 z-[60] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+        
+        <div
+            class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+            <button onclick="closeVbmappCompanion()"
+                class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+            </button>
+            <div class="flex-1 text-center pr-14">
+                <span class="text-xs font-bold uppercase tracking-widest text-action">Szkolenie po ocenie</span>
+            </div>
+        </div>
+
+        <div class="max-w-md mx-auto px-6 py-8 space-y-12">
+            
+            <div class="space-y-4">
+                <h1 class="text-3xl font-black text-dark leading-tight">Szkolenie po ocenie</h1>
+                <p class="text-lg text-text leading-relaxed font-medium">Przekładaj wyniki oceny na jasne i skuteczne decyzje dotyczące interwencji.</p>
+            </div>
+
+            
+            <div class="space-y-4">
+                <div class="bg-orange-50 rounded-[2rem] p-6 border border-orange-100 space-y-4">
+                    <p class="text-orange-900 font-medium leading-relaxed">
+                        Ukończenie oceny VB-MAPP to ważny etap. Wielu specjalistów nie ma jednak pewności, jakie działania podjąć później.
+                    </p>
+                    <p class="text-orange-900 font-medium leading-relaxed">
+                        Same wyniki nie zapewniają postępów. Trzeba przełożyć dane z oceny na trafne decyzje dydaktyczne, które ukierunkują codzienne sesje.
+                    </p>
+                    <div class="h-px bg-orange-200 w-full"></div>
+                    <p class="text-orange-900 font-bold">
+                        Na tym etapie wiele programów traci przejrzystość, spójność i skuteczność.
+                    </p>
+                </div>
+            </div>
+
+            
+            <div class="space-y-6">
+                <div class="space-y-2">
+                    <h2 class="text-2xl font-bold text-dark">W czym pomaga to szkolenie</h2>
+                    <p class="text-text leading-relaxed">Szkolenie po ocenie pomaga specjalistom przekładać dane z oceny na uporządkowane plany interwencji, które można realizować z poczuciem pewności.</p>
+                    <p class="text-text leading-relaxed">Dzięki tym materiałom możesz:</p>
+                </div>
+
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-3">
+                        <div
+                            class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                        </div>
+                        <span class="text-dark font-medium leading-relaxed">Interpretować wyniki VB-MAPP w praktyce</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div
+                            class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                        </div>
+                        <span class="text-dark font-medium leading-relaxed">Ustalać, czego uczyć w następnej kolejności i dlaczego</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div
+                            class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                        </div>
+                        <span class="text-dark font-medium leading-relaxed">Wybierać między DTT a nauczaniem naturalistycznym na podstawie danych</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div
+                            class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                        </div>
+                        <span class="text-dark font-medium leading-relaxed">Strategicznie dostosowywać wzmocnienia i podpowiedzi</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div
+                            class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                        </div>
+                        <span class="text-dark font-medium leading-relaxed">Utrwalać umiejętności i wspierać ich uogólnianie</span>
+                    </li>
+                </ul>
+
+                <p class="text-sm text-gray-500 italic border-l-4 border-blue-200 pl-3 py-1">
+                    Nacisk położono na praktyczne rozumowanie kliniczne.
+                </p>
+            </div>
+
+            
+            <div class="space-y-6">
+                <h2 class="text-2xl font-bold text-dark">Co zawiera program</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-2">
+                        <i data-lucide="film" class="w-6 h-6 text-action"></i>
+                        <span class="font-bold text-dark text-sm">Objaśnienia wideo krok po kroku</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-2">
+                        <i data-lucide="brain-circuit" class="w-6 h-6 text-action"></i>
+                        <span class="font-bold text-dark text-sm">Schematy podejmowania decyzji</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-2">
+                        <i data-lucide="bar-chart-3" class="w-6 h-6 text-action"></i>
+                        <span class="font-bold text-dark text-sm">Praktyczne przykłady oparte na rzeczywistych scenariuszach oceny</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-2">
+                        <i data-lucide="infinity" class="w-6 h-6 text-action"></i>
+                        <span class="font-bold text-dark text-sm">Dostęp bez ograniczeń czasowych</span>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div
+                class="bg-white rounded-[2rem] p-8 text-center space-y-6 shadow-sm border border-gray-100 relative overflow-hidden group">
+                
+                <div
+                    class="absolute top-0 right-0 w-40 h-40 bg-action/5 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-action/10 transition-colors duration-500">
+                </div>
+
+                <div class="relative z-10 space-y-4">
+                    <div
+                        class="w-12 h-12 bg-action/10 rounded-2xl flex items-center justify-center mx-auto mb-2 text-action shadow-sm">
+                        <i data-lucide="lock" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-2xl font-bold text-dark">Otwórz szkolenie</h3>
+                        <p class="text-text text-sm leading-relaxed px-4">Dostęp do tego programu wymaga odpowiedniego zakupu.</p>
+                    </div>
+                </div>
+                <button onclick="openVbmappVideos()"
+                    class="w-full py-4 rounded-xl bg-action text-white font-bold hover:bg-green-600 transition-all flex items-center justify-center gap-3 relative z-10 shadow-lg shadow-action/20 hover:scale-[1.02] active:scale-95 text-lg">
+                    <span>Otwórz szkolenie</span>
+                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+
+        </div>
+    </div>
+
+    
+    <div id="vbmapp-videos-view"
+        class="tab-content hidden fixed inset-0 z-[70] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+        
+        <div
+            class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+            <button onclick="closeVbmappVideos()"
+                class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+            </button>
+            <div class="flex-1 text-center pr-14">
+                <span class="text-xs font-bold uppercase tracking-widest text-action">Moduły kursu</span>
+            </div>
+        </div>
+
+        <div class="max-w-md mx-auto px-6 py-8 space-y-6">
+            <div class="space-y-4">
+                <h1 class="text-2xl font-black text-dark leading-tight">Lekcje wideo</h1>
+                <p class="text-text leading-relaxed">Wybierz lekcję, aby sprawdzić jej dostępność.</p>
+            </div>
+
+            
+            <div id="vbmapp-video-list-container" class="space-y-3">
+                
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="vbmapp-video-player-view"
+        class="tab-content hidden fixed inset-0 z-[80] bg-background overflow-y-auto pb-32 animate-in slide-in-from-right duration-300">
+        
+        <div
+            class="sticky top-0 bg-background/90 backdrop-blur-md border-b border-gray-100 px-6 h-16 flex items-center gap-4 z-10 text-dark">
+            <button onclick="closeVbmappPlayer()"
+                class="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-text hover:text-action transition-colors active:scale-95">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+            </button>
+            <div class="flex-1 text-center pr-14">
+                <span class="text-xs font-bold uppercase tracking-widest text-action">Wybrana lekcja</span>
+            </div>
+        </div>
+
+        <div class="max-w-md mx-auto px-6 py-6 space-y-6">
+            <h2 id="video-player-title" class="text-xl font-bold text-dark leading-tight"></h2>
+
+            <div id="video-player-container" class="w-full rounded-2xl overflow-hidden shadow-lg bg-black">
+                
+            </div>
+        </div>
+    </div>
+
+    
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-t border-gray-100 z-50">
+        <div class="max-w-md mx-auto px-6 h-20 flex items-center justify-around">
+
+            <button class="nav-btn w-12 h-12 flex flex-col items-center justify-center gap-1 text-action transition-all"
+                onclick="switchTab('home')">
+                <i data-lucide="home" class="w-6 h-6"></i>
+                <span class="text-[0.6rem] font-bold">Start</span>
+            </button>
+
+            <button
+                class="nav-btn w-12 h-12 flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-action transition-all"
+                onclick="switchTab('programs')">
+                <i data-lucide="layers" class="w-6 h-6"></i>
+                <span class="text-[0.6rem] font-bold">Programy</span>
+            </button>
+
+            <button
+                class="nav-btn w-12 h-12 flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-action transition-all"
+                onclick="switchTab('feed')">
+                <i data-lucide="newspaper" class="w-6 h-6"></i>
+                <span class="text-[0.6rem] font-bold">Aktualności</span>
+            </button>
+
+            <button
+                class="nav-btn w-12 h-12 flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-action transition-all"
+                onclick="switchTab('profile')">
+                <i data-lucide="user" class="w-6 h-6"></i>
+                <span class="text-[0.6rem] font-bold">Profil</span>
+            </button>
+
+        </div>
+    </nav>
+
+    <script src="app.js"></script>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const CHECKOUT_LINKS = {
+  "35_protocols": "",
+  "naturalistic_mastery": "",
+  "pratical_toolkit": "https://pay.snappcheckout.com/tp0r1yto1dsndmnz",
+  "20_session_plans": "",
+  "30_functional_play": "",
+  "15_intervention_protocols": "",
+  "17_guided_aba": "",
+  "school_readiness": "",
+  "emotional_recognition": "",
+  "autism_safety": "",
+  "aba_playful": "",
+  "vbmapp_implementation": "https://pay.snappcheckout.com/s6g6cyl9ef13rcnt",
+  "aba_business_kit": "https://pay.snappcheckout.com/leu5ijy8kbjivs7g",
+  "parent_training_kit": "https://pay.snappcheckout.com/61abq0z8ix0matax",
+  "aba_emergency_pack": "https://pay.snappcheckout.com/t200yahc107lrwlf",
+  "therapist_survival_guide": "https://pay.snappcheckout.com/3nnrofk31d35emn0"
+};
+        const AVAILABLE_PRODUCT_SLUGS = new Set(Object.keys(CHECKOUT_LINKS));
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const SUPABASE_URL = 'https://tjxfjwhpillhudgqtusf.supabase.co';
+            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqeGZqd2hwaWxsaHVkZ3F0dXNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMzE3ODMsImV4cCI6MjA4NTkwNzc4M30.on32sO1OAx9NWZZr4oOA2b2Z_Gk5BesQ7xhtMAMDpXc';
+
+            // Product Mapping (Reference)
+            const PRODUCT_MAPPING = {};
+
+
+
+            let supabase;
+
+            try {
+                if (window.supabase) {
+                    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                    window.supabaseClient = supabase; // Expose globally
+                } else {
+                    throw new Error('Nie udało się załadować biblioteki Supabase.');
+                }
+
+                await verifyAccess(supabase);
+
+            } catch (err) {
+                console.error('Critical Error in Access System:', err);
+                // Fallback: Lock everything if system fails
+                lockAllFallback();
+            }
+        });
+
+        async function verifyAccess(supabase) {
+            const storedAuth = localStorage.getItem('abatools_auth');
+            let email = null;
+
+            if (storedAuth) {
+                try {
+                    const parsed = JSON.parse(storedAuth);
+                    if (parsed && parsed.email) email = parsed.email.trim().toLowerCase();
+                } catch (e) { console.error('Auth parse error', e); }
+            }
+
+            if (!email) {
+                console.warn('Brak zalogowanego użytkownika. Dostęp do treści jest zablokowany.');
+                applyLocks(new Set());
+                return;
+            }
+
+            console.log('Verifying access for:', email);
+
+            // 1. Ask the server what this e-mail owns. user_access / product_rules are closed to the
+            //    public key; the app_login RPC returns only this e-mail's customIds and unlocked slugs.
+            //    (It also refreshes last_access, which used to be a client-side UPDATE.)
+            const { data: access, error: accessError } = await supabase.rpc('app_login', { p_email: email });
+
+            if (accessError || !access || !access.ok) {
+                console.warn('No access records found for user or error:', accessError);
+                applyLocks(new Set());
+                return;
+            }
+
+            const productIds = (access.product_ids || []).map(id => String(id).trim()).filter(id => id.length > 0);
+            console.log('Found Product IDs:', productIds);
+
+            if (productIds.length === 0) {
+                console.warn('User has records but no valid numeric product_ids found.');
+                applyLocks(new Set());
+                return;
+            }
+
+            // 2. Slugs unlocked by product_rules (matched server side)
+            const allowedSlugs = new Set((access.slugs || []).map(slug => String(slug).trim()).filter(Boolean));
+            console.log('Matched Rules:', Array.from(allowedSlugs));
+
+            console.log('Final Allowed Slugs:', Array.from(allowedSlugs));
+
+            // Update UI Active Count
+            const activeTag = document.getElementById('active-products-tag');
+            if (activeTag) {
+                const count = allowedSlugs.size;
+                activeTag.textContent = `${count} AKTYWNYCH`;
+                activeTag.classList.remove('hidden');
+            }
+
+            // 3. Apply Locks
+            applyLocks(allowedSlugs);
+        }
+
+        function lockAllFallback() {
+            applyLocks(new Set());
+        }
+
+        function applyLocks(allowedSlugs) {
+            const cards = document.querySelectorAll('[data-slug]');
+            console.log(`Processing ${cards.length} program cards...`);
+
+            cards.forEach(card => {
+                const slug = card.getAttribute('data-slug');
+                const isAllowed = allowedSlugs.has(slug);
+                if (!isAllowed && !CHECKOUT_LINKS[slug]) { card.remove(); return; }
+
+                // console.log(`Card [${slug}]: ${isAllowed ? 'UNLOCKED' : 'LOCKED'}`);
+
+                if (!isAllowed) {
+                    lockCard(card);
+                } else {
+                    // Ensure it's unlocked (remove overlay if exists, though we start clean usually)
+                    unlockCard(card);
+                }
+            });
+
+            // Re-render icons for any newly added overlays
+            try { lucide.createIcons(); } catch (e) { }
+
+            // Distribute cards between the "My Programs" and "Offers" sub-tabs
+            organizePrograms(allowedSlugs);
+        }
+
+        // Move owned cards into the "My Programs" pane and locked cards into the "Offers"
+        // pane, then update counters, the nudge banner and the empty states.
+        function organizePrograms(allowedSlugs) {
+            const ownedContainer = document.getElementById('owned-container');
+            const offersContainer = document.getElementById('offers-container');
+            if (!ownedContainer || !offersContainer) return;
+
+            const cards = document.querySelectorAll('#tab-programs [data-slug]');
+            let ownedCount = 0;
+            let offersCount = 0;
+
+            cards.forEach(card => {
+                const slug = card.getAttribute('data-slug');
+                if (allowedSlugs.has(slug)) {
+                    ownedContainer.appendChild(card);
+                    ownedCount++;
+                } else {
+                    offersContainer.appendChild(card);
+                    offersCount++;
+                }
+            });
+
+            // Empty states
+            const ownedEmpty = document.getElementById('owned-empty-state');
+            if (ownedEmpty) ownedEmpty.classList.toggle('hidden', ownedCount > 0);
+            const offersEmpty = document.getElementById('offers-empty-state');
+            if (offersEmpty) offersEmpty.classList.toggle('hidden', offersCount > 0);
+            const offersIntro = document.getElementById('offers-intro');
+            if (offersIntro) offersIntro.classList.toggle('hidden', offersCount === 0);
+
+            // Offers count badge on the selector
+            const badge = document.getElementById('offers-count-badge');
+            if (badge) {
+                badge.textContent = offersCount;
+                badge.classList.toggle('hidden', offersCount === 0);
+            }
+
+            // "X new offers for you" nudge banner on the My Programs pane
+            const banner = document.getElementById('offers-banner');
+            const bannerCount = document.getElementById('offers-banner-count');
+            if (bannerCount) bannerCount.textContent = offersCount;
+            if (banner) banner.classList.toggle('hidden', offersCount === 0);
+
+            try { lucide.createIcons(); } catch (e) { }
+        }
+
+        function lockCard(card) {
+            // Already processed?
+            if (card.dataset.locked === 'true') return;
+            card.dataset.locked = 'true';
+
+            const slug = card.getAttribute('data-slug');
+            const checkoutUrl = CHECKOUT_LINKS[slug];
+
+            const goToCheckout = function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (checkoutUrl) window.location.href = checkoutUrl;
+            };
+
+            // No gray mask and no center lock icon: the card text stays fully readable.
+            // The whole card is clickable toward the checkout.
+            if (checkoutUrl) {
+                card.style.cursor = 'pointer';
+                card.onclick = goToCheckout;
+            } else {
+                card.style.cursor = 'default';
+            }
+
+            // Turn the action button/link into an orange "locked" CTA.
+            const actionElements = card.querySelectorAll('button, a');
+            actionElements.forEach(el => {
+                if (el.tagName === 'A') {
+                    el.removeAttribute('href');
+                    el.removeAttribute('download');
+                }
+                el.removeAttribute('onclick');
+                el.disabled = false;
+                el.style.pointerEvents = '';
+                el.onclick = checkoutUrl ? goToCheckout : null;
+                el.className = 'w-full py-2.5 rounded-xl border border-orange-300 bg-orange-50 text-orange-600 font-bold text-sm hover:bg-orange-100 transition-colors flex items-center justify-center gap-2';
+                el.innerHTML = '<i data-lucide="lock" class="w-4 h-4"></i><span>Odblokuj program</span>';
+            });
+
+            try { lucide.createIcons(); } catch (e) { }
+        }
+
+        function unlockCard(card) {
+            // Remove overlay if present (useful for re-verification without reload)
+            const overlay = card.querySelector('.locked-overlay');
+            if (overlay) overlay.remove();
+            // We do not restore buttons automatically because we removed attributes. 
+            // This function assumes page load state is "unlocked" by default HTML.
+        }
+
+        function logout() {
+            localStorage.removeItem('abatools_auth');
+            window.location.href = 'login.html';
+        }
+
+        window.openNaturalisticMastery = function () {
+            const view = document.getElementById('program-view-naturalistic-mastery');
+            if (view) {
+                view.classList.remove('hidden');
+                view.classList.add('block');
+                view.style.display = 'block';
+                try { lucide.createIcons(); } catch (e) { }
+            }
+        };
+
+        window.closeNaturalisticMastery = function () {
+            const view = document.getElementById('program-view-naturalistic-mastery');
+            if (view) {
+                view.classList.add('hidden');
+                view.classList.remove('block');
+                view.style.display = '';
+            }
+        };
+    </script>
+</body>
+
+</html>
