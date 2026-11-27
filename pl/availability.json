@@ -180,6 +180,78 @@
       "sha256": "dc74390c8c0934531169bfa7098c7dbb77a28f081358db0941c8876f9e72d8c3",
       "ready": true,
       "pages": 15
+    },
+    {
+      "path": "assets/pl/pat/szkolenie-po-ocenie-v2.pdf",
+      "sha256": "c9dcd1edbc79c756dcddf50684d805765a1f70d722d1779a95a396810618553c",
+      "ready": true,
+      "pages": 15
+    },
+    {
+      "path": "assets/pl/pat/emocje-v2.pdf",
+      "sha256": "54a61f6748ff5e579f8341a69f84209a2dd46e41eb2388d4e0040a4d0db4a0bc",
+      "ready": true,
+      "pages": 20
+    },
+    {
+      "path": "assets/pl/pat/mand-v2.pdf",
+      "sha256": "523d6d25bfd879633ab1a1c27832e57583b2342e66e98e8705a9e83c78c2b3a6",
+      "ready": true,
+      "pages": 51
+    },
+    {
+      "path": "assets/pl/pat/tact-v2.pdf",
+      "sha256": "48cfca558b6cc8fd71c870a7406b838cb2f478b529758b86d124b3570eda8ccf",
+      "ready": true,
+      "pages": 36
+    },
+    {
+      "path": "assets/pl/pat/echoika-v2.pdf",
+      "sha256": "f0106e1b313a3ba673d923622595fde8bd8c956ed7a8442bb973e88c611dbe1c",
+      "ready": true,
+      "pages": 42
+    },
+    {
+      "path": "assets/pl/pat/protokol-skutecznej-korekty-bledow-v2.pdf",
+      "sha256": "146d2925ef9fb6642560848b38165c6221713e537e9b1fdaf84386c5cd5b9e7f",
+      "ready": true,
+      "pages": 11
+    },
+    {
+      "path": "assets/pl/pat/umiejetnosci-intrawerbalne-v2.pdf",
+      "sha256": "45da1f189b0cbb09a63ec118d811211941b15bb8b4523f398a87d9d60275ebb6",
+      "ready": true,
+      "pages": 35
+    },
+    {
+      "path": "assets/pl/pat/system-aba-do-zbierania-danych-i-monitorowania-v2.pdf",
+      "sha256": "4cd662a543009f2b0c15b41f3c69099fe18807fe3f7a091ec34706d07d879739",
+      "ready": true,
+      "pages": 12
+    },
+    {
+      "path": "assets/pl/pat/umiejetnosci-spoleczne-v2.pdf",
+      "sha256": "7ef2db7efdbf8023eda4373724c3abfc172ff1f03856f1309de116c1ed48ef1a",
+      "ready": true,
+      "pages": 30
+    },
+    {
+      "path": "assets/pl/pat/stosowana-analiza-zachowania-v2.pdf",
+      "sha256": "b83526cfa1022c0d37823d23b6e5b89c485a12c07ae0328aa7e6c2fabd9862ab",
+      "ready": true,
+      "pages": 15
+    },
+    {
+      "path": "assets/pl/pat/reagowanie-sluchacza-v2.pdf",
+      "sha256": "70ac70e0fd6358166a033625e2f2eb87627c42d4d24dc26c74cf0b8c6d703f28",
+      "ready": true,
+      "pages": 37
+    },
+    {
+      "path": "assets/pl/pat/reagowanie-sluchacza-wedlug-funkcji-cechy-i-kategorii-v2.pdf",
+      "sha256": "210dff50a7d49f0cb7852f13c075b9396d2eb2750dd77182d67f606daf7980bc",
+      "ready": true,
+      "pages": 25
     }
   ]
 }

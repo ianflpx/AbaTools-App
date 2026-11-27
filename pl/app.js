@@ -9,14 +9,11 @@ function switchTab(tabId) {
             el.id === 'program-view-35' ||
             el.id === 'program-view-toolkit' ||
             el.id === 'toolkit-materials-view' ||
-            el.id === 'program-view-naturalistic-mastery' ||
             el.id === 'program-view-aba-business-kit' ||
             el.id === 'program-view-parent-training-kit' ||
             el.id === 'program-view-aba-emergency-pack' ||
             el.id === 'program-view-therapist-survival-guide' ||
-            el.id === 'program-view-vbmapp-companion' ||
-            el.id === 'vbmapp-videos-view' ||
-            el.id === 'vbmapp-video-player-view') {
+            el.id === 'program-view-vbmapp-companion') {
             el.classList.add('hidden');
         }
     });
@@ -154,7 +151,10 @@ function openHub(hubKey) {
     data.observation.forEach(item => {
         const li = document.createElement('li');
         li.className = "flex items-start gap-3";
-        li.innerHTML = `\n            <i data-lucide="help-circle" class="w-5 h-5 text-action flex-shrink-0 mt-0.5"></i>\n            <span class="text-sm text-gray-600 leading-relaxed">${item}</span>\n        `;
+        li.innerHTML = `
+\n            <i data-lucide="help-circle" class="w-5 h-5 text-action flex-shrink-0 mt-0.5"></i>
+\n            <span class="text-sm text-gray-600 leading-relaxed">${item}</span>
+\n        `;
         listContainer.appendChild(li);
     });
 
@@ -185,19 +185,6 @@ function closeProgram35() {
     const programView = document.getElementById('program-view-35');
     programView.classList.add('hidden');
     programView.classList.remove('block');
-}
-
-function openNaturalisticMastery() {
-    const view = document.getElementById('program-view-naturalistic-mastery');
-    view.classList.remove('hidden');
-    view.classList.add('block');
-    lucide.createIcons();
-}
-
-function closeNaturalisticMastery() {
-    const view = document.getElementById('program-view-naturalistic-mastery');
-    view.classList.add('hidden');
-    view.classList.remove('block');
 }
 
 function openUpsellView(viewId) {
@@ -258,157 +245,6 @@ function closeToolkitMaterials() {
     const materialsView = document.getElementById('toolkit-materials-view');
     materialsView.classList.add('hidden');
     materialsView.classList.remove('block');
-}
-
-// VB-MAPP Implementation Companion Videos
-const vbmappVideoData = [
-  {
-    "title": "1. Powitanie i omówienie kursu",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">1. Powitanie i omówienie kursu. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d25a452aad814cc4b41e4_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d25a452aad814cc4b41e4_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d25a452aad814cc4b41e4\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d25a452aad814cc4b41e4/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "2. Czym jest VB-MAPP i dlaczego jest ważny",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">2. Czym jest VB-MAPP i dlaczego jest ważny. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d2633392e72f9adef4925_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d2633392e72f9adef4925_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d2633392e72f9adef4925\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d2633392e72f9adef4925/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "3. Kamienie milowe rozwoju w VB-MAPP",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">3. Kamienie milowe rozwoju w VB-MAPP. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d269f86e3a582c04ea089_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d269f86e3a582c04ea089_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d269f86e3a582c04ea089\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d269f86e3a582c04ea089/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "4. Jak interpretować ocenę i wybierać priorytetowe umiejętności",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">4. Jak interpretować ocenę i wybierać priorytetowe umiejętności. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d26ae900d8c9b45a3fb20_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d26ae900d8c9b45a3fb20_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d26ae900d8c9b45a3fb20\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d26ae900d8c9b45a3fb20/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "5. Rozumienie Mand i Tact",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">5. Rozumienie Mand i Tact. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d26b98b6c64d7fbc9fb3f_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d26b98b6c64d7fbc9fb3f_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d26b98b6c64d7fbc9fb3f\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d26b98b6c64d7fbc9fb3f/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "6. Bariery w uczeniu się: rozpoznawanie i interwencja",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">6. Bariery w uczeniu się: rozpoznawanie i interwencja. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d26c8162fa67651ecf1ae_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d26c8162fa67651ecf1ae_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d26c8162fa67651ecf1ae\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d26c8162fa67651ecf1ae/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "7. Cele nauczania, indywidualny program i wskazówki dotyczące doboru poziomu",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">7. Cele nauczania, indywidualny program i wskazówki dotyczące doboru poziomu. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d26df86e3a582c04ea0ef_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d26df86e3a582c04ea0ef_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d26df86e3a582c04ea0ef\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d26df86e3a582c04ea0ef/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "8. Wzmocnienia warunkowe i naturalne zainteresowania dziecka",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">8. Wzmocnienia warunkowe i naturalne zainteresowania dziecka. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d271b392e72f9adef4a86_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d271b392e72f9adef4a86_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d271b392e72f9adef4a86\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d271b392e72f9adef4a86/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "9. Przechodzenie między aktywnościami i samoobsługa",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">9. Przechodzenie między aktywnościami i samoobsługa. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d2728900d8c9b45a3fbaf_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d2728900d8c9b45a3fbaf_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d2728900d8c9b45a3fbaf\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d2728900d8c9b45a3fbaf/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "10. Tworzenie codziennego planu nauczania opartego na VB-MAPP",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">10. Tworzenie codziennego planu nauczania opartego na VB-MAPP. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d25b10d2808c273f63ae5_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d25b10d2808c273f63ae5_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d25b10d2808c273f63ae5\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d25b10d2808c273f63ae5/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "11. Przygotowanie do nauczania poszczególnych obszarów umiejętności",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">11. Przygotowanie do nauczania poszczególnych obszarów umiejętności. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d25bd52aad814cc4b4214_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d25bd52aad814cc4b4214_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d25bd52aad814cc4b4214\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d25bd52aad814cc4b4214/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "12. VP-MTS: percepcja wzrokowa i dopasowywanie do wzoru",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">12. VP-MTS: percepcja wzrokowa i dopasowywanie do wzoru. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d25ca86e3a582c04e9f63_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d25ca86e3a582c04e9f63_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d25ca86e3a582c04e9f63\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d25ca86e3a582c04e9f63/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "13. Naśladowanie ruchowe i wokalne",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">13. Naśladowanie ruchowe i wokalne. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d25d52cca4d27f1c1e323_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d25d52cca4d27f1c1e323_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d25d52cca4d27f1c1e323\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d25d52cca4d27f1c1e323/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "14. Echoika: rozwijanie powtarzania wypowiedzi",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">14. Echoika: rozwijanie powtarzania wypowiedzi. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d25e0392e72f9adef48be_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d25e0392e72f9adef48be_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d25e0392e72f9adef48be\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d25e0392e72f9adef48be/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "15. Umiejętności wokalne: zachowania werbalne inicjowane przez dziecko",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">15. Umiejętności wokalne: zachowania werbalne inicjowane przez dziecko. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d25ee19eaa3a949e78089_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d25ee19eaa3a949e78089_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d25ee19eaa3a949e78089\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d25ee19eaa3a949e78089/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "16. LRFFC: reagowanie słuchacza według cechy, funkcji i kategorii",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">16. LRFFC: reagowanie słuchacza według cechy, funkcji i kategorii. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d25fb0d2808c273f63b33_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d25fb0d2808c273f63b33_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d25fb0d2808c273f63b33\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d25fb0d2808c273f63b33/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "17. Umiejętności intrawerbalne: odpowiadanie bez bodźców wzrokowych",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">17. Umiejętności intrawerbalne: odpowiadanie bez bodźców wzrokowych. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d260a162fa67651ecf09b_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d260a162fa67651ecf09b_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d260a162fa67651ecf09b\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d260a162fa67651ecf09b/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "18. Społeczne użycie języka",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">18. Społeczne użycie języka. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d2617900d8c9b45a3fa47_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d2617900d8c9b45a3fa47_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d2617900d8c9b45a3fa47\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d2617900d8c9b45a3fa47/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "19. Rutyny klasowe: zachowania szkolne i grupowe",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">19. Rutyny klasowe: zachowania szkolne i grupowe. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d2624392e72f9adef490b_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d2624392e72f9adef490b_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d2624392e72f9adef490b\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d2624392e72f9adef490b/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "20. Pisanie: motoryka mała i wypowiedzi pisemne",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">20. Pisanie: motoryka mała i wypowiedzi pisemne. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d263e162fa67651ecf0fe_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d263e162fa67651ecf0fe_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d263e162fa67651ecf0fe\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d263e162fa67651ecf0fe/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "21. Czytanie: rozpoznawanie i rozumienie słów",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">21. Czytanie: rozpoznawanie i rozumienie słów. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d264b2cca4d27f1c1e398_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d264b2cca4d27f1c1e398_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d264b2cca4d27f1c1e398\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d264b2cca4d27f1c1e398/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "22. Matematyka: wprowadzenie do myślenia liczbowego i logicznego",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">22. Matematyka: wprowadzenie do myślenia liczbowego i logicznego. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d2656599fcc08351ee5e3_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d2656599fcc08351ee5e3_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d2656599fcc08351ee5e3\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d2656599fcc08351ee5e3/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  },
-  {
-    "title": "23. Zakończenie: ocena postępów i rozwijanie nauczania",
-    "embed": "<p class=\"p-4 bg-white text-dark text-sm leading-relaxed\">23. Zakończenie: ocena postępów i rozwijanie nauczania. Nagranie z oryginalną ścieżką dźwiękową.</p><script type=\"text/javascript\"> var s=document.createElement(\"script\"); s.src=\"https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js\", s.async=!0,document.head.appendChild(s); </script> <div id=\"ifr_690d26632cca4d27f1c1e3ba_wrapper\" style=\"margin: 0 auto; width: 100%; \"> <div style=\"position: relative; padding: 75% 0 0 0;\" id=\"ifr_690d26632cca4d27f1c1e3ba_aspect\"> <iframe frameborder=\"0\" allowfullscreen src=\"about:blank\" id=\"ifr_690d26632cca4d27f1c1e3ba\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\" referrerpolicy=\"origin\" onload=\" this.onload=null, this.src='https://scripts.converteai.net/b52bf57e-45c5-4845-9eff-0685d663e912/players/690d26632cca4d27f1c1e3ba/v4/embed.html' +(location.search||'?') +'&vl=' +encodeURIComponent(location.href)\"></iframe> </div> </div>"
-  }
-];
-
-function openVbmappVideos() {
-    const view = document.getElementById('vbmapp-videos-view');
-    const container = document.getElementById('vbmapp-video-list-container');
-
-    // Clear list
-    container.innerHTML = '';
-
-    // Populate list
-    vbmappVideoData.forEach((video, index) => {
-        const div = document.createElement('div');
-        div.className = "bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4 cursor-pointer hover:shadow-md transition-all active:scale-95";
-        div.onclick = () => openVbmappPlayer(index);
-
-        div.innerHTML = `\n            <div class="flex items-center gap-4">\n                <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-600 flex-shrink-0">\n                    <i data-lucide="play" class="w-5 h-5 fill-current border-none"></i>\n                </div>\n                <h4 class="font-bold text-dark text-sm leading-tight">${video.title}</h4>\n            </div>\n            <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i>\n        `;
-        container.appendChild(div);
-    });
-
-    view.classList.remove('hidden');
-    view.classList.add('block');
-    lucide.createIcons();
-}
-
-function closeVbmappVideos() {
-    const view = document.getElementById('vbmapp-videos-view');
-    view.classList.add('hidden');
-    view.classList.remove('block');
-}
-
-function openVbmappPlayer(index) {
-    const video = vbmappVideoData[index];
-    if (!video) return;
-
-    const playerView = document.getElementById('vbmapp-video-player-view');
-    const titleEl = document.getElementById('video-player-title');
-    const container = document.getElementById('video-player-container');
-
-    titleEl.textContent = video.title;
-    container.innerHTML = video.embed;
-
-    playerView.classList.remove('hidden');
-    playerView.classList.add('block');
-    lucide.createIcons();
-}
-
-function closeVbmappPlayer() {
-    const playerView = document.getElementById('vbmapp-video-player-view');
-    const container = document.getElementById('video-player-container');
-
-    playerView.classList.add('hidden');
-    playerView.classList.remove('block');
-
-    // Stop video by clearing content
-    container.innerHTML = '';
 }
 
 // Initialize default tab (Home)
@@ -564,7 +400,14 @@ function renderFeed() {
     feedData.forEach(item => {
         const div = document.createElement('div');
         div.className = "bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100 space-y-3";
-        div.innerHTML = `\n            <div class="flex items-center gap-3 mb-2">\n                <span class="${item.colorClass} text-[0.65rem] font-bold px-2 py-1 rounded-full uppercase tracking-wider">${item.type}</span>\n                <span class="text-xs text-gray-400">${item.date}</span>\n            </div>\n            <h3 class="font-bold text-dark text-lg leading-tight">${item.title}</h3>\n            <p class="text-sm text-gray-500 leading-relaxed">${item.text}</p>\n        `;
+        div.innerHTML = `
+\n            <div class="flex items-center gap-3 mb-2">
+\n                <span class="${item.colorClass} text-[0.65rem] font-bold px-2 py-1 rounded-full uppercase tracking-wider">${item.type}</span>
+\n                <span class="text-xs text-gray-400">${item.date}</span>
+\n            </div>
+\n            <h3 class="font-bold text-dark text-lg leading-tight">${item.title}</h3>
+\n            <p class="text-sm text-gray-500 leading-relaxed">${item.text}</p>
+\n        `;
         feedContainer.appendChild(div);
     });
 }
@@ -694,4 +537,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         link.textContent = 'Plik jest obecnie niedostępny. Skontaktuj się z pomocą.';
     }));
     document.querySelectorAll('[data-unavailable]').forEach(link => {link.textContent='Ten materiał nie jest dostępny w języku polskim.';});
+});
+
+
+// Accessible names for icon-only and generic download links and buttons.
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('a[download]').forEach(link => {
+        if (link.hasAttribute('aria-label')) return;
+        const scope = link.closest('[data-slug]') || link.parentElement;
+        const title = scope && scope.querySelector('h1, h2, h3, h4');
+        const name = title ? title.textContent.trim() : (link.getAttribute('download') || '').replace(/\.pdf$/i, '');
+        if (name) link.setAttribute('aria-label', 'Pobierz PDF: ' + name);
+    });
 });
